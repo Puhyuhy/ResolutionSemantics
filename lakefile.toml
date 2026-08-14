@@ -1,0 +1,33 @@
+name = "resolution-semantics"
+version = "1.0.0"
+defaultTargets = ["Paper"]
+
+[[lean_lib]]
+name = "Paper"
+srcDir = "lean"
+roots = [
+  "ResolutionKernel",
+  "ResolutionFree",
+  "ResolutionModels",
+  "ResolutionExternal",
+  "ResolutionFiniteTagProof",
+  "ResolutionFreeCompletionFinal",
+  "ResolutionIntegerArithmetic",
+  "ResolutionSemantics",
+  "ResolutionPigeonhole",
+  "ResolutionOrbit",
+  "ResolutionCompletionProbe",
+  "ResolutionFiniteBaseProperness",
+  "ResolutionFiniteBasePropernessPublic",
+  "ResolutionOnePoint",
+  "ResolutionOnePointCompletion",
+  "ResolutionSemanticsCompletion",
+  "ResolutionRelativeSeparation",
+  "ResolutionIntrinsicFiniteComplement",
+  "ResolutionIntrinsicFiniteComplementPublic",
+  "ResolutionIntrinsicFiniteComplementAPI",
+  "ResolutionArithmeticPropernessPublic",
+  "ResolutionArithmeticProperness",
+  "ResolutionOldFixingContextProperness",
+  "ResolutionOldFixingContextPropernessPublic",
+]

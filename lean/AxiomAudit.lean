@@ -1,0 +1,69 @@
+import ResolutionSemanticsCompletion
+import ResolutionIntrinsicFiniteComplementAPI
+import ResolutionFiniteBasePropernessPublic
+import ResolutionOldFixingContextPropernessPublic
+import ResolutionArithmeticPropernessPublic
+import ResolutionCompletionProbe
+
+/-!
+# Paper-facing declaration and axiom audit
+
+Every declaration cited with `\leanname` in the manuscript is checked here.
+The final commands expose the axiom dependencies of the paper's principal
+results; `scripts/verify.sh` rejects any dependency on `sorryAx`.
+-/
+
+#check ResolutionSemantics.freeCompletionUniversal
+#check ResolutionSemantics.expressionKernelQuotientInjective
+#check ResolutionSemantics.expressionKernelQuotientSurjective
+
+#check ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem
+#check ResolutionSemantics.OutsideOld
+#check ResolutionSemantics.oldOrOutsideEquiv
+#check ResolutionSemantics.outsideEquiv
+#check ResolutionSemantics.intrinsicSeparationIffFiniteTag
+#check ResolutionSemantics.intrinsicExtensionHasCanonicalPresentation
+#check ResolutionSemantics.finiteExternalSeparation
+#check ResolutionSemantics.finiteObservationComplete
+#check ResolutionSemantics.finiteSeparationBound
+
+#check ResolutionSemantics.FiniteBaseCompletion.completeIffTotal
+#check ResolutionSemantics.FiniteBaseCompletion.embeddingNotSurjectiveIffExistsUndefined
+#check ResolutionSemantics.OnePointCompletion.addsPoint
+
+#check ResolutionSemantics.OldFixingContextCompletion.factorialSequenceCauchy
+#check ResolutionSemantics.OldFixingContextCompletion.factorialSequenceNoLimit
+#check ResolutionSemantics.OldFixingContextCompletion.separationRankGreaterThanBudget
+#check ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective
+
+#check ResolutionSemantics.NatDivision.oldFixingCriterion
+#check ResolutionSemantics.NatDivision.separationRanksUnbounded
+#check ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective
+#check ResolutionSemantics.IntDivision.separationRanksUnbounded
+
+#check ResolutionSemantics.completionComplete
+#check ResolutionSemantics.completedAlgebra
+#check ResolutionSemantics.equationConservative
+
+#check ResolutionSemantics.NatDivision.singularFamilyInjective
+#check ResolutionSemantics.NatDivision.singularFamilyDisjoint
+#check ResolutionSemantics.IntDivision.singularFamilyInjective
+#check ResolutionSemantics.IntDivision.zeroDivZeroNotOld
+#check ResolutionSemantics.IntDivision.everyFiniteStageNotEquality
+#check ResolutionSemantics.IntDivision.factorialOldFixingCauchy
+
+#check Resolution.Probe.observational_strictly_finer_than_depth
+#check Resolution.Probe.comb_separatesAt_one
+#check Resolution.Probe.NatProbe.natComb_pairwise_separated_at_zero
+
+#print axioms ResolutionSemantics.freeCompletionUniversal
+#print axioms ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem
+#print axioms ResolutionSemantics.intrinsicExtensionHasCanonicalPresentation
+#print axioms ResolutionSemantics.finiteObservationComplete
+#print axioms ResolutionSemantics.completionComplete
+#print axioms ResolutionSemantics.equationConservative
+#print axioms ResolutionSemantics.FiniteBaseCompletion.completeIffTotal
+#print axioms ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective
+#print axioms ResolutionSemantics.NatDivision.completionEmbeddingNotSurjective
+#print axioms ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective
+#print axioms Resolution.Probe.observational_strictly_finer_than_depth

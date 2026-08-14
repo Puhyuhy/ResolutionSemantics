@@ -1,0 +1,49 @@
+name: Verify paper package
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lean:
+    name: Lean 4.33.0
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lean toolchain
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain leanprover/lean4:v4.33.0
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Verify proof package
+        run: bash scripts/verify.sh
+      - name: Preserve axiom audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: axiom-audit
+          path: build/axiom-audit.txt
+          if-no-files-found: warn
+
+  paper:
+    name: Rebuild manuscript PDF
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install manuscript dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            texlive-latex-base texlive-latex-extra texlive-fonts-recommended \
+            lmodern poppler-utils
+      - name: Build and inspect PDF
+        run: bash scripts/build-paper.sh
+      - name: Preserve rebuilt PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: resolution-semantics-paper
+          path: build/paper/Resolution_Semantics_Adrian_Puha.pdf

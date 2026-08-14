@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the paper and this repository."
+title: "Resolution Semantics for Binary Partial Algebras"
+type: software
+authors:
+  - family-names: Puha
+    given-names: Adrian
+version: 1.0.0
+date-released: 2026-08-14
+repository-code: "https://github.com/Puhyuhy/ResolutionSemantics"
+url: "https://github.com/Puhyuhy/ResolutionSemantics"
+license: MIT
+preferred-citation:
+  type: article
+  title: "Resolution Semantics for Binary Partial Algebras: A Formalized Free Completion, Intrinsic Finite-Complement Separation, and Observational Completion"
+  authors:
+    - family-names: Puha
+      given-names: Adrian
+  year: 2026
