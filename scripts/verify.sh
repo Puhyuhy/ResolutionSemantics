@@ -18,15 +18,15 @@ case "$LEAN_VERSION" in
     ;;
 esac
 
-if rg -n \
+if grep -REn --include='*.lean' \
     '^[[:space:]]*(sorry|admit|axiom)([[:space:](]|$)|:=[[:space:]]*(sorry|admit)([[:space:]]|$)' \
-    lean --glob '*.lean'; then
+    lean; then
   echo "proof hole or local axiom found in paper sources" >&2
   exit 1
 fi
 
-if rg -n 'NewMath|UniversalTotality|namespace[[:space:]]+(Curvature|Omega)' \
-    lean --glob '*.lean'; then
+if grep -REn --include='*.lean' \
+    'NewMath|UniversalTotality|namespace[[:space:]]+(Curvature|Omega)' lean; then
   echo "unrelated research namespace found in paper sources" >&2
   exit 1
 fi
@@ -36,7 +36,7 @@ lake build Paper
 
 mkdir -p build
 lake env lean lean/AxiomAudit.lean | tee build/axiom-audit.txt
-if rg -n 'sorryAx' build/axiom-audit.txt; then
+if grep -n 'sorryAx' build/axiom-audit.txt; then
   echo "axiom audit found a sorryAx dependency" >&2
   exit 1
 fi

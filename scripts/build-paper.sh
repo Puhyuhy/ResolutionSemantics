@@ -15,7 +15,7 @@ bibtex revised
 pdflatex -interaction=nonstopmode -halt-on-error revised.tex
 pdflatex -interaction=nonstopmode -halt-on-error revised.tex
 
-if rg -n \
+if grep -En \
     'LaTeX Warning: (Citation|Reference).*undefined|There were undefined (references|citations)|multiply defined' \
     revised.log; then
   echo "unresolved or duplicate manuscript references found" >&2
