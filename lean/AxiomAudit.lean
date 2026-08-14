@@ -1,5 +1,6 @@
 import ResolutionSemanticsCompletion
 import ResolutionIntrinsicFiniteComplementAPI
+import ResolutionResidualComparisonPublic
 import ResolutionFiniteBasePropernessPublic
 import ResolutionOldFixingContextPropernessPublic
 import ResolutionArithmeticPropernessPublic
@@ -26,6 +27,11 @@ results; `scripts/verify.sh` rejects any dependency on `sorryAx`.
 #check ResolutionSemantics.finiteExternalSeparation
 #check ResolutionSemantics.finiteObservationComplete
 #check ResolutionSemantics.finiteSeparationBound
+
+#check ResolutionSemantics.ResidualComparison.finiteBaseCompatibleSeparationBound
+#check ResolutionSemantics.ResidualComparison.finiteBaseGeneratedResiduallyFinite
+#check ResolutionSemantics.ResidualComparison.undefinedApplicationEscapesOldImage
+#check ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal
 
 #check ResolutionSemantics.FiniteBaseCompletion.completeIffTotal
 #check ResolutionSemantics.FiniteBaseCompletion.embeddingNotSurjectiveIffExistsUndefined
@@ -59,6 +65,8 @@ results; `scripts/verify.sh` rejects any dependency on `sorryAx`.
 #print axioms ResolutionSemantics.freeCompletionUniversal
 #print axioms ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem
 #print axioms ResolutionSemantics.intrinsicExtensionHasCanonicalPresentation
+#print axioms ResolutionSemantics.ResidualComparison.finiteBaseGeneratedResiduallyFinite
+#print axioms ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal
 #print axioms ResolutionSemantics.finiteObservationComplete
 #print axioms ResolutionSemantics.completionComplete
 #print axioms ResolutionSemantics.equationConservative

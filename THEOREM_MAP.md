@@ -3,6 +3,8 @@
 The core paper-facing names live in `ResolutionSemantics.lean`; the explicit
 one-point facade lives in `ResolutionSemanticsCompletion.lean`; the intrinsic
 finite-complement facade lives in `ResolutionIntrinsicFiniteComplementAPI.lean`;
+the residual-finiteness and Rees-index comparison lives in
+`ResolutionResidualComparisonPublic.lean`;
 the finite-base criterion lives in `ResolutionFiniteBasePropernessPublic.lean`;
 the arbitrary-base old-fixing-context criterion and its arithmetic instances
 live in `ResolutionOldFixingContextPropernessPublic.lean`; and the original
@@ -66,6 +68,31 @@ statement.  Finite external separation and observational completeness are
 canonical consequences via the same-budget equivalence.  It does not use
 “full abstraction” as a novelty headline.  The constructor-count estimate is a
 valid baseline construction bound, not an optimal state-complexity theorem.
+
+## Residual finiteness and the Rees-index distinction
+
+- `ResolutionSemantics.ResidualComparison.finiteBaseCompatibleSeparationBound`
+- `ResolutionSemantics.ResidualComparison.finiteBaseGeneratedResiduallyFinite`
+- `ResolutionSemantics.ResidualComparison.undefinedApplicationEscapesOldImage`
+- `ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal`
+
+Supporting declarations:
+
+- `Resolution.ResidualComparison.FiniteCompatibleSeparatesAt`
+- `Resolution.ResidualComparison.GeneratedResiduallyFinite`
+- `Resolution.ResidualComparison.finiteBaseCompatibleSeparationBound`
+- `Resolution.ResidualComparison.finiteBaseGeneratedResiduallyFinite`
+- `Resolution.ResidualComparison.undefinedApplicationEscapesOldImage`
+- `Resolution.ResidualComparison.generatedOldClosed_iff_evaluatorTotal`
+
+If the old carrier injects into `Fin baseSize`, the existing finite-tag
+separator becomes a finite compatible target whose whole carrier injects into
+`Fin (baseSize + nodeCount x + nodeCount y + 1)`.  Hence the generated Answer
+algebra is residually finite for every finitely coded base.  Independently,
+the embedded old image is closed under the generated total operations exactly
+when the old evaluator is total.  In the genuinely partial case it is therefore
+not a total subalgebra, so the finite-complement inclusion is not literally an
+ordinary finite-Rees-index inclusion.
 
 ## Completion, properness, and equations
 

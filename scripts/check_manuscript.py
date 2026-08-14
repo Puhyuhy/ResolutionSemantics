@@ -93,6 +93,8 @@ for name in sorted(lean_names):
 
 required_headlines = {
     "ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem",
+    "ResolutionSemantics.ResidualComparison.finiteBaseGeneratedResiduallyFinite",
+    "ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal",
     "ResolutionSemantics.FiniteBaseCompletion.completeIffTotal",
     "ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective",
     "ResolutionSemantics.NatDivision.oldFixingCriterion",

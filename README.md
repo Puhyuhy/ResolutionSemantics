@@ -26,6 +26,11 @@ historical-priority claim is made.
 - quotient presentation by equality after resolution;
 - intrinsic finite-complement separation over a pointwise-preserved base;
 - equivalence with the canonical finite-tag presentation;
+- ordinary residual finiteness, with an explicit whole-target bound, whenever
+  the old carrier is finitely coded;
+- a proof that the old image is a total subalgebra of generated Answers exactly
+  when the original evaluator is total, separating the construction from
+  ordinary finite Rees index in the genuinely partial case;
 - the induced separated filtration and complete observational completion;
 - exact preservation and reflection of constant-bearing universal equations;
 - properness iff the old evaluator is partial for finitely coded bases;

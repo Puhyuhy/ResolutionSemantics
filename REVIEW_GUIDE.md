@@ -16,20 +16,27 @@ or the adequacy of the literature comparison.
    into the primitive definition.
 3. The finite observers induce a separated filtration and a complete
    observational completion with the stated equational conservativity.
-4. For finitely coded old carriers, the completion embedding is surjective
+4. For finitely coded old carriers, generated Answers are residually finite
+   with the stated whole-target bound.
+5. The embedded old image is closed under the generated total operations if
+   and only if the old evaluator is total. Thus the genuinely partial case is
+   not literally an inclusion of a closed finite-Rees-index subalgebra.
+6. For finitely coded old carriers, the completion embedding is surjective
    exactly when the old evaluator is total.
-5. Over an arbitrary carrier, an undefined old seed together with an
+7. Over an arbitrary carrier, an undefined old seed together with an
    old-fixing context is sufficient for proper completion, strict failure of
    equality at every finite stage, and unbounded separation rank.
-6. Natural and integer arithmetic instantiate that sufficient criterion using
+8. Natural and integer arithmetic instantiate that sufficient criterion using
    0/0 and the context x maps to x + 0.
 
 ## Priority questions
 
 - Is intrinsic finite-complement separation already known under another name?
 - Has separation by homomorphisms into extensions with finite complement over
-  a pointwise-fixed base been studied in connection with finite Rees index,
-  residual finiteness, or semigroup separability?
+  a pointwise-fixed partial base been studied under a generalized Rees-index,
+  relative residual-finiteness, or semigroup-separability formulation?
+- Does the finite-base residual-finiteness corollary follow from a known result
+  in a more general setting, with a comparable explicit state bound?
 - Is the properness criterion known in an equivalent framework?
 - Does the combined package contain a publishable contribution, and what
   literature or terminology is missing?

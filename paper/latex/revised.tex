@@ -25,6 +25,9 @@ $\Fin(n+1)$.  At each budget this is equivalent to the canonical presentation
 \]
 The fresh-tag count is at most the combined constructor size; this is a
 construction bound, not an optimality claim.
+When the old carrier is finitely coded, the same witnesses are finite in the
+ordinary sense, so the generated Answer algebra is residually finite with an
+explicit total-state bound.
 
 Finite-tag agreement induces a separated filtration whose Cauchy completion
 supports canonical operations and has the same universal equational theory.
@@ -95,7 +98,8 @@ For every one-sorted binary partial algebra $D$:
   \item every distinct $x,y\in\RAlg{D}$ is separated by a compatible total
         extension whose complement over $A$ has at most $|x|+|y|+1$ points;
         equivalently, a canonical finite-tag model needs at most
-        $|x|+|y|$ fresh tags and one overflow state.
+        $|x|+|y|$ fresh tags and one overflow state.  Consequently, when $A$
+        is finite, $\RAlg{D}$ is residually finite.
 \end{enumerate}
 \end{theorem}
 
@@ -129,7 +133,9 @@ construction within established free-completion theory.  The more specific
 ingredients are the intrinsic finite-complement observer class over a
 pointwise-preserved base, its pairwise separator, and the observational
 structure it induces.  The linear estimate is retained as a general
-construction bound rather than a state-complexity advance.  The finite-base
+construction bound rather than a state-complexity advance.  Over a finitely
+coded base it also gives ordinary residual finiteness and an explicit bound on
+the entire separating target.  The finite-base
 properness criterion explains exactly when the Cauchy construction adds
 genuinely new points over a finite old carrier; the old-fixing-context
 criterion shows that properness is not confined to finite bases.  Natural and
@@ -407,7 +413,51 @@ finite-tag sum is a derived normal form.  The displayed linear estimate is a
 baseline construction bound, not an optimality theorem.  We avoid
 using “full abstraction” as a novelty label; the mathematical content is the
 explicit model class and separator.
+
+More precisely, let $\mathcal C_D$ be the class of compatible total extensions
+that fix $A$ pointwise and have finite complement over $A$.  The theorem says
+that $\RAlg{D}$ is residually $\mathcal C_D$: every unequal pair is separated
+by its canonical homomorphism into some member of $\mathcal C_D$.  This is an
+exact classification of the statement as a relative residual property, not a
+claim that the terminology or general residual paradigm is new.
 \end{remark}
+
+\begin{corollary}[Finite-base residual finiteness]
+\label{cor:finite-base-residual}
+Suppose the old carrier admits an injective code into $\Fin(m)$.  Then
+$\RAlg{D}$ is residually finite in the ordinary homomorphic sense.  More
+precisely, distinct $x,y$ are separated by a finite compatible algebra with an
+injective code into
+\[
+  \Fin\bigl(m+|x|+|y|+1\bigr).
+\]
+\end{corollary}
+
+The formal statements are
+\leanname{ResolutionSemantics.ResidualComparison.finiteBaseCompatibleSeparationBound}
+and
+\leanname{ResolutionSemantics.ResidualComparison.finiteBaseGeneratedResiduallyFinite}.
+The target produced by the proof still embeds the old carrier injectively, so
+the formal result is slightly stronger than ordinary residual finiteness,
+whose separating homomorphisms need not be faithful on the chosen generators.
+
+\begin{proposition}[Closure of the old image]
+\label{prop:old-image-closed}
+Let $\iota_D:A\hookrightarrow\RAlg{D}$ be the canonical old embedding.  Its
+image is closed under every total operation of $\RAlg{D}$ if and only if the
+old evaluator is total.
+\end{proposition}
+
+Indeed, a defined old application reduces to an old value.  If
+$\eval_D(f,a,b)=\operatorname{none}$, however, then
+\[
+  f^{\RAlg{D}}(\iota_D(a),\iota_D(b))
+    =\operatorname{susp}(f,\old(a),\old(b)),
+\]
+which is not in the old image.  Lean checks both the pointwise escape statement
+\leanname{ResolutionSemantics.ResidualComparison.undefinedApplicationEscapesOldImage}
+and the equivalence
+\leanname{ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal}.
 
 Residual finiteness and recognizability of free algebras are established
 subjects.  The present targets are generally not finite: the base carrier $A$
@@ -828,10 +878,14 @@ These results are important adjacent prior art, but neither citation by itself
 identifies the observer class used here.  Our base is a pointwise-fixed partial
 subalgebra, while a separator is a compatible total extension whose complement
 over that base is finite; the separating codomain need not itself be finite
-when the base is infinite.  The exact specialist question is whether separation
-by such base-fixing, finite-complement total extensions has already been
-studied, perhaps under a relative residual-finiteness or Rees-index
-formulation.
+when the base is infinite.  Moreover, ordinary Rees index starts with a closed
+subsemigroup.  By \cref{prop:old-image-closed}, the old image in the generated
+Answer algebra is closed under the total operations exactly in the already
+total case.  Hence finite Rees index is not literally the inclusion used by a
+genuinely partial Resolution algebra.  The remaining specialist question is
+whether separation by finite-complement extensions of a pointwise-fixed
+\emph{partial} base has already been studied under a generalized Rees-index,
+relative residual-finiteness, or separability formulation.
 
 There is likewise a mature theory of profinite completions and natural
 extensions of residually finite algebras, as well as categorical formulations
@@ -958,7 +1012,11 @@ conservativity follows from the reduction rule.  The substantive additional
 construction is intrinsic finite-complement separation over the
 pointwise-preserved old fragment.  It separates every generated pair while
 adding only finitely many states beyond the base; a derived finite-tag normal
-form supplies the explicit witnesses and induces a separated observational filtration.  The
+form supplies the explicit witnesses and induces a separated observational
+filtration.  For finite bases this implies ordinary residual finiteness with
+an explicit whole-target bound.  For genuinely partial algebras the old image
+is not a total subalgebra, so the finite-complement condition is not literally
+ordinary Rees index.  The
 general linear estimate is a baseline; its sharper relative complexity is
 open.  Over every finite old carrier, the completion is proper exactly when an
 old application is undefined.  Standard completion methods then

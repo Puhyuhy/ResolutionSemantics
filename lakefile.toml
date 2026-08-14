@@ -26,6 +26,8 @@ roots = [
   "ResolutionIntrinsicFiniteComplement",
   "ResolutionIntrinsicFiniteComplementPublic",
   "ResolutionIntrinsicFiniteComplementAPI",
+  "ResolutionResidualComparison",
+  "ResolutionResidualComparisonPublic",
   "ResolutionArithmeticPropernessPublic",
   "ResolutionArithmeticProperness",
   "ResolutionOldFixingContextProperness",
