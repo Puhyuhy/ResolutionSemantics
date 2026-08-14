@@ -26,7 +26,10 @@ or the adequacy of the literature comparison.
 7. Over an arbitrary carrier, an undefined old seed together with an
    old-fixing context is sufficient for proper completion, strict failure of
    equality at every finite stage, and unbounded separation rank.
-8. Natural and integer arithmetic instantiate that sufficient criterion using
+8. The finite-base and old-fixing-context hypotheses are incomparable: the
+   one-point algebra satisfies the former but not the latter, while natural
+   arithmetic satisfies the latter but has no finite code for its carrier.
+9. Natural and integer arithmetic instantiate the old-fixing criterion using
    0/0 and the context x maps to x + 0.
 
 ## Priority questions
