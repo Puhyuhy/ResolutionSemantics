@@ -18,8 +18,9 @@ after resolution.
 
 Our additional construction is an intrinsic finite-complement separating
 semantics.  Every distinct pair is distinguished by a compatible total
-extension fixing the old carrier pointwise whose complement injects into
-$\Fin(n+1)$.  At each budget this is equivalent to the canonical presentation
+extension that fixes the old carrier pointwise and whose complement injects
+into $\Fin(n+1)$.  At each budget this is equivalent to the canonical
+presentation
 \[
   D.\mathrm{Carrier}\;\sqcup\;\Fin(n)\;\sqcup\;\{\overflow\}.
 \]
@@ -107,7 +108,7 @@ For every one-sorted binary partial algebra $D$:
 \label{thm:completion-and-equations}
 Finite-tag agreement defines a separated descending filtration on $\RAlg{D}$.
 Its Cauchy completion $\Comp{\RAlg{D}}$ is complete, contains an injective
-finite-stage dense image of $\RAlg{D}$, and carries the unique jointly
+stage-dense image of $\RAlg{D}$, and carries the unique jointly
 nonexpansive extensions of the primitive operations.  Relative to complete
 compatible filtered targets, the completed algebra has the expected universal
 extension property.  If the old carrier is finite, the canonical embedding is
@@ -138,8 +139,11 @@ coded base it also gives ordinary residual finiteness and an explicit bound on
 the entire separating target.  The finite-base
 properness criterion explains exactly when the Cauchy construction adds
 genuinely new points over a finite old carrier; the old-fixing-context
-criterion shows that properness is not confined to finite bases.  Natural and
-integer arithmetic are concrete corollaries.
+criterion shows that properness is not confined to finite bases.  The two
+hypotheses are incomparable: the one-point algebra is finite and partial but
+has no old-fixing context, whereas natural arithmetic has an old-fixing
+context but no finite code for its carrier.  Natural and integer arithmetic
+are concrete corollaries.
 We have not found the exact combined package in the literature reviewed so
 far, but this is not a claim of historical priority.
 
@@ -463,7 +467,8 @@ Residual finiteness and recognizability of free algebras are established
 subjects.  The present targets are generally not finite: the base carrier $A$
 may be infinite and is retained pointwise, while only the added tags and
 $\overflow$ are counted.  The closest computational analogy is the separating-
-words problem.  Sublinear worst-case bounds were established by Goralcik and
+words problem.  Sublinear worst-case bounds were established by
+Goral{\v{c}}{\'i}k and
 Koubek, Robson, and Chase \cite{GoralcikKoubek1986,Robson1989,Chase2020}.
 Along a unary comb, a Resolution observer likewise iterates one transition map
 from a fixed starting state.  This analogy confirms that our linear estimate is
@@ -482,7 +487,7 @@ agreement at every smaller budget.  By
 \cref{thm:finite-external-separation},
 \[
   \bigcap_{n\in\mathbb N}\stageeq{n}
-  \,=\,=.
+  =\{(x,x)\mid x\in\RAlg{D}\}.
 \]
 Thus the filtration is separated.
 
@@ -619,6 +624,36 @@ equal to equality.  The direct public corollaries include
 \leanname{ResolutionSemantics.NatDivision.separationRanksUnbounded},
 \leanname{ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective}, and
 \leanname{ResolutionSemantics.IntDivision.separationRanksUnbounded}.
+
+\begin{proposition}[Incomparability of the properness hypotheses]
+\label{prop:properness-hypotheses-incomparable}
+Neither properness hypothesis subsumes the other.
+
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item The one-point always-undefined algebra has a one-state code, an
+        undefined old application, and a proper completion, but it admits no
+        old-fixing-context witness.
+  \item Natural arithmetic has the old-fixing witness $x\mapsto x+0$ and a
+        proper completion, but its old carrier admits no finite code.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+For the one-point algebra, any old-fixing witness would require its sole
+operation to satisfy
+$\eval_D(u,\star,\star)=\operatorname{some}(\star)$, contradicting the definition
+$\eval_D\equiv\operatorname{none}$.  Its one-state code, undefined operation,
+and proper completion are explicit.
+
+For natural arithmetic, the witness is the undefined seed $0/0$ together with
+the context $x\mapsto x+0$.  If a finite code of bound $m$ existed, applying
+the bounded pigeonhole theorem to the $m+1$ inputs $0,\ldots,m$ would give
+distinct $i,j$ with equal codes, contradicting injectivity.  The checked
+statements are
+\leanname{ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing}
+and
+\leanname{ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding}.
+\end{proof}
 
 \begin{proposition}[Completed operations]
 Every generated operation $f_{\RAlg{D}}$ is jointly stage-compatible and
@@ -926,6 +961,8 @@ The narrow evidence-qualified contribution is the following combined package:
   \item an infinite-base old-fixing-context criterion proving properness,
         failure of finite-stage discreteness, and unbounded separation rank,
         with natural and integer arithmetic as corollaries;
+  \item a proof that the finite-base and old-fixing-context properness
+        hypotheses are incomparable;
   \item completed operations and exact universal equational conservativity;
   \item a complete Lean formalization of the package.
 \end{enumerate}
@@ -941,6 +978,7 @@ import ResolutionSemanticsCompletion
 import ResolutionIntrinsicFiniteComplementAPI
 import ResolutionFiniteBasePropernessPublic
 import ResolutionOldFixingContextPropernessPublic
+import ResolutionPropernessCriteriaComparison
 import ResolutionArithmeticPropernessPublic
 
 #check ResolutionSemantics.freeCompletionUniversal
@@ -957,6 +995,8 @@ import ResolutionArithmeticPropernessPublic
 #check ResolutionSemantics.FiniteBaseCompletion.embeddingNotSurjectiveIffExistsUndefined
 #check ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective
 #check ResolutionSemantics.OldFixingContextCompletion.separationRankGreaterThanBudget
+#check ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing
+#check ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding
 #check ResolutionSemantics.NatDivision.separationRanksUnbounded
 #check ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective
 #check ResolutionSemantics.IntDivision.separationRanksUnbounded
@@ -991,9 +1031,10 @@ completion lemmas are summarized and linked to exact declarations in
         syntactic-congruence constructions remains under review.
   \item The linear tag bound is a baseline upper bound, not an optimality
         theorem; its relative state complexity is open.
-  \item Properness is classified exactly for finite old carriers.  For
-        arbitrary carriers the old-fixing-context theorem is sufficient, not
-        necessary; a full infinite-base classification remains open.
+  \item Properness is classified exactly for finite old carriers.  The
+        old-fixing-context hypothesis is sufficient but not necessary, and
+        neither of the two stated hypotheses subsumes the other; a full
+        arbitrary-carrier classification remains open.
   \item The construction is semantic, not an efficiency claim.  Retaining full
         provenance can produce large finite trees.
   \item No ordinary field law is asserted globally on singular Answers unless
@@ -1019,7 +1060,9 @@ is not a total subalgebra, so the finite-complement condition is not literally
 ordinary Rees index.  The
 general linear estimate is a baseline; its sharper relative complexity is
 open.  Over every finite old carrier, the completion is proper exactly when an
-old application is undefined.  Standard completion methods then
+old application is undefined.  This finite-base hypothesis and the
+old-fixing-context hypothesis are incomparable, as witnessed by the one-point
+algebra and natural arithmetic respectively.  Standard completion methods then
 produce a complete total algebra with canonical operations and unchanged
 universal equational theory.
 

@@ -35,6 +35,8 @@ historical-priority claim is made.
 - exact preservation and reflection of constant-bearing universal equations;
 - properness iff the old evaluator is partial for finitely coded bases;
 - an old-fixing-context sufficient criterion over arbitrary bases;
+- a formal proof that these two properness hypotheses are incomparable, using
+  the one-point algebra and natural arithmetic as opposite witnesses;
 - natural- and integer-arithmetic instances with proper completions and
   unbounded finite separation ranks.
 

@@ -7,8 +7,10 @@ the residual-finiteness and Rees-index comparison lives in
 `ResolutionResidualComparisonPublic.lean`;
 the finite-base criterion lives in `ResolutionFiniteBasePropernessPublic.lean`;
 the arbitrary-base old-fixing-context criterion and its arithmetic instances
-live in `ResolutionOldFixingContextPropernessPublic.lean`; and the original
-natural-arithmetic facade lives in `ResolutionArithmeticPropernessPublic.lean`.
+live in `ResolutionOldFixingContextPropernessPublic.lean`; their formal
+incomparability is recorded in `ResolutionPropernessCriteriaComparison.lean`;
+and the original natural-arithmetic facade lives in
+`ResolutionArithmeticPropernessPublic.lean`.
 Implementation declarations remain available for audit but are not presented
 as the main public interface.
 
@@ -111,6 +113,8 @@ ordinary finite-Rees-index inclusion.
 - `ResolutionSemantics.OldFixingContextCompletion.notComplete`
 - `ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective`
 - `ResolutionSemantics.OldFixingContextCompletion.addsPoint`
+- `ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing`
+- `ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding`
 - `ResolutionSemantics.NatDivision.stageZeroNotSeparating`
 - `ResolutionSemantics.NatDivision.everyFiniteStageNotEquality`
 - `ResolutionSemantics.NatDivision.factorialAddZeroCauchy`
@@ -170,6 +174,13 @@ Its factorial orbit is Cauchy with no generated limit, every finite stage is
 strictly coarser than equality, and explicit stage-`m` pairs have separation
 rank greater than `m`.  Natural and integer arithmetic both instantiate this
 criterion with `0 / 0` and `x ↦ x + 0`.
+
+The two properness hypotheses are incomparable.  The one-point
+always-undefined algebra has a one-state code and a proper completion but no
+old-fixing-context witness.  Natural arithmetic has the old-fixing witness
+`x ↦ x + 0` and a proper completion, but `Nat` admits no injection into any
+finite code bound.  The latter fact is proved from the repository's explicit
+pigeonhole theorem.
 
 ## Distinction from prefix-depth completion
 

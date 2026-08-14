@@ -97,6 +97,8 @@ required_headlines = {
     "ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal",
     "ResolutionSemantics.FiniteBaseCompletion.completeIffTotal",
     "ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective",
+    "ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing",
+    "ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding",
     "ResolutionSemantics.NatDivision.oldFixingCriterion",
     "ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective",
 }

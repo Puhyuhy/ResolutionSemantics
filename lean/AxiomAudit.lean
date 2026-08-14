@@ -3,6 +3,7 @@ import ResolutionIntrinsicFiniteComplementAPI
 import ResolutionResidualComparisonPublic
 import ResolutionFiniteBasePropernessPublic
 import ResolutionOldFixingContextPropernessPublic
+import ResolutionPropernessCriteriaComparison
 import ResolutionArithmeticPropernessPublic
 import ResolutionCompletionProbe
 
@@ -42,6 +43,9 @@ results; `scripts/verify.sh` rejects any dependency on `sorryAx`.
 #check ResolutionSemantics.OldFixingContextCompletion.separationRankGreaterThanBudget
 #check ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective
 
+#check ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing
+#check ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding
+
 #check ResolutionSemantics.NatDivision.oldFixingCriterion
 #check ResolutionSemantics.NatDivision.separationRanksUnbounded
 #check ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective
@@ -72,6 +76,8 @@ results; `scripts/verify.sh` rejects any dependency on `sorryAx`.
 #print axioms ResolutionSemantics.equationConservative
 #print axioms ResolutionSemantics.FiniteBaseCompletion.completeIffTotal
 #print axioms ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective
+#print axioms ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing
+#print axioms ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding
 #print axioms ResolutionSemantics.NatDivision.completionEmbeddingNotSurjective
 #print axioms ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective
 #print axioms Resolution.Probe.observational_strictly_finer_than_depth
