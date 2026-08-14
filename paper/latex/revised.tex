@@ -18,8 +18,9 @@ after resolution.
 
 Our additional construction is an intrinsic finite-complement separating
 semantics.  Every distinct pair is distinguished by a compatible total
-extension fixing the old carrier pointwise whose complement injects into
-$\Fin(n+1)$.  At each budget this is equivalent to the canonical presentation
+extension that fixes the old carrier pointwise and whose complement injects
+into $\Fin(n+1)$.  At each budget this is equivalent to the canonical
+presentation
 \[
   D.\mathrm{Carrier}\;\sqcup\;\Fin(n)\;\sqcup\;\{\overflow\}.
 \]
@@ -107,7 +108,7 @@ For every one-sorted binary partial algebra $D$:
 \label{thm:completion-and-equations}
 Finite-tag agreement defines a separated descending filtration on $\RAlg{D}$.
 Its Cauchy completion $\Comp{\RAlg{D}}$ is complete, contains an injective
-finite-stage dense image of $\RAlg{D}$, and carries the unique jointly
+stage-dense image of $\RAlg{D}$, and carries the unique jointly
 nonexpansive extensions of the primitive operations.  Relative to complete
 compatible filtered targets, the completed algebra has the expected universal
 extension property.  If the old carrier is finite, the canonical embedding is
@@ -466,7 +467,8 @@ Residual finiteness and recognizability of free algebras are established
 subjects.  The present targets are generally not finite: the base carrier $A$
 may be infinite and is retained pointwise, while only the added tags and
 $\overflow$ are counted.  The closest computational analogy is the separating-
-words problem.  Sublinear worst-case bounds were established by Goralcik and
+words problem.  Sublinear worst-case bounds were established by
+Goral{\v{c}}{\'i}k and
 Koubek, Robson, and Chase \cite{GoralcikKoubek1986,Robson1989,Chase2020}.
 Along a unary comb, a Resolution observer likewise iterates one transition map
 from a fixed starting state.  This analogy confirms that our linear estimate is
@@ -485,7 +487,7 @@ agreement at every smaller budget.  By
 \cref{thm:finite-external-separation},
 \[
   \bigcap_{n\in\mathbb N}\stageeq{n}
-  \,=\,=.
+  =\{(x,x)\mid x\in\RAlg{D}\}.
 \]
 Thus the filtration is separated.
 
@@ -639,7 +641,7 @@ Neither properness hypothesis subsumes the other.
 \begin{proof}
 For the one-point algebra, any old-fixing witness would require its sole
 operation to satisfy
-$\eval_D(u,(),())=\operatorname{some}(())$, contradicting the definition
+$\eval_D(u,\star,\star)=\operatorname{some}(\star)$, contradicting the definition
 $\eval_D\equiv\operatorname{none}$.  Its one-state code, undefined operation,
 and proper completion are explicit.
 
@@ -1030,9 +1032,9 @@ completion lemmas are summarized and linked to exact declarations in
   \item The linear tag bound is a baseline upper bound, not an optimality
         theorem; its relative state complexity is open.
   \item Properness is classified exactly for finite old carriers.  The
-        old-fixing-context hypothesis is strictly sufficient and incomparable
-        with finite coding; a full arbitrary-carrier classification remains
-        open.
+        old-fixing-context hypothesis is sufficient but not necessary, and
+        neither of the two stated hypotheses subsumes the other; a full
+        arbitrary-carrier classification remains open.
   \item The construction is semantic, not an efficiency claim.  Retaining full
         provenance can produce large finite trees.
   \item No ordinary field law is asserted globally on singular Answers unless
