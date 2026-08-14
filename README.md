@@ -26,8 +26,9 @@ historical-priority claim is made.
 - quotient presentation by equality after resolution;
 - intrinsic finite-complement separation over a pointwise-preserved base;
 - equivalence with the canonical finite-tag presentation;
-- ordinary residual finiteness, with an explicit whole-target bound, whenever
-  the old carrier is finitely coded;
+- a base-faithful finite separator and explicit whole-target bound whenever the
+  old carrier is finitely coded; its ordinary residual-finiteness consequence
+  is positioned against classical finite-signature ground-term recognizability;
 - a proof that the old image is a total subalgebra of generated Answers exactly
   when the original evaluator is total, separating the construction from
   ordinary finite Rees index in the genuinely partial case;
@@ -43,6 +44,12 @@ historical-priority claim is made.
 Division by zero is represented by a structured non-old Answer. The paper does
 not assign an ordinary numerical value to a/0, and it does not prove Strong
 Totality.
+
+The paper explicitly treats free completion, finite-signature ground-term
+recognizability, operation-tree syntax, and standard Cauchy completion as prior
+art. The open novelty question concerns the relative observer class that fixes
+a possibly infinite partial base pointwise while bounding only its complement,
+and the completion and properness results built from that class.
 
 ## Reproducing the formal verification
 

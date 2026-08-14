@@ -62,7 +62,7 @@ results; `scripts/verify.sh` rejects any dependency on `sorryAx`.
 #check ResolutionSemantics.IntDivision.everyFiniteStageNotEquality
 #check ResolutionSemantics.IntDivision.factorialOldFixingCauchy
 
-#check Resolution.Probe.observational_strictly_finer_than_depth
+#check Resolution.Probe.depthCauchy_not_observationalCauchy
 #check Resolution.Probe.comb_separatesAt_one
 #check Resolution.Probe.NatProbe.natComb_pairwise_separated_at_zero
 
@@ -80,4 +80,4 @@ results; `scripts/verify.sh` rejects any dependency on `sorryAx`.
 #print axioms ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding
 #print axioms ResolutionSemantics.NatDivision.completionEmbeddingNotSurjective
 #print axioms ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective
-#print axioms Resolution.Probe.observational_strictly_finer_than_depth
+#print axioms Resolution.Probe.depthCauchy_not_observationalCauchy

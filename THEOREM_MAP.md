@@ -96,6 +96,15 @@ when the old evaluator is total.  In the genuinely partial case it is therefore
 not a total subalgebra, so the finite-complement inclusion is not literally an
 ordinary finite-Rees-index inclusion.
 
+When the operation signature is also finite, the qualitative ordinary
+residual-finiteness conclusion is classical: the Answer algebra is the ground
+term algebra modulo the finite congruence presentation formed by the defined
+old applications, and Kozen's recognizability theorem yields finite syntactic
+quotients separating distinct classes. The formal declarations above record
+the repository's direct separator, its explicit whole-target bound, and the
+fact that no finiteness assumption on the operation signature is required;
+they are not presented as a novelty claim for the classical subcase.
+
 ## Completion, properness, and equations
 
 - `ResolutionSemantics.completedAlgebra`
@@ -184,11 +193,15 @@ pigeonhole theorem.
 
 ## Distinction from prefix-depth completion
 
-- `Resolution.Probe.observational_strictly_finer_than_depth`
+- `Resolution.Probe.depthCauchy_not_observationalCauchy`
 - `Resolution.Probe.comb_separatesAt_one`
 - `Resolution.Probe.NatProbe.natComb_pairwise_separated_at_zero`
 
-These theorems show that fixed finite observational budgets can detect arbitrarily deep comb differences. They also show that the general linear tag bound is far from tight on this family.
+These theorems show that fixed finite observational budgets can detect
+arbitrarily deep comb differences. The first theorem proves that the
+prefix-depth and observational uniformities differ; it does not claim that
+either filtration refines the other. The results also show that the general
+linear tag bound is far from tight on this family.
 
 ## Arithmetic examples
 
