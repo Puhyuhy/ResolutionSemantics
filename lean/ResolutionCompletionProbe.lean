@@ -1,7 +1,7 @@
 import ResolutionFiniteTagProof
 
 /-!
-# The observational filtration is strictly finer than prefix depth
+# The observational and prefix-depth filtrations differ
 
 This module settles, by an explicit kernel-checked witness, the question that
 gates Paper I (`paper/README.md`): is the finite-tag observational completion
@@ -369,12 +369,11 @@ theorem comb_not_cauchy_observational (h : D.eval f a z = none) :
   rcases comb_separatesAt_one D f a z h N with ⟨T, hT⟩
   exact hT (hEq T)
 
-/-- **The gate theorem.** Any partial algebra with one undefined application
+/-- **Filtration contrast.** Any partial algebra with one undefined application
     carries a sequence that is Cauchy for prefix depth but observationally
-    divergent. The finite-tag uniformity is strictly finer than the
-    prefix-depth uniformity, so the observational completion is not the
-    classical infinite-tree completion. -/
-theorem observational_strictly_finer_than_depth (h : D.eval f a z = none) :
+    divergent. This proves that the two induced uniformities differ; it does
+    not assert a refinement relation between them. -/
+theorem depthCauchy_not_observationalCauchy (h : D.eval f a z = none) :
     ∃ s : Nat -> Free.GeneratedAns D,
       Filtered.Cauchy (depthSpace D) s ∧
       ¬ Filtered.Cauchy (External.generatedFilteredSpace D) s :=

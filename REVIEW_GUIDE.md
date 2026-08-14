@@ -17,7 +17,10 @@ or the adequacy of the literature comparison.
 3. The finite observers induce a separated filtration and a complete
    observational completion with the stated equational conservativity.
 4. For finitely coded old carriers, generated Answers are residually finite
-   with the stated whole-target bound.
+   with the stated whole-target bound. In the additional finite-signature
+   subcase, the manuscript now identifies the qualitative conclusion as a
+   consequence of classical ground-term recognizability; the explicit
+   base-faithful bound and arbitrary-signature statement remain to be compared.
 5. The embedded old image is closed under the generated total operations if
    and only if the old evaluator is total. Thus the genuinely partial case is
    not literally an inclusion of a closed finite-Rees-index subalgebra.
@@ -38,8 +41,9 @@ or the adequacy of the literature comparison.
 - Has separation by homomorphisms into extensions with finite complement over
   a pointwise-fixed partial base been studied under a generalized Rees-index,
   relative residual-finiteness, or semigroup-separability formulation?
-- Does the finite-base residual-finiteness corollary follow from a known result
-  in a more general setting, with a comparable explicit state bound?
+- Does classical ground-term recognizability also recover the manuscript's
+  arbitrary-signature finite-base statement and comparable explicit
+  base-faithful state bound, or only its finite-signature qualitative subcase?
 - Is the properness criterion known in an equivalent framework?
 - Does the combined package contain a publishable contribution, and what
   literature or terminology is missing?
