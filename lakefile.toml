@@ -1,0 +1,14 @@
+name = "resolution-semantics"
+version = "1.0.0"
+defaultTargets = ["Paper"]
+
+[[lean_lib]]
+name = "Paper"
+srcDir = "lean"
+roots = [
+  "ResolutionSemanticsCompletion",
+  "ResolutionIntrinsicFiniteComplementAPI",
+  "ResolutionFiniteBasePropernessPublic",
+  "ResolutionOldFixingContextPropernessPublic",
+  "ResolutionArithmeticPropernessPublic",
+]
