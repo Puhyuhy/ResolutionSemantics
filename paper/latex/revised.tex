@@ -4,7 +4,7 @@
 \title{\textbf{Resolution Semantics for Binary Partial Algebras}\\
 A Formalized Free Completion, Intrinsic Finite-Complement Separation, and Observational Completion}
 \author{Adrian Puha}
-\date{August 2026}
+\date{16 August 2026}
 
 \begin{document}
 \maketitle
@@ -19,8 +19,8 @@ after resolution.
 Our additional construction is an intrinsic finite-complement separating
 semantics.  Every distinct pair is distinguished by a compatible total
 extension that fixes the old carrier pointwise and whose complement injects
-into $\Fin(n+1)$.  At each budget this is equivalent to the canonical
-presentation
+into $\Fin(n+1)$.  At each budget, pair separation by this intrinsic class is
+equivalent to pair separation by the canonical finite-tag models
 \[
   D.\mathrm{Carrier}\;\sqcup\;\Fin(n)\;\sqcup\;\{\overflow\}.
 \]
@@ -34,7 +34,8 @@ finite ground-equation congruence classes; the construction here additionally
 keeps the old carrier faithful and supplies the displayed bound.
 
 Finite-tag agreement induces a separated filtration whose Cauchy completion
-supports canonical operations and has the same universal equational theory.
+supports canonical operations and has exactly the same universal equations in
+the language with named old-carrier constants.
 For a finitely coded old carrier, the embedding is surjective exactly when the
 old evaluator is total.  Without any finiteness assumption, an undefined old
 application plus a context $x\mapsto u(x,e)$ fixing every old element yields a
@@ -59,6 +60,9 @@ symbols $\Sigma$, and evaluator
 \]
 The value $\operatorname{some}(c)$ records that the old application is defined
 and equals $c$; $\operatorname{none}$ records old undefinedness.
+We call $A$ \emph{finitely coded} when it admits an injection into $\Fin(m)$
+for some $m$.  This is classically equivalent to finiteness and is the exact
+hypothesis used by the Lean statements below.
 
 There is extensive prior work on completing or encoding partial algebras.
 Climent Vidal and Cosme Ll\'opez prove that the inclusion of total algebras into
@@ -88,8 +92,8 @@ The paper asks two narrower questions.
         that do not themselves contain Answer trees, while preserving every
         old-defined application?
   \item Can those finite observations support a completion on which the
-        operations remain canonical and the universal equational theory is
-        unchanged?
+        operations remain canonical and all constant-bearing universal
+        equations are unchanged?
 \end{enumerate}
 
 The answer to both is yes.  The paper has two principal results.
@@ -106,7 +110,7 @@ For every one-sorted binary partial algebra $D$:
         extension whose complement over $A$ has at most $|x|+|y|+1$ points;
         equivalently, a canonical finite-tag model needs at most
         $|x|+|y|$ fresh tags and one overflow state.  Consequently, when $A$
-        is finite, $\RAlg{D}$ is residually finite.
+        is finitely coded, $\RAlg{D}$ is residually finite.
 \end{enumerate}
 \end{theorem}
 
@@ -115,12 +119,14 @@ For every one-sorted binary partial algebra $D$:
 Finite-tag agreement defines a separated descending filtration on $\RAlg{D}$.
 Its Cauchy completion $\Comp{\RAlg{D}}$ is complete, contains an injective
 stage-dense image of $\RAlg{D}$, and carries the unique jointly
-nonexpansive extensions of the primitive operations.  Relative to complete
-compatible filtered targets, the completed algebra has the expected universal
-extension property.  If the old carrier is finite, the canonical embedding is
+nonexpansive extensions of the primitive operations.  Relative to complete,
+separated filtered compatible total extensions whose old embedding is
+injective, the completed algebra has the expected universal extension
+property.  If the old carrier is finitely coded, the canonical embedding is
 surjective exactly when the old evaluator is total; equivalently, the
 completion is proper exactly when some old application is undefined.  Without
-assuming the old carrier finite, suppose some old application is undefined and
+assuming finite coding of the old carrier, suppose some old application is
+undefined and
 there are $u\in\Sigma$ and $e\in A$ with
 $\eval_D(u,a,e)=\operatorname{some}(a)$ for every $a\in A$.  Then every finite
 observation stage is strictly coarser than equality, an explicit factorial
@@ -145,11 +151,11 @@ coded base it also gives an explicit, base-faithful bound on the entire
 separating target; ordinary residual finiteness itself is classical in the
 finite-signature subcase.  The finite-base
 properness criterion explains exactly when the Cauchy construction adds
-genuinely new points over a finite old carrier; the old-fixing-context
+genuinely new points over a finitely coded old carrier; the old-fixing-context
 criterion shows that properness is not confined to finite bases.  The two
-hypotheses are incomparable: the one-point algebra is finite and partial but
-has no old-fixing context, whereas natural arithmetic has an old-fixing
-context but no finite code for its carrier.  Natural and integer arithmetic
+hypotheses are incomparable: the one-point algebra is finitely coded and
+partial but has no old-fixing context, whereas natural arithmetic has an
+old-fixing context but no finite code for its carrier.  Natural and integer arithmetic
 are concrete corollaries.
 We have not found the exact combined package in the literature reviewed so
 far, but this is not a claim of historical priority.
@@ -710,7 +716,8 @@ For embedded points,
 \]
 \end{proposition}
 
-The completed carrier and operations form a compatible total algebra over $D$.
+The completed carrier and operations form a compatible total extension of $D$
+with injective old embedding.
 Its completeness is exposed by
 \leanname{ResolutionSemantics.completionComplete}; the compatible algebra is
 \leanname{ResolutionSemantics.completedAlgebra}.
@@ -719,7 +726,7 @@ Its completeness is exposed by
 
 The formalization defines a category-like class of targets consisting of:
 \begin{itemize}
-  \item a compatible total algebra over $D$;
+  \item a compatible total extension of $D$ with injective old embedding;
   \item a separated descending filtration;
   \item nonexpansive generated interpretation;
   \item jointly nonexpansive primitive operations;
@@ -728,7 +735,8 @@ The formalization defines a category-like class of targets consisting of:
 For every such target $T$, generated interpretation extends uniquely from the
 stage-dense subalgebra, and binary-extension uniqueness shows that the extension
 preserves all primitive operations.  Hence the completion is initial relative
-to this specified target class.
+to this specified target class.  The exact Lean package is
+\leanname{Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra\_initial}.
 
 The adjectives “initial,” “reflective,” and “idempotent” are mathematically
 correct only with these hypotheses.  They are consequences of standard
@@ -1039,6 +1047,7 @@ import ResolutionArithmeticPropernessPublic
 #check ResolutionSemantics.finiteExternalSeparation
 #check ResolutionSemantics.finiteSeparationBound
 #check ResolutionSemantics.completionComplete
+#check Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra_initial
 #check ResolutionSemantics.equationConservative
 #check ResolutionSemantics.FiniteBaseCompletion.completeIffTotal
 #check ResolutionSemantics.FiniteBaseCompletion.embeddingNotSurjectiveIffExistsUndefined
@@ -1055,13 +1064,14 @@ The repository pins Lean~4.33.0.  The command
 bash scripts/verify.sh
 \end{lstlisting}
 compiles the checked-in proof dependency chain, checks every manuscript-linked
-declaration, rejects direct proof-hole commands, and prints the axiom
-dependencies of the principal public theorems.  The separate command
-\texttt{bash scripts/build-paper.sh} rebuilds and inspects this PDF.  Finite
-indexing and witness selection use
-ordinary classical choice in documented places.  The result is relative to
-Lean's underlying logic and implementation; no foundation-independent
-consistency claim is made.
+declaration, rejects direct proof-hole commands, and requires each audited
+public theorem to depend only on \texttt{propext},
+\texttt{Classical.choice}, and \texttt{Quot.sound}.  The separate command
+\texttt{bash scripts/build-paper.sh --check-committed} rebuilds this PDF
+deterministically and verifies that the checked-in copy matches.  Finite
+indexing and witness selection use ordinary classical choice in documented
+places.  The result is relative to Lean's underlying logic and implementation;
+no foundation-independent consistency claim is made.
 
 The paper gives full mathematical arguments for the free-completion and finite
 separator constructions because those determine its positioning.  Routine
@@ -1081,7 +1091,7 @@ completion lemmas are summarized and linked to exact declarations in
         constructions remains under review.
   \item The linear tag bound is a baseline upper bound, not an optimality
         theorem; its relative state complexity is open.
-  \item Properness is classified exactly for finite old carriers.  The
+  \item Properness is classified exactly for finitely coded old carriers.  The
         old-fixing-context hypothesis is sufficient but not necessary, and
         neither of the two stated hypotheses subsumes the other; a full
         arbitrary-carrier classification remains open.
@@ -1089,8 +1099,8 @@ completion lemmas are summarized and linked to exact declarations in
         provenance can produce large finite trees.
   \item No ordinary field law is asserted globally on singular Answers unless
         it is separately proved in the generated algebra.
-  \item Universal equations transfer exactly; conditional equations require
-        additional hypotheses.
+  \item Constant-bearing universal equations transfer exactly; conditional
+        equations require additional hypotheses.
   \item Historical priority for the combined package remains unresolved until
         specialist review is complete.
 \end{enumerate}
@@ -1104,19 +1114,20 @@ construction is intrinsic finite-complement separation over the
 pointwise-preserved old fragment.  It separates every generated pair while
 adding only finitely many states beyond the base; a derived finite-tag normal
 form supplies the explicit witnesses and induces a separated observational
-filtration.  For finite bases this implies ordinary residual finiteness with
+filtration.  For finitely coded bases this implies ordinary residual finiteness
+with
 an explicit whole-target bound; the qualitative finite-signature consequence
 also follows from classical ground-term recognizability.  For genuinely partial
 algebras the old image
 is not a total subalgebra, so the finite-complement condition is not literally
 ordinary Rees index.  The
 general linear estimate is a baseline; its sharper relative complexity is
-open.  Over every finite old carrier, the completion is proper exactly when an
-old application is undefined.  This finite-base hypothesis and the
+open.  Over every finitely coded old carrier, the completion is proper exactly
+when an old application is undefined.  This finite-base hypothesis and the
 old-fixing-context hypothesis are incomparable, as witnessed by the one-point
 algebra and natural arithmetic respectively.  Standard completion methods then
-produce a complete total algebra with canonical operations and unchanged
-universal equational theory.
+produce a complete total algebra with canonical operations and exactly the same
+universal equations in the language with named old-carrier constants.
 
 The old-fixing-context theorem explains the arithmetic examples uniformly:
 for both natural and integer arithmetic every finite stage is strictly coarser

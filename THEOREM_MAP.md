@@ -175,6 +175,16 @@ Supporting declarations:
 - `Resolution.ArithmeticProperness.completionEmbedding_not_surjective`
 - `Resolution.ArithmeticProperness.completion_adds_point`
 
+The relative completion target is deliberately narrower than the ordinary
+free-completion target.  `Resolution.External.FilteredTotalAlg` packages a
+compatible total extension with an injective old embedding, a separated
+descending filtration, nonexpansive generated interpretation and operations,
+and (for the universal theorem) completeness.  The theorem
+`completedResolutionFilteredAlgebra_initial` supplies the canonical morphism
+and uniqueness of its underlying nonexpansive algebra-homomorphism function.
+This is the precise target class behind the manuscript's qualified use of
+“initial.”
+
 For a finitely coded old carrier, the completion is proper exactly when at
 least one old application is undefined.  The one-point result is the smallest
 explicit corollary.  For an arbitrary old carrier, an undefined old seed plus

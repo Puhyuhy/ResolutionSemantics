@@ -12,7 +12,8 @@ import ResolutionCompletionProbe
 
 Every declaration cited with `\leanname` in the manuscript is checked here.
 The final commands expose the axiom dependencies of the paper's principal
-results; `scripts/verify.sh` rejects any dependency on `sorryAx`.
+results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
+`Quot.sound`.
 -/
 
 #check ResolutionSemantics.freeCompletionUniversal
@@ -54,6 +55,7 @@ results; `scripts/verify.sh` rejects any dependency on `sorryAx`.
 #check ResolutionSemantics.completionComplete
 #check ResolutionSemantics.completedAlgebra
 #check ResolutionSemantics.equationConservative
+#check Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra_initial
 
 #check ResolutionSemantics.NatDivision.singularFamilyInjective
 #check ResolutionSemantics.NatDivision.singularFamilyDisjoint
@@ -73,6 +75,7 @@ results; `scripts/verify.sh` rejects any dependency on `sorryAx`.
 #print axioms ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal
 #print axioms ResolutionSemantics.finiteObservationComplete
 #print axioms ResolutionSemantics.completionComplete
+#print axioms Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra_initial
 #print axioms ResolutionSemantics.equationConservative
 #print axioms ResolutionSemantics.FiniteBaseCompletion.completeIffTotal
 #print axioms ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective

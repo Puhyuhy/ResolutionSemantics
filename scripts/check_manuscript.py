@@ -13,6 +13,8 @@ LEAN_DIR = ROOT / "lean"
 MANUSCRIPT = ROOT / "paper" / "latex" / "revised.tex"
 STYLE = ROOT / "paper" / "latex" / "resolution-paper.sty"
 AUDIT = LEAN_DIR / "AxiomAudit.lean"
+CITATION = ROOT / "CITATION.cff"
+LAKEFILE = ROOT / "lakefile.toml"
 
 
 def fail(message: str) -> None:
@@ -24,7 +26,7 @@ required_files = [
     ROOT / "README.md",
     ROOT / "REVIEW_GUIDE.md",
     ROOT / "THEOREM_MAP.md",
-    ROOT / "CITATION.cff",
+    CITATION,
     ROOT / "paper" / "Resolution_Semantics_Adrian_Puha.pdf",
     MANUSCRIPT,
     STYLE,
@@ -40,6 +42,8 @@ for path in required_files:
 tex = MANUSCRIPT.read_text(encoding="utf-8")
 style = STYLE.read_text(encoding="utf-8")
 audit = AUDIT.read_text(encoding="utf-8")
+citation = CITATION.read_text(encoding="utf-8")
+lakefile = LAKEFILE.read_text(encoding="utf-8")
 docs = "\n".join(
     (ROOT / name).read_text(encoding="utf-8")
     for name in ("README.md", "REVIEW_GUIDE.md", "THEOREM_MAP.md")
@@ -58,6 +62,17 @@ if expected_title not in style:
     fail("the PDF metadata title is stale")
 if "references-phase" in tex:
     fail("the manuscript still uses an internal phase bibliography name")
+
+citation_version = re.search(r"^version:\s*([^\s]+)\s*$", citation, re.M)
+lake_version = re.search(r'^version\s*=\s*"([^"]+)"\s*$', lakefile, re.M)
+style_version = re.search(r"\\newcommand\{\\resolutionversion\}\{([^}]+)\}", style)
+if not citation_version or not lake_version or not style_version:
+    fail("could not read a package version from CFF, Lake, and manuscript style")
+versions = {citation_version.group(1), lake_version.group(1), style_version.group(1)}
+if len(versions) != 1:
+    fail("CFF, Lake, and manuscript versions disagree: " + ", ".join(sorted(versions)))
+if "Review version \\resolutionversion" not in style:
+    fail("the running header does not identify the review version")
 
 for stale in (
     "Anonymous",

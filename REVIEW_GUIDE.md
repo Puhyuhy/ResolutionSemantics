@@ -6,6 +6,9 @@ This package is intended for critical mathematical review, not endorsement.
 Lean checks the formal derivations; it does not establish novelty, importance,
 or the adequacy of the literature comparison.
 
+The review package is version 1.1.0, dated 16 August 2026. Please identify the
+reviewed commit when reporting results so comments remain reproducible.
+
 ## Central claims to inspect
 
 1. Generated Answers form a normalized free compatible total extension of a
@@ -15,7 +18,10 @@ or the adequacy of the literature comparison.
    finite. The canonical finite-tag presentation is derived rather than built
    into the primitive definition.
 3. The finite observers induce a separated filtration and a complete
-   observational completion with the stated equational conservativity.
+   observational completion with the stated constant-bearing equational
+   conservativity. Its relative universal property ranges over complete,
+   separated filtered compatible total extensions with injective old
+   embedding.
 4. For finitely coded old carriers, generated Answers are residually finite
    with the stated whole-target bound. In the additional finite-signature
    subcase, the manuscript now identifies the qualitative conclusion as a
@@ -63,11 +69,14 @@ The paper does not:
 Run:
 
     bash scripts/verify.sh
-    bash scripts/build-paper.sh
+    bash scripts/build-paper.sh --check-committed
 
 The public declarations cited by the manuscript are listed in
 [THEOREM_MAP.md](THEOREM_MAP.md). A concise critical response, including a
 negative result or prior-art pointer, is explicitly welcome.
+
+The axiom audit rejects proof holes and any dependency beyond `propext`,
+`Classical.choice`, and `Quot.sound` in the principal theorem list.
 
 ## Development disclosure
 
