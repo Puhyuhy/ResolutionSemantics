@@ -36,9 +36,6 @@ lake build Paper
 
 mkdir -p build
 lake env lean lean/AxiomAudit.lean | tee build/axiom-audit.txt
-if grep -n 'sorryAx' build/axiom-audit.txt; then
-  echo "axiom audit found a sorryAx dependency" >&2
-  exit 1
-fi
+python3 scripts/check_axiom_audit.py
 
 echo "Lean build, manuscript/API check, and axiom audit passed."

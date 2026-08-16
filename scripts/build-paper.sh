@@ -2,6 +2,28 @@
 set -euo pipefail
 
 ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+MODE="build"
+
+if [[ $# -gt 1 ]]; then
+  echo "usage: $0 [--check-committed|--update-committed]" >&2
+  exit 2
+fi
+if [[ $# -eq 1 ]]; then
+  case "$1" in
+    --check-committed) MODE="check" ;;
+    --update-committed) MODE="update" ;;
+    *)
+      echo "usage: $0 [--check-committed|--update-committed]" >&2
+      exit 2
+      ;;
+  esac
+fi
+
+# Keep the review PDF byte-reproducible across local and CI builds.
+export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1786838400}"
+export FORCE_SOURCE_DATE=1
+export TZ=UTC
+
 WORK_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$WORK_DIR"' EXIT
 
@@ -23,6 +45,7 @@ if grep -En \
 fi
 
 OUTPUT="$ROOT_DIR/build/paper/Resolution_Semantics_Adrian_Puha.pdf"
+COMMITTED="$ROOT_DIR/paper/Resolution_Semantics_Adrian_Puha.pdf"
 cp revised.pdf "$OUTPUT"
 
 PDF_INFO="$(pdfinfo "$OUTPUT")"
@@ -36,4 +59,17 @@ if ! grep -Fq 'Resolution Semantics for Binary Partial Algebras' <<<"$PDF_INFO";
 fi
 
 pdftotext "$OUTPUT" - | grep -Fq 'Adrian Puha'
+
+if [[ "$MODE" == "update" ]]; then
+  cp "$OUTPUT" "$COMMITTED"
+  echo "updated committed paper: $COMMITTED"
+elif [[ "$MODE" == "check" ]]; then
+  if ! cmp -s "$OUTPUT" "$COMMITTED"; then
+    echo "checked-in PDF does not match the deterministic LaTeX build" >&2
+    echo "run: bash scripts/build-paper.sh --update-committed" >&2
+    exit 1
+  fi
+  echo "checked-in PDF matches the deterministic LaTeX build"
+fi
+
 echo "paper build passed: $OUTPUT"

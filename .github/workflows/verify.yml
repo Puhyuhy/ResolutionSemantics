@@ -13,7 +13,7 @@ jobs:
     name: Lean 4.33.0
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install Lean toolchain
         run: |
           curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
@@ -23,7 +23,7 @@ jobs:
         run: bash scripts/verify.sh
       - name: Preserve axiom audit
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: axiom-audit
           path: build/axiom-audit.txt
@@ -33,7 +33,7 @@ jobs:
     name: Rebuild manuscript PDF
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install manuscript dependencies
         run: |
           sudo apt-get update
@@ -41,9 +41,9 @@ jobs:
             texlive-latex-base texlive-latex-extra texlive-fonts-recommended \
             lmodern poppler-utils
       - name: Build and inspect PDF
-        run: bash scripts/build-paper.sh
+        run: bash scripts/build-paper.sh --check-committed
       - name: Preserve rebuilt PDF
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: resolution-semantics-paper
           path: build/paper/Resolution_Semantics_Adrian_Puha.pdf

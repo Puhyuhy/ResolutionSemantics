@@ -6,6 +6,8 @@ Completion**
 
 Author: **Adrian Puha**
 
+[![Verify paper package](https://github.com/Puhyuhy/ResolutionSemantics/actions/workflows/verify.yml/badge.svg)](https://github.com/Puhyuhy/ResolutionSemantics/actions/workflows/verify.yml)
+
 [Read the current paper](paper/Resolution_Semantics_Adrian_Puha.pdf)
 
 This repository is the self-contained, paper-only release of the manuscript
@@ -15,7 +17,7 @@ work.
 
 ## Status
 
-This is a working preprint for independent specialist review. The Lean
+Version 1.1.0 (16 August 2026) is the specialist-review release. The Lean
 development checks the stated formal results. The exact novelty and priority
 of the combined mathematical package remain open specialist questions; no
 historical-priority claim is made.
@@ -64,8 +66,8 @@ The toolchain is pinned in [lean-toolchain](lean-toolchain).
     bash scripts/verify.sh
 
 The command builds every paper-facing Lean module, checks the manuscript/API
-map, rejects proof holes, and audits the public theorems for unexpected
-sorryAx dependencies.
+map, rejects proof holes, and requires every audited public theorem to depend
+only on Lean's standard `propext`, `Classical.choice`, and `Quot.sound` axioms.
 
 ## Building the paper
 
@@ -76,6 +78,12 @@ and Poppler utilities.
 
 The rebuilt PDF is written to
 build/paper/Resolution_Semantics_Adrian_Puha.pdf.
+After editing the LaTeX source, refresh the checked-in copy with
+
+    bash scripts/build-paper.sh --update-committed
+
+CI uses `--check-committed` to reject a PDF that does not exactly match the
+deterministic build.
 
 ## Repository structure
 
