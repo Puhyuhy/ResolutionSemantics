@@ -4,7 +4,7 @@ import ResolutionOldFixingContextProperness
 # Sharper old-fixing orbit compression
 
 The original proof collapses the entire base to one additional finite state,
-which gives an `(n+2)!` synchronization bound at stage `n`.  For an old-fixing
+which gives an `(n+2)!` synchronization bound at stage `n`. For an old-fixing
 context that extra state is unnecessary: if the orbit ever enters the base it
 is already constant, while an orbit that has not entered the base lives in the
 `n` tags plus overflow, hence in only `n+1` moving states.
@@ -73,21 +73,27 @@ theorem observerOrbit_old_or_external_repeat
           exfalso
           apply hOld
           exact ⟨k, hk, a, h⟩
-      | inr q => exact ⟨q, h⟩
+      | inr q => exact ⟨q, rfl⟩
     let code : Nat -> Nat := fun k =>
-      match hq : orb (observerStep D W T) s k with
+      match orb (observerStep D W T) s k with
       | Sum.inl _ => 0
       | Sum.inr q => outsideCode q
     have hBound : forall k : Nat, k <= n + 1 -> code k < n + 1 := by
       intro k hk
       rcases hOutside k hk with ⟨q, hq⟩
-      simp [code, hq, outsideCode_lt]
+      have hcode : code k = outsideCode q := by
+        simp [code, hq]
+      rw [hcode]
+      exact outsideCode_lt q
     rcases Resolution.Pigeon.boundedRepeat (n + 1) code hBound with
       ⟨i, j, hij, hj, hcode⟩
     rcases hOutside i (by omega) with ⟨qi, hqi⟩
     rcases hOutside j hj with ⟨qj, hqj⟩
+    have hci : code i = outsideCode qi := by simp [code, hqi]
+    have hcj : code j = outsideCode qj := by simp [code, hqj]
     have hc : outsideCode qi = outsideCode qj := by
-      simpa [code, hqi, hqj] using hcode
+      rw [← hci, ← hcj]
+      exact hcode
     have hq : qi = qj := outsideCode_inj qi qj hc
     exact ⟨i, j, hij, hj, by simpa [hqi, hqj, hq]⟩
 
@@ -154,9 +160,17 @@ theorem sharper_factorial_pair_eqAt :
     exact Nat.le_of_dvd (fact_pos (n + 2))
       (fact_dvd_fact (n + 1) (n + 2) (by omega))
   apply iterate_eqAt_of_sharper_factorial_dvd D W hi hij
-  rw [show fact (n + 2) = (n + 2) * fact (n + 1) from rfl]
+  have hsplit :
+      fact (n + 2) = (n + 1) * fact (n + 1) + fact (n + 1) := by
+    rw [show fact (n + 2) = (n + 2) * fact (n + 1) from rfl]
+    rw [show n + 2 = (n + 1) + 1 from by omega, Nat.add_mul]
+    simp
+  have hdiff :
+      fact (n + 2) - fact (n + 1) = (n + 1) * fact (n + 1) := by
+    rw [hsplit]
+    omega
   refine ⟨n + 1, ?_⟩
-  omega
+  rw [hdiff, Nat.mul_comm]
 
 end OldFixingContextProperness
 end Resolution
