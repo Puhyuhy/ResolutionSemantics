@@ -16,6 +16,20 @@ feature studied here is the requirement that every observer preserve an
 arbitrary partial base pointwise while only the complement over that base is
 budgeted.  This permits infinite codomains with finite external complexity.
 
+There is a concrete obstruction to reducing the simultaneous finite-pattern
+statement to the usual ``separate pairs and take their product'' argument.
+The obstruction is already visible at carrier level.  For an infinite base
+$A$, each one-point extension $A\hookrightarrow A\sqcup\{\star\}$ has finite
+relative complement.  But the Cartesian product of two such extensions, with
+$A$ embedded diagonally, contains all mixed points $(a,\star)$ outside the old
+image.  Hence its complement is infinite.  This failure of product closure is
+Lean-checked for $A=\mathbb N$ in
+\texttt{ResolutionRelativeProductObstruction.lean}.  Thus abstract
+finite-family discrimination may be classical, but the standard product
+construction does not establish it inside the restricted observer class used
+here when the preserved base is infinite; the direct finite-pattern
+construction is doing additional work.
+
 \subsection{Filtered and profinite completions}
 Cauchy completion of separated filtrations and factorial synchronization of
 finite deterministic dynamics are standard.  Profinite completions organize
