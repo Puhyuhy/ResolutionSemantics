@@ -112,6 +112,8 @@ theorem factorialSample_eqAt
     (hi : W.bound n <= i) (hj : W.bound n <= j) :
     FiniteTagEqAt D n (factorialSample W i) (factorialSample W j) := by
   intro T
+  change Free.TotalAlg.interp D (T.toTotalAlg D) (W.term (fact i)) =
+    Free.TotalAlg.interp D (T.toTotalAlg D) (W.term (fact j))
   rw [W.fold_orbit T (fact i), W.fold_orbit T (fact j)]
   have hdi : fact (W.bound n) ∣ fact i :=
     fact_dvd_fact _ _ hi
