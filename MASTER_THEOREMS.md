@@ -16,9 +16,15 @@ For any finite list of generated Answers, `lean/ResolutionFinitePatternRealizati
 - evaluates every selected normal node to its encoding;
 - is injective simultaneously on all generated Answers in the chosen finite list.
 
-Thus pairwise finite-tag separation is the two-point instance of a stronger finite-pattern theorem. The public API is `lean/ResolutionFinitePatternRealizationPublic.lean`, and `ResolutionMasterTheorems.relativeFinitePatternRealization` exposes it as Master I.
+Thus pairwise finite-tag separation is the two-point instance of a stronger finite-pattern theorem. The public API is `lean/ResolutionFinitePatternRealizationPublic.lean`, and `ResolutionMasterTheorems.relativeFinitePatternRealization` exposes it as Master I for the main binary kernel.
 
-This result is currently formalized for the repository's one-sorted binary presentation. Generalization to arbitrary finitary signatures remains a distinct further test; it is not claimed by this branch yet.
+### Verified arbitrary-finitary generalization
+
+`lean/ResolutionFinitaryPatternRealization.lean` independently checks that the same mechanism does not depend on binarity. In that module a signature consists of operation symbols with arbitrary finite arities `arity : Op -> Nat`, raw suspended nodes carry a `Fin (arity f)`-indexed family of children, and partial evaluation accepts the corresponding finite tuple.
+
+For any finite child-closed list of normalized raw Answers, one compatible finite-complement observer is constructed that preserves every defined old/base application and is injective on the whole selected pattern. The proof works for every finite arity, including arity zero.
+
+This finitary module is deliberately a generality probe rather than a replacement of the manuscript's binary kernel. Its purpose is to establish that the finite-tag + overflow realization principle is structural, not a consequence of binary syntax.
 
 ## II. Finite orbit compression => proper completion
 
@@ -58,11 +64,12 @@ The `m = 0` instance yields `c_1 ~_0 c_2`, so the former separate stage-zero phe
 
 The branch now supports the following checked architecture:
 
-- **Master I:** one finite-complement observer simultaneously realizes every chosen finite pattern of generated Answers;
+- **Master I:** one finite-complement observer simultaneously realizes every chosen finite pattern of generated Answers in the main binary kernel;
+- the same finite-pattern realization mechanism is independently Lean-checked for arbitrary finite operation arities;
 - Theorem 3.3's pairwise finite-tag statement is the two-point consequence of Master I;
 - **Master II:** finite orbit compression supplies the proper-completion mechanism;
 - finite-base properness and old-fixing properness are instances of the dynamic mechanism;
 - the old-fixing unbounded-rank witness is sharpened from `(m+2)!/(m+3)!` to `(m+1)!/(m+2)!`;
 - the factorial mechanism is explicitly treated as standard finite/profinite orbit technology rather than a novelty claim.
 
-The main unresolved reduction test is now whether Master I can be lifted from the concrete binary presentation to an arbitrary finitary signature without introducing any genuinely new obstruction. That test will determine how much of the remaining structure is presentation-specific.
+The principal remaining structural question is no longer whether Master I survives arbitrary finite arity; it does. The next harder test is whether Master II itself admits a clean abstract formulation independent of the concrete binary observer implementation, and how far that abstraction extends beyond the current fixed-base orbit setting.
