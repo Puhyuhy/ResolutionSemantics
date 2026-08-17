@@ -3,6 +3,8 @@ set -euo pipefail
 
 ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 
+python3 "$ROOT_DIR/scripts/check_restructured_manuscript.py"
+
 export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1786924800}"
 export FORCE_SOURCE_DATE=1
 export TZ=UTC
