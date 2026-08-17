@@ -6,92 +6,122 @@ This package is intended for critical mathematical review, not endorsement.
 Lean checks the formal derivations; it does not establish novelty, importance,
 or the adequacy of the literature comparison.
 
-The review package is version 1.2.0, dated 17 August 2026. Please identify the
-reviewed commit when reporting results so comments remain reproducible.
+The review package is version 1.2.0, manuscript revision dated 18 August 2026.
+Please identify the reviewed commit when reporting results so comments remain
+reproducible.
 
 ## Central claims to inspect
 
-1. The Diaconescu bridge correctly implements many-sorted finite-arity
-   signatures with separate total and partial symbols, the Horn theory
-   `Gamma`, `alpha`, `beta`, the satisfaction condition, `gamma`, recovery up
-   to canonical equivalence, the persistent-liberality lift, the functor laws,
-   the hom-set equivalence and its two-variable naturality, the unit/counit
-   triangle identities, both fixed-signature initiality transfers (including
-   the `beta`-reduct step used in Corollary 4.2), the conditional term-model
-   construction and initial-partial-model existence theorem for the explicit
-   class of quasi-existence equations, and the semantic consequence
-   equivalence. The generated-normal-form interface should also agree with the
-   stated Resolution presentation. In particular, `generatedEquiv` and
-   `gammaEquiv` should correctly identify the singleton-sort, no-`TF`,
-   binary-`PF` instance with the pre-existing binary core, including both data
-   and truth carriers and all encoded operations. This is a
-   verification/continuation claim, not a novelty claim for those results.
-2. Generated Answers form a normalized free compatible total extension of a
-   binary partial algebra and admit the stated quotient presentation.
-3. Distinct generated Answers can be separated by compatible total extensions
-   whose genuine complement over the pointwise-preserved old carrier is
-   finite. The canonical finite-tag presentation is derived rather than built
-   into the primitive definition.
-4. The finite observers induce a separated filtration and a complete
-   observational completion with the stated constant-bearing equational
-   conservativity. Its relative universal property ranges over complete,
-   separated filtered compatible total extensions with injective old
-   embedding.
-5. For finitely coded old carriers, generated Answers are residually finite
-   with the stated whole-target bound. In the additional finite-signature
-   subcase, the manuscript now identifies the qualitative conclusion as a
-   consequence of classical ground-term recognizability; the explicit
-   base-faithful bound and arbitrary-signature statement remain to be compared.
-6. The embedded old image is closed under the generated total operations if
-   and only if the old evaluator is total. Thus the genuinely partial case is
-   not literally an inclusion of a closed finite-Rees-index subalgebra.
-7. For finitely coded old carriers, the completion embedding is surjective
-   exactly when the old evaluator is total.
-8. Over an arbitrary carrier, an undefined old seed together with an
-   old-fixing context is sufficient for proper completion, strict failure of
-   equality at every finite stage, and unbounded separation rank.
-9. The finite-base and old-fixing-context hypotheses are incomparable: the
-   one-point algebra satisfies the former but not the latter, while natural
-   arithmetic satisfies the latter but has no finite code for its carrier.
-10. Natural and integer arithmetic instantiate the old-fixing criterion using
-   0/0 and the context x maps to x + 0.
+1. **Free-completion substrate.** Generated Answers form the stated normalized
+   free compatible total extension of a binary partial algebra and admit the
+   quotient presentation by equality after resolution. This is infrastructure,
+   not a novelty claim.
+2. **Relative observer class.** Intrinsic finite-complement observers preserve
+   the partial base pointwise and budget only genuinely outside states. The base
+   itself may be infinite. The canonical finite-tag presentation is derived
+   from this observer class rather than built into its primitive definition.
+3. **Master I — finite-pattern realization.** For any finite family of generated
+   Answers, one compatible finite-complement observer is simultaneously
+   injective on the whole family. Pairwise finite-tag separation should follow
+   as the two-point case, while the explicit pairwise constructor-size bound is
+   retained by the older quantitative separator.
+4. **Observational filtration.** The finite observers induce a separated
+   filtration and complete Cauchy completion with the stated relative extension
+   property and exact constant-bearing equational conservativity.
+5. **Master II — trajectory compression.** The factorial Cauchy theorem should
+   require only a finite code of the single relevant deterministic observer
+   trajectory at each stage, not finiteness of the whole observer carrier. The
+   proof should reduce to standard finite periodicity and factorial
+   synchronization; this component is not claimed as new.
+6. **Finite-pattern escape.** For a growing unary syntax
+   `t_(k+1) = susp(u,t_k,old(e))`, the selected candidate/prefix observer should
+   realize the finite pattern exactly, force the next unseen iterate into
+   overflow, and keep the remaining tail in overflow. This should rule out
+   convergence to every finite generated candidate without using the finite-
+   state periodicity argument.
+7. **Combined properness theorem.** Trajectory compression supplies the Cauchy
+   half and finite-pattern escape supplies the no-generated-limit half; together
+   they force a proper observational completion. Review whether this is a
+   genuine structural unification rather than merely a repackaging of two
+   unrelated proofs.
+8. **Finite-base instance.** For finitely coded old carriers, the completion
+   embedding is surjective exactly when the old evaluator is total. Check that
+   this is correctly obtained as an instance of the combined mechanism when an
+   undefined application exists.
+9. **Infinite-base old-fixing instance.** An undefined old seed together with a
+   pointwise old-fixing unary context should provide both trajectory compression
+   and finite-pattern escape over an arbitrary, possibly infinite base. The
+   sharp checked witness is `c_(n+1)! ~_n c_(n+2)!`, yielding unbounded least
+   finite-tag separation rank.
+10. **Arithmetic instances.** Natural and integer arithmetic instantiate the
+    old-fixing criterion using `0/0` and `x ↦ x + 0`, while division by zero
+    remains a structured non-old Answer rather than an ordinary number.
+11. **Diaconescu provenance bridge.** The many-sorted finite-arity formalization
+    should correctly implement the operations-only fragment used by the paper:
+    separate total and partial symbols, `Gamma`, `alpha`, `beta`, the
+    satisfaction condition, `gamma`, recovery up to canonical equivalence,
+    persistent liberality, the hom-set adjunction laws, semantic consequence,
+    fixed-signature initiality transfers, and the singleton-sort binary
+    specialization. This is a verification/continuation claim, not a novelty
+    claim for Diaconescu's results.
 
-## Priority questions
+## Priority novelty questions
 
-- Does the concrete Lean statement of the Diaconescu bridge omit or alter any
-  mathematically significant hypothesis? In particular, is canonical
-  equivalence the right conservative replacement for definitional equality in
-  the recovery statement? Does the explicit satisfaction-transport theorem
-  correctly bridge that equivalence in the proof of semantic consequence?
-- Does `BinarySpecialization.gammaEquiv` genuinely commute with the binary
-  operation, existence equality, and truth constant in both directions, and
-  does its singleton-sort signature capture exactly the original binary core?
-- Do `termModel_initial`, `translateQuasiEquation_sat_iff_partial`, and
-  `quasiTheory_has_initial_partial_model` correctly supply the classical
-  existence step and the fixed-signature, operations-only conclusion of
-  Corollary 4.2, with the stated quasi-existence syntax and universe bound?
-- Is intrinsic finite-complement separation already known under another name?
-- Has separation by homomorphisms into extensions with finite complement over
-  a pointwise-fixed partial base been studied under a generalized Rees-index,
-  relative residual-finiteness, or semigroup-separability formulation?
-- Does classical ground-term recognizability also recover the manuscript's
-  arbitrary-signature finite-base statement and comparable explicit
-  base-faithful state bound, or only its finite-signature qualitative subcase?
-- Is the properness criterion known in an equivalent framework?
+- Is simultaneous finite-pattern realization over a pointwise-preserved,
+  possibly infinite partial base already known under another formulation?
+- Has separation by extensions whose complement over such a fixed partial base
+  is finite been studied as relative residual finiteness, generalized Rees
+  index, or another separability notion?
+- Is the **compression–escape interaction** known in an equivalent framework:
+  finite complexity of the relevant observer trajectory making a factorial
+  sample Cauchy while candidate-tailored finite-pattern observers force escape
+  from every finite generated candidate?
+- Does classical ground-term recognizability recover only the finite-signature
+  qualitative finite-base residual-finiteness consequence, or can it also
+  recover the relative base-faithful finite-pattern statement and explicit
+  state-budget behavior?
+- Is the exact finite-base properness criterion known in a comparable relative
+  completion framework?
+- Is there an existing arbitrary-base theorem subsuming the old-fixing
+  compression–escape instance?
 - Does the combined package contain a publishable contribution, and what
-  literature or terminology is missing?
+  literature or terminology is still missing?
 
-## Scope
+## Priority formalization questions
+
+- Does `ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization`
+  state exactly the finite-pattern result described in the manuscript?
+- Does `ObserverOrbitCompression` constrain only the relevant trajectory, as
+  claimed, rather than smuggling in global finiteness?
+- Does `finitePatternEscapeNoGeneratedLimit` genuinely derive nonconvergence
+  from selected-pattern/overflow mechanics rather than restating
+  nonconvergence as an assumption?
+- Do the finite-base and old-fixing instances both factor through
+  `compressedEscapingOrbitNotComplete` / the corresponding embedding theorem?
+- Is the sharper `(n+1)!/(n+2)!` old-fixing indexing correct at stage `n`,
+  including the `n = 0` case?
+- Does the Diaconescu binary specialization commute with the data operation,
+  existence equality, and truth constant in both directions?
+- Do the initiality and semantic-consequence results have exactly the
+  fixed-signature, operations-only and universe-bounded scope stated by the
+  manuscript?
+
+## Scope and non-claims
 
 The paper does not:
 
-- claim to invent free completion, operation trees, or ultrametric completion;
+- claim to invent free compatible completion, operation trees, selected-subterm
+  sink constructions in isolation, finite-state eventual periodicity,
+  factorial synchronization, or generic Cauchy completion;
+- claim Diaconescu's encoding or adjunction theory as new;
 - assign an ordinary number to division by zero;
 - establish optimal separator complexity;
+- give a necessary-and-sufficient arbitrary-infinite-base properness criterion;
+- extend the full observational completion theory to arbitrary many-sorted
+  signatures;
 - prove Strong Totality;
-- formalize the institution/comorphism layer, arbitrary signature morphisms,
-  the full institution-level formulation of Corollary 4.2, or Birkhoff
-  proof-theoretic completeness;
+- formalize the full institution/comorphism layer or arbitrary signature
+  morphisms;
 - claim historical priority.
 
 ## Verification
@@ -101,12 +131,15 @@ Run:
     bash scripts/verify.sh
     bash scripts/build-paper.sh --check-committed
 
-The public declarations cited by the manuscript are listed in
-[THEOREM_MAP.md](THEOREM_MAP.md). A concise critical response, including a
-negative result or prior-art pointer, is explicitly welcome.
+The public declarations cited by the manuscript are organized in
+[THEOREM_MAP.md](THEOREM_MAP.md). The research reduction behind the manuscript
+architecture is summarized in [MASTER_THEOREMS.md](MASTER_THEOREMS.md).
 
 The axiom audit rejects proof holes and any dependency beyond `propext`,
 `Classical.choice`, and `Quot.sound` in the principal theorem list.
+
+A concise critical response, including a negative result, counterexample, or
+prior-art pointer, is explicitly welcome.
 
 ## Development disclosure
 
