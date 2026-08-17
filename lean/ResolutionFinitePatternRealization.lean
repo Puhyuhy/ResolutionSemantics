@@ -29,7 +29,7 @@ variable (D : PartialAlg.{u,v} Sigma)
 def patternSelected :
     List (RawAns Sigma D.Carrier) -> List (RawAns Sigma D.Carrier)
   | [] => []
-  | r :: rs => subterms D r ++ patternSelected D rs
+  | r :: rs => subterms D r ++ patternSelected rs
 
 @[simp] theorem patternSelected_nil :
     patternSelected D ([] : List (RawAns Sigma D.Carrier)) = [] := rfl
@@ -284,7 +284,17 @@ def rawRoots (xs : List (Free.GeneratedAns D)) :
 theorem rawRoot_mem
     {xs : List (Free.GeneratedAns D)} {x : Free.GeneratedAns D}
     (hx : x ∈ xs) : x.1 ∈ rawRoots D xs := by
-  simp [rawRoots, hx]
+  induction xs with
+  | nil => simp at hx
+  | cons a xs ih =>
+      simp only [List.mem_cons] at hx
+      simp only [rawRoots, List.map_cons, List.mem_cons]
+      rcases hx with h | h
+      · left
+        cases h
+        rfl
+      · right
+        exact ih h
 
 /-- One finite-tag observer is simultaneously injective on any finite list of
 generated Answers.  This is the finite-pattern strengthening of pairwise
