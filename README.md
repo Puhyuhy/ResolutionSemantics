@@ -10,67 +10,87 @@ Author: **Adrian Puha**
 
 [Read the current paper](paper/Resolution_Semantics_Adrian_Puha.pdf)
 
-This repository is the self-contained, paper-only release of the manuscript
-and its Lean formalization. It intentionally excludes exploratory projects,
-superseded drafts, phase reports, temporary logs, and future Strong Totality
-work.
+This repository is the self-contained paper and Lean formalization package.
+It intentionally excludes exploratory projects, superseded phase reports,
+temporary logs, and future Strong Totality work.
 
 ## Status
 
-Version 1.2.0 (17 August 2026) is the specialist-review release. The Lean
-development checks the stated formal results. The exact novelty and priority
-of the combined mathematical package remain open specialist questions; no
-historical-priority claim is made.
+Version 1.2.0, manuscript revision dated 18 August 2026, is under specialist
+review. The Lean development checks the stated formal results. The exact
+novelty and priority of the combined mathematical package remain open
+specialist questions; no historical-priority claim is made.
 
-## Main formal results
+## Structural result architecture
 
-- normalized free compatible completion of a binary partial algebra;
-- quotient presentation by equality after resolution;
-- intrinsic finite-complement separation over a pointwise-preserved base;
-- equivalence with the canonical finite-tag presentation;
-- a base-faithful finite separator and explicit whole-target bound whenever the
-  old carrier is finitely coded; its ordinary residual-finiteness consequence
-  is positioned against classical finite-signature ground-term recognizability;
-- a proof that the old image is a total subalgebra of generated Answers exactly
-  when the original evaluator is total, separating the construction from
-  ordinary finite Rees index in the genuinely partial case;
+The promoted manuscript is organized around two master principles and one
+Resolution-specific anti-limit mechanism.
+
+1. **Master I — relative finite-pattern realization.** For every finite family
+   of generated Answers, one compatible finite-complement observer fixes the
+   entire partial base pointwise and is simultaneously injective on that
+   family. Pairwise finite-tag separation is the two-point consequence; the
+   explicit constructor-size pair bound is retained.
+2. **Master II — trajectory compression.** At each finite observation stage it
+   is enough for the single deterministic trajectory relevant to a chosen
+   generated unary family to admit a finite code. The whole observer carrier
+   need not be finite. Standard periodicity and factorial divisibility then
+   make the factorial sample Cauchy.
+3. **Finite-pattern escape.** For a syntactically growing unary orbit, a
+   candidate-tailored finite-pattern observer realizes the candidate and a
+   long orbit prefix exactly, sends the next unseen iterate to absorbing
+   overflow, and thereby rules out every generated candidate as a limit.
+4. **Combined properness theorem.** Trajectory compression plus finite-pattern
+   escape yields a Cauchy sequence with no generated limit, hence a proper
+   observational completion.
+
+The finite-base criterion and the arbitrary-base old-fixing theorem are
+formally checked instances of this same combined mechanism. In the old-fixing
+case the sharp stage-`n` witness is
+
+`c_(n+1)! ~_n c_(n+2)!`,
+
+which gives unbounded finite separation ranks.
+
+## Other main formal results
+
+- normalized free compatible completion of a binary partial algebra and its
+  quotient presentation by equality after resolution;
+- intrinsic finite-complement observers over a pointwise-preserved, possibly
+  infinite partial base, with equivalence to canonical finite-tag models;
 - the induced separated filtration and complete observational completion;
 - exact preservation and reflection of constant-bearing universal equations;
-- properness iff the old evaluator is partial for finitely coded bases;
-- an old-fixing-context sufficient criterion over arbitrary bases;
-- a formal proof that these two properness hypotheses are incomparable, using
-  the one-point algebra and natural arithmetic as opposite witnesses;
-- natural- and integer-arithmetic instances with proper completions and
-  unbounded finite separation ranks;
-- a supporting many-sorted, arbitrary-finite-arity bridge to Diaconescu's
-  total-algebra encoding, with separate `TF`/`PF` symbols, the Horn theory
-  `Gamma`, the translations `alpha` and `beta`, and the satisfaction condition;
-- a canonical many-sorted `gamma` construction, recovery by `beta` up to
-  partial-algebra equivalence, and the unique encoded lift (persistent
-  liberality), together with the functor laws, hom-set equivalence, naturality,
-  unit and counit, triangle identities, semantic consequence, and both
-  fixed-signature initiality transfers;
-- an explicit quasi-existence syntax and conditional term-model construction
-  checking the fixed-signature, operations-only initial-model conclusion used
-  in Diaconescu's Corollary 4.2;
-- a formal equivalence between the pre-existing binary Resolution
-  implementation and the singleton-sort, no-`TF`, binary-`PF` instance of the
-  many-sorted construction, including the generated data and truth carriers
-  and all encoded operations.
+- for finitely coded bases, properness exactly when some base application is
+  undefined;
+- over arbitrary bases, the old-fixing-context instance of the combined
+  compression–escape theorem;
+- natural- and integer-arithmetic instances using the undefined seed `0/0` and
+  the context `x ↦ x + 0`;
+- a supporting many-sorted, arbitrary-finite-arity formalization of the
+  operations-only fragment of Diaconescu's encoding, including satisfaction,
+  recovery, persistent liberality, adjunction laws, semantic consequence,
+  fixed-signature initiality transfers, and the binary specialization bridge.
 
-The final four items establish provenance and exact formal compatibility with
-the cited encoding. They are a machine-checked continuation of established
-work, not the novelty claim of this paper.
+The Diaconescu development establishes provenance and exact formal
+compatibility with established partial-to-total infrastructure. It is not a
+separate novelty claim of this paper.
 
 Division by zero is represented by a structured non-old Answer. The paper does
-not assign an ordinary numerical value to a/0, and it does not prove Strong
+not assign an ordinary numerical value to `a/0`, and it does not prove Strong
 Totality.
 
-The paper explicitly treats free completion, finite-signature ground-term
-recognizability, operation-tree syntax, and standard Cauchy completion as prior
-art. The open novelty question concerns the relative observer class that fixes
-a possibly infinite partial base pointwise while bounding only its complement,
-and the completion and properness results built from that class.
+## Novelty discipline
+
+The paper explicitly treats the following as background rather than novelty:
+free compatible completion, finite selected-subterm/sink constructions in
+isolation, finite-state eventual periodicity, factorial synchronization,
+generic Cauchy completion, and Diaconescu's encoding itself.
+
+The strongest contribution under review is the interaction of a pointwise-
+preserved possibly infinite partial base, finite complexity only outside that
+base, simultaneous finite-pattern realization, trajectory-level compression,
+and finite-pattern escape witnesses that force proper observational
+completions.
 
 ## Reproducing the formal verification
 
@@ -96,7 +116,7 @@ and Poppler utilities.
     bash scripts/build-paper.sh
 
 The rebuilt PDF is written to
-build/paper/Resolution_Semantics_Adrian_Puha.pdf.
+`build/paper/Resolution_Semantics_Adrian_Puha.pdf`.
 After editing the LaTeX source, refresh the checked-in copy with
 
     bash scripts/build-paper.sh --update-committed
@@ -106,12 +126,13 @@ deterministic build.
 
 ## Repository structure
 
-- paper/ — final PDF, LaTeX source, and bibliography;
-- lean/ — proof sources required by this manuscript;
-- [THEOREM_MAP.md](THEOREM_MAP.md) — paper claims mapped to Lean declarations;
-- [REVIEW_GUIDE.md](REVIEW_GUIDE.md) — focused questions for independent review;
-- scripts/ — reproducible verification and paper-build commands;
-- .github/workflows/verify.yml — continuous verification.
+- `paper/` — committed PDF, LaTeX source, and bibliography;
+- `lean/` — proof sources required by the manuscript;
+- [`THEOREM_MAP.md`](THEOREM_MAP.md) — structural claims mapped to Lean declarations;
+- [`REVIEW_GUIDE.md`](REVIEW_GUIDE.md) — focused questions for independent review;
+- [`MASTER_THEOREMS.md`](MASTER_THEOREMS.md) — research reduction behind the promoted architecture;
+- `scripts/` — reproducible verification and paper-build commands;
+- `.github/workflows/verify.yml` — continuous verification.
 
 The manuscript and formalization were developed with substantial AI
 assistance. Adrian Puha is responsible for the claims and is seeking
