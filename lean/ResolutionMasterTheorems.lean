@@ -5,7 +5,7 @@ import ResolutionOldFixingContextPropernessPublic
 /-!
 # Master theorem facade for relative separation and orbit compression
 
-This module does not introduce a new proof mechanism.  It reorganizes the
+This module does not introduce a new proof mechanism. It reorganizes the
 checked public results around the two structural principles isolated by the
 post-audit reduction:
 
@@ -39,15 +39,15 @@ application is undefined. -/
 theorem finiteBasePropernessCriterion
     (D : Resolution.PartialAlg.{u,v} Sigma) {baseSize : Nat}
     (C : Resolution.Orbit.Coded D.Carrier baseSize) :
-    (not Function.Surjective
+    (¬ Function.Surjective
         (Resolution.Filtered.embed
-          (Resolution.External.generatedFilteredSpace D))) <->
+          (Resolution.External.generatedFilteredSpace D))) ↔
       exists f : Sigma.Op, exists a b : D.Carrier,
         D.eval f a b = none :=
   FiniteBaseCompletion.embeddingNotSurjectiveIffExistsUndefined D C
 
 /-- Consequences supplied by finite orbit compression in the presence of an
-old/base-fixing unary context.  Keeping this as one record makes explicit that
+old/base-fixing unary context. Keeping this as one record makes explicit that
 the Cauchy witness, failure of generated convergence, incompleteness, and
 properness are one package rather than independent mechanisms. -/
 structure OrbitCompressionConsequences
@@ -59,14 +59,14 @@ structure OrbitCompressionConsequences
       (OldFixingContextCompletion.factorialSequence D W)
   noGeneratedLimit :
     forall x : Resolution.Free.GeneratedAns D,
-      not Resolution.Filtered.Converges
+      ¬ Resolution.Filtered.Converges
         (Resolution.External.generatedFilteredSpace D)
         (OldFixingContextCompletion.factorialSequence D W) x
   notComplete :
-    not Resolution.Filtered.Complete
+    ¬ Resolution.Filtered.Complete
       (Resolution.External.generatedFilteredSpace D)
   embeddingNotSurjective :
-    not Function.Surjective
+    ¬ Function.Surjective
       (Resolution.Filtered.embed
         (Resolution.External.generatedFilteredSpace D))
 
