@@ -4,31 +4,24 @@ import ResolutionOldFixingContextPropernessPublic
 import ResolutionOldFixingContextSharperOrbitPublic
 import ResolutionFinitePatternRealizationPublic
 import ResolutionOrbitCompressionMaster
+import ResolutionFinitePatternAntiLimit
 
 /-!
-# Master theorem facade for relative separation and orbit compression
+# Master theorem facade for relative separation and proper completion
 
-This module reorganizes the checked public results around two structural
-principles isolated by the post-audit reduction:
+The checked architecture now has two independent structural ingredients:
 
-1. finite-pattern realization over the pointwise-fixed partial base;
-2. trajectory-level finite orbit compression plus a Resolution-specific
-   no-generated-limit witness, yielding a proper completion.
+1. relative finite-pattern realization over the pointwise-fixed partial base;
+2. finite trajectory compression for the relevant observer orbit.
 
-Finite-pattern realization strengthens pairwise separation: one compatible
-finite-tag observer is simultaneously injective on any chosen finite list of
-generated Answers. Pairwise separation is the two-point instance.
+For growing unary syntax, the concrete finite-pattern construction supplies an
+anti-limit principle: retain the candidate and a finite orbit prefix exactly,
+then force the first unseen continuation into absorbing overflow. Combining
+this escape mechanism with trajectory compression yields a proper completion.
 
-Master II is deliberately split. The factorial-periodicity/Cauchy half is the
-standard finite-dynamics mechanism and only requires a finite code of the
-relevant observer trajectory, not a finite observer carrier. The no-limit half
-remains Resolution-specific and is supplied by selected finite patterns plus
-absorbing overflow.
-
-The old-fixing branch also uses the sharper observation that a stage-`n`
-orbit either enters the fixed base and stabilizes or remains in only `n+1`
-outside states. Consequently the consecutive factorial pair `(n+1)!`,
-`(n+2)!` already agrees at stage `n`.
+The factorial-periodicity/Cauchy half is standard finite-dynamics machinery.
+The Resolution-specific content lies in the relative observer class and in the
+finite-pattern escape mechanism that rules out every finite generated limit.
 -/
 
 universe u v
@@ -56,9 +49,8 @@ theorem relativeFiniteComplementSeparation
     Resolution.External.IntrinsicFiniteComplementSeparating D :=
   qualitativeFiniteComplementSeparating_theorem D
 
-/-- The finite-base criterion packaged as a consequence of bounded observer
-state spaces: the completion embedding is proper exactly when some base
-application is undefined. -/
+/-- The finite-base criterion: the completion embedding is proper exactly when
+some base application is undefined. -/
 theorem finiteBasePropernessCriterion
     (D : Resolution.PartialAlg.{u,v} Sigma) {baseSize : Nat}
     (C : Resolution.Orbit.Coded D.Carrier baseSize) :
@@ -92,8 +84,48 @@ theorem orbitCompressionCauchy
       (orbitCompressionFactorialSample W) :=
   Resolution.OrbitCompression.factorialSample_cauchy W
 
-/-- Master II in abstract form. If the compressed factorial orbit additionally
-has no generated limit, then the generated filtered space is incomplete. -/
+/-- A growing unary orbit has the syntactic escape shape needed by the generic
+finite-pattern anti-limit construction. -/
+abbrev EscapingUnarySyntax
+    {D : Resolution.PartialAlg.{u,v} Sigma}
+    (W : OrbitCompressionWitness D) :=
+  Resolution.FinitePatternAntiLimit.EscapingUnarySyntax W
+
+/-- Resolution-specific anti-limit half: finite-pattern realization plus
+syntactic escape rules out convergence of the factorial sample to every
+generated Answer. -/
+theorem finitePatternEscapeNoGeneratedLimit
+    (D : Resolution.PartialAlg.{u,v} Sigma)
+    (W : OrbitCompressionWitness D)
+    (U : EscapingUnarySyntax W) :
+    Resolution.OrbitCompression.NoGeneratedLimit W :=
+  Resolution.FinitePatternAntiLimit.noGeneratedLimit_of_escapingSyntax D W U
+
+/-- Combined master properness theorem. Uniform finite trajectory compression
+supplies Cauchy behavior, while finite-pattern escape supplies the absence of a
+generated limit. Therefore the generated observational space is incomplete. -/
+theorem compressedEscapingOrbitNotComplete
+    (D : Resolution.PartialAlg.{u,v} Sigma)
+    (W : OrbitCompressionWitness D)
+    (U : EscapingUnarySyntax W) :
+    ¬ Resolution.Filtered.Complete
+      (Resolution.External.generatedFilteredSpace D) :=
+  Resolution.FinitePatternAntiLimit.notComplete_of_compressed_escapingSyntax
+    D W U
+
+/-- Publication-facing proper-completion form of the combined master theorem. -/
+theorem compressedEscapingOrbitEmbeddingNotSurjective
+    (D : Resolution.PartialAlg.{u,v} Sigma)
+    (W : OrbitCompressionWitness D)
+    (U : EscapingUnarySyntax W) :
+    ¬ Function.Surjective
+      (Resolution.Filtered.embed
+        (Resolution.External.generatedFilteredSpace D)) :=
+  Resolution.FinitePatternAntiLimit.embeddingNotSurjective_of_compressed_escapingSyntax
+    D W U
+
+/-- More general abstract Master-II implication when no-generated-limit is
+provided by some other mechanism. -/
 theorem orbitCompressionNotComplete
     (D : Resolution.PartialAlg.{u,v} Sigma)
     (W : OrbitCompressionWitness D)
@@ -112,9 +144,8 @@ theorem orbitCompressionEmbeddingNotSurjective
         (Resolution.External.generatedFilteredSpace D)) :=
   Resolution.OrbitCompression.embeddingNotSurjective_of_compression W hNo
 
-/-- Both the finite-base undefined-comb theorem and the infinite-base
-old-fixing theorem instantiate the same abstract trajectory-compression
-principle. -/
+/-- The old-fixing infinite-base theorem factors through abstract trajectory
+compression. -/
 theorem oldFixingPropernessViaAbstractCompression
     (D : Resolution.PartialAlg.{u,v} Sigma)
     (W : Resolution.OldFixingContextWitness D) :
@@ -122,10 +153,17 @@ theorem oldFixingPropernessViaAbstractCompression
       (Resolution.External.generatedFilteredSpace D) :=
   Resolution.OrbitCompression.oldFixing_notComplete_via_compression D W
 
-/-- Consequences supplied by finite orbit compression in the presence of an
-old/base-fixing unary context. Keeping this as one record makes explicit that
-the Cauchy witness, failure of generated convergence, incompleteness, and
-properness are one package rather than independent mechanisms. -/
+/-- The same old-fixing theorem also factors through the combined
+compression-plus-finite-pattern-escape master theorem. -/
+theorem oldFixingPropernessViaCombinedMaster
+    (D : Resolution.PartialAlg.{u,v} Sigma)
+    (W : Resolution.OldFixingContextWitness D) :
+    ¬ Resolution.Filtered.Complete
+      (Resolution.External.generatedFilteredSpace D) :=
+  Resolution.FinitePatternAntiLimit.oldFixing_notComplete_via_master D W
+
+/-- Consequences supplied by finite orbit compression in the concrete
+old/base-fixing unary context. -/
 structure OrbitCompressionConsequences
     (D : Resolution.PartialAlg.{u,v} Sigma)
     (W : OldFixingContextCompletion.Witness D) : Prop where
@@ -146,8 +184,7 @@ structure OrbitCompressionConsequences
       (Resolution.Filtered.embed
         (Resolution.External.generatedFilteredSpace D))
 
-/-- Old-fixing concrete package, retained as the manuscript-facing instance of
-abstract Master II. -/
+/-- Old-fixing concrete package, retained as a manuscript-facing instance. -/
 theorem oldFixingOrbitCompression
     (D : Resolution.PartialAlg.{u,v} Sigma)
     (W : OldFixingContextCompletion.Witness D) :
