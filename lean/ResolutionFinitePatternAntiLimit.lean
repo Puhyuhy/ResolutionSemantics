@@ -184,6 +184,8 @@ theorem next_not_escapeSelected
   · have hle := Resolution.FiniteBaseProperness.nodeCount_le_of_mem_subterms D hp
     have hsucc := EscapingUnarySyntax.nodeCount_succ U
       (nodeCount D x.1 + 1)
+    have hidx : nodeCount D x.1 + 1 + 1 = nodeCount D x.1 + 2 := by omega
+    rw [hidx] at hsucc
     omega
 
 /-- The first transition beyond the retained prefix misses every selected table
@@ -249,6 +251,9 @@ theorem patternOp_after_escapePrefix
       patternOverflow D := by
   let roots := escapeRoots W x
   let p := (W.term (escapePrefixIndex W x)).1
+  change patternOp D roots U.stepOp
+      (patternEncode D roots p)
+      (patternEncode D roots (.old U.fixedRight)) = patternOverflow D
   have hpRoot : p ∈ patternSelected D roots :=
     prefix_mem_escapeSelected D W x
   let n := nodeCount D x.1
@@ -274,8 +279,15 @@ theorem patternOp_after_escapePrefix
         FiniteTagCarrier D (patternSelected D roots).length) := by
     rw [hpShape]
     exact hpenc
-  rw [hpenc'] at htable ⊢
-  simpa [patternOp] using htable
+  rw [hpenc']
+  change patternTable D roots U.stepOp
+      (Sum.inr (Sum.inl
+        (tagIndex
+          (RawAns.susp U.stepOp (W.term n).1 (.old U.fixedRight))
+          (patternSelected D roots) hsusp)))
+      (patternEncode D roots (.old U.fixedRight)) = patternOverflow D
+  rw [hpenc'] at htable
+  exact htable
 
 /-- The retained prefix is faithfully realized by the finite-pattern observer. -/
 theorem fold_escapePrefix_eq_encode (x : Free.GeneratedAns D) :
@@ -312,7 +324,11 @@ theorem fold_escapeNext_eq_overflow
       (Free.TotalAlg.foldRaw D ((patternAlg D roots).toTotalAlg D)
         (W.term (nodeCount D x.1 + 1)).1)
       (Sum.inl U.fixedRight) = patternOverflow D
-  rw [fold_escapePrefix_eq_encode D W x]
+  have hp := fold_escapePrefix_eq_encode D W x
+  change Free.TotalAlg.foldRaw D ((patternAlg D roots).toTotalAlg D)
+      (W.term (nodeCount D x.1 + 1)).1 =
+    patternEncode D roots (W.term (nodeCount D x.1 + 1)).1 at hp
+  rw [hp]
   simpa only [patternEncode] using patternOp_after_escapePrefix D W U x
 
 /-- Once overflow is reached, every later orbit node remains overflow. -/
