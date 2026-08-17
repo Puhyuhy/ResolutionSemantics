@@ -4,25 +4,25 @@ import ResolutionOrbitCompressionMaster
 /-!
 # Finite-pattern escape as the Resolution-specific anti-limit mechanism
 
-Orbit compression explains why factorial sampling is Cauchy.  It does not, by
+Orbit compression explains why factorial sampling is Cauchy. It does not, by
 itself, explain why the resulting Cauchy sequence has no generated limit.
 
-This module isolates that second ingredient.  For a generated unary syntactic
+This module isolates that second ingredient. For a generated unary syntactic
 orbit
 
     t_(k+1) = susp stepOp t_k (old fixedRight),
 
-syntax grows strictly at every step.  Given any candidate generated Answer x,
+syntax grows strictly at every step. Given any candidate generated Answer x,
 we select the finite subterm pattern consisting of x and a sufficiently long
-orbit prefix.  The finite-pattern observer realizes that whole finite pattern,
-but the very next orbit node is too large to belong to it.  Therefore the next
-transition misses the finite table and enters overflow.  Since no selected node
+orbit prefix. The finite-pattern observer realizes that whole finite pattern,
+but the very next orbit node is too large to belong to it. Therefore the next
+transition misses the finite table and enters overflow. Since no selected node
 can have overflow as an encoded child, overflow is absorbing along the unary
-context.  All sufficiently late orbit terms are thus separated from x by one
+context. All sufficiently late orbit terms are thus separated from x by one
 candidate-tailored finite-complement observer.
 
 Combined with trajectory compression, this yields a reusable proper-completion
-theorem.  The finite-base comb and old-fixing infinite-base constructions are
+theorem. The finite-base comb and old-fixing infinite-base constructions are
 both instances.
 -/
 
@@ -54,21 +54,23 @@ namespace EscapingUnarySyntax
 
 variable {D : PartialAlg.{u,v} Sigma}
 variable {W : ObserverOrbitCompression D}
-variable (U : EscapingUnarySyntax W)
 
 /-- Each syntactic step adds exactly one suspension and one fixed old leaf. -/
-theorem nodeCount_succ (k : Nat) :
+theorem nodeCount_succ
+    (U : EscapingUnarySyntax W) (k : Nat) :
     nodeCount D (W.term (k + 1)).1 = nodeCount D (W.term k).1 + 2 := by
   rw [U.raw_succ k]
-  simp [nodeCount]
+  simp only [nodeCount]
+  omega
 
 /-- The orbit index is a crude lower bound on constructor count. -/
-theorem index_le_nodeCount : forall k : Nat,
-    k <= nodeCount D (W.term k).1
+theorem index_le_nodeCount
+    (U : EscapingUnarySyntax W) : forall k : Nat,
+      k <= nodeCount D (W.term k).1
   | 0 => Nat.zero_le _
   | k + 1 => by
       rw [nodeCount_succ U k]
-      have hk := index_le_nodeCount k
+      have hk := index_le_nodeCount U k
       omega
 
 end EscapingUnarySyntax
@@ -139,7 +141,6 @@ section OrbitEscape
 
 variable (D : PartialAlg.{u,v} Sigma)
 variable (W : ObserverOrbitCompression D)
-variable (U : EscapingUnarySyntax W)
 
 /-- The candidate is one of the retained roots. -/
 theorem candidate_mem_escapeSelected (x : Free.GeneratedAns D) :
@@ -155,35 +156,40 @@ theorem prefix_mem_escapeSelected (x : Free.GeneratedAns D) :
   simp [escapeRoots]
 
 /-- The fixed old right argument occurs inside the retained prefix. -/
-theorem fixedRight_mem_escapeSelected (x : Free.GeneratedAns D) :
+theorem fixedRight_mem_escapeSelected
+    (U : EscapingUnarySyntax W) (x : Free.GeneratedAns D) :
     (.old U.fixedRight : RawAns Sigma D.Carrier) ∈
       patternSelected D (escapeRoots W x) := by
   let n := nodeCount D x.1
   have hp := prefix_mem_escapeSelected D W x
-  have hshape := U.raw_succ n
   change (W.term (n + 1)).1 ∈ patternSelected D (escapeRoots W x) at hp
+  have hshape := U.raw_succ n
   rw [hshape] at hp
   exact (children_mem_patternSelected D hp).2
 
 /-- The orbit node immediately beyond the retained prefix is too large to be a
 subterm of either retained root. -/
-theorem next_not_escapeSelected (x : Free.GeneratedAns D) :
+theorem next_not_escapeSelected
+    (U : EscapingUnarySyntax W) (x : Free.GeneratedAns D) :
     (W.term (nodeCount D x.1 + 2)).1 ∉
       patternSelected D (escapeRoots W x) := by
   intro hmem
-  simp only [escapeRoots, patternSelected, List.mem_append,
-    List.mem_nil_iff, or_false] at hmem
+  simp only [escapeRoots, escapePrefixIndex, patternSelected,
+    List.mem_append, List.mem_nil_iff, or_false] at hmem
   rcases hmem with hx | hp
   · have hle := Resolution.FiniteBaseProperness.nodeCount_le_of_mem_subterms D hx
-    have hindex := U.index_le_nodeCount (nodeCount D x.1 + 2)
+    have hindex := EscapingUnarySyntax.index_le_nodeCount U
+      (nodeCount D x.1 + 2)
     omega
   · have hle := Resolution.FiniteBaseProperness.nodeCount_le_of_mem_subterms D hp
-    have hsucc := U.nodeCount_succ (nodeCount D x.1 + 1)
+    have hsucc := EscapingUnarySyntax.nodeCount_succ U
+      (nodeCount D x.1 + 1)
     omega
 
 /-- The first transition beyond the retained prefix misses every selected table
 entry and therefore returns overflow. -/
-theorem patternTable_after_escapePrefix (x : Free.GeneratedAns D) :
+theorem patternTable_after_escapePrefix
+    (U : EscapingUnarySyntax W) (x : Free.GeneratedAns D) :
     let roots := escapeRoots W x
     let p := (W.term (escapePrefixIndex W x)).1
     patternTable D roots U.stepOp
@@ -233,7 +239,8 @@ theorem patternTable_after_escapePrefix (x : Free.GeneratedAns D) :
 
 /-- The conservative operation itself overflows immediately after the retained
 prefix. -/
-theorem patternOp_after_escapePrefix (x : Free.GeneratedAns D) :
+theorem patternOp_after_escapePrefix
+    (U : EscapingUnarySyntax W) (x : Free.GeneratedAns D) :
     let roots := escapeRoots W x
     let p := (W.term (escapePrefixIndex W x)).1
     patternOp D roots U.stepOp
@@ -245,27 +252,30 @@ theorem patternOp_after_escapePrefix (x : Free.GeneratedAns D) :
   have hpRoot : p ∈ patternSelected D roots :=
     prefix_mem_escapeSelected D W x
   let n := nodeCount D x.1
-  have hshape := U.raw_succ n
-  change (W.term (n + 1)).1 =
-      RawAns.susp U.stepOp (W.term n).1 (.old U.fixedRight) at hshape
-  change patternOp D roots U.stepOp
-      (patternEncode D roots p)
-      (patternEncode D roots (.old U.fixedRight)) = patternOverflow D
   have hpShape : p =
       RawAns.susp U.stepOp (W.term n).1 (.old U.fixedRight) := by
-    exact hshape
-  rw [hpShape] at hpRoot ⊢
-  rw [patternEncode_susp_of_mem D hpRoot]
-  change patternTable D roots U.stepOp
-      (patternEncode D roots
-        (RawAns.susp U.stepOp (W.term n).1 (.old U.fixedRight)))
-      (patternEncode D roots (.old U.fixedRight)) = patternOverflow D
+    change (W.term (n + 1)).1 =
+      RawAns.susp U.stepOp (W.term n).1 (.old U.fixedRight)
+    exact U.raw_succ n
+  have hsusp : RawAns.susp U.stepOp (W.term n).1 (.old U.fixedRight) ∈
+      patternSelected D roots := by
+    rw [← hpShape]
+    exact hpRoot
+  have hpenc := patternEncode_susp_of_mem D hsusp
   have htable := patternTable_after_escapePrefix D W U x
   change patternTable D roots U.stepOp
       (patternEncode D roots p)
       (patternEncode D roots (.old U.fixedRight)) = patternOverflow D at htable
-  rw [hpShape] at htable
-  exact htable
+  have hpenc' : patternEncode D roots p =
+      (Sum.inr (Sum.inl
+        (tagIndex
+          (RawAns.susp U.stepOp (W.term n).1 (.old U.fixedRight))
+          (patternSelected D roots) hsusp)) :
+        FiniteTagCarrier D (patternSelected D roots).length) := by
+    rw [hpShape]
+    exact hpenc
+  rw [hpenc'] at htable ⊢
+  simpa [patternOp] using htable
 
 /-- The retained prefix is faithfully realized by the finite-pattern observer. -/
 theorem fold_escapePrefix_eq_encode (x : Free.GeneratedAns D) :
@@ -291,7 +301,8 @@ theorem fold_candidate_eq_encode (x : Free.GeneratedAns D) :
   exact foldRaw_eq_patternEncode D x.1 hx (generated_normal D x)
 
 /-- The very next orbit node is sent to overflow. -/
-theorem fold_escapeNext_eq_overflow (x : Free.GeneratedAns D) :
+theorem fold_escapeNext_eq_overflow
+    (U : EscapingUnarySyntax W) (x : Free.GeneratedAns D) :
     let roots := escapeRoots W x
     Free.TotalAlg.foldRaw D ((patternAlg D roots).toTotalAlg D)
         (W.term (nodeCount D x.1 + 2)).1 = patternOverflow D := by
@@ -301,11 +312,12 @@ theorem fold_escapeNext_eq_overflow (x : Free.GeneratedAns D) :
       (Free.TotalAlg.foldRaw D ((patternAlg D roots).toTotalAlg D)
         (W.term (nodeCount D x.1 + 1)).1)
       (Sum.inl U.fixedRight) = patternOverflow D
-  rw [fold_escapePrefix_eq_encode D W U x]
+  rw [fold_escapePrefix_eq_encode D W x]
   simpa only [patternEncode] using patternOp_after_escapePrefix D W U x
 
 /-- Once overflow is reached, every later orbit node remains overflow. -/
-theorem fold_escapeTail_eq_overflow (x : Free.GeneratedAns D) :
+theorem fold_escapeTail_eq_overflow
+    (U : EscapingUnarySyntax W) (x : Free.GeneratedAns D) :
     let roots := escapeRoots W x
     forall d : Nat,
       Free.TotalAlg.foldRaw D ((patternAlg D roots).toTotalAlg D)
@@ -327,9 +339,10 @@ theorem fold_escapeTail_eq_overflow (x : Free.GeneratedAns D) :
       exact patternOp_overflow_left D roots U.stepOp (Sum.inl U.fixedRight)
 
 /-- Finite-pattern escape rules out every generated candidate as a limit of the
-factorially sampled orbit.  Compression is not used in this proof; it is only
+factorially sampled orbit. Compression is not used in this proof; it is only
 needed separately to establish the Cauchy property. -/
-theorem noGeneratedLimit_of_escapingSyntax : NoGeneratedLimit W := by
+theorem noGeneratedLimit_of_escapingSyntax
+    (U : EscapingUnarySyntax W) : NoGeneratedLimit W := by
   intro x hconv
   let roots := escapeRoots W x
   let stage := (patternSelected D roots).length
@@ -360,15 +373,19 @@ theorem noGeneratedLimit_of_escapingSyntax : NoGeneratedLimit W := by
   rw [hxFold, htail] at hmodel
   exact (patternEncode_ne_overflow_of_mem D hxMem) hmodel
 
-/-- **Combined master properness theorem.** Trajectory compression supplies the
+/-- Combined master properness theorem. Trajectory compression supplies the
 Cauchy half; finite-pattern escape supplies the Resolution-specific no-limit
 half. -/
-theorem notComplete_of_compressed_escapingSyntax :
+theorem notComplete_of_compressed_escapingSyntax
+    (W : ObserverOrbitCompression D)
+    (U : EscapingUnarySyntax W) :
     ¬ Filtered.Complete (generatedFilteredSpace D) :=
   notComplete_of_compression W (noGeneratedLimit_of_escapingSyntax D W U)
 
 /-- Equivalent properness statement for the canonical completion embedding. -/
-theorem embeddingNotSurjective_of_compressed_escapingSyntax :
+theorem embeddingNotSurjective_of_compressed_escapingSyntax
+    (W : ObserverOrbitCompression D)
+    (U : EscapingUnarySyntax W) :
     ¬ Function.Surjective (Filtered.embed (generatedFilteredSpace D)) :=
   embeddingNotSurjective_of_compression W
     (noGeneratedLimit_of_escapingSyntax D W U)
