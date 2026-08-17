@@ -291,9 +291,10 @@ theorem rawRoot_mem
       simp only [List.mem_cons] at hx
       rcases hx with h | h
       · subst a
-        simp [rawRoots]
-      · have iht := ih h
-        simp [rawRoots, iht]
+        change x.1 ∈ x.1 :: List.map Subtype.val xs
+        exact List.Mem.head _
+      · change x.1 ∈ a.1 :: List.map Subtype.val xs
+        exact List.Mem.tail _ (ih h)
 
 /-- One finite-tag observer is simultaneously injective on any finite list of
 generated Answers.  This is the finite-pattern strengthening of pairwise
