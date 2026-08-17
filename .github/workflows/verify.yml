@@ -40,10 +40,17 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
             texlive-latex-base texlive-latex-extra texlive-fonts-recommended \
             lmodern poppler-utils
-      - name: Build and inspect PDF
+      - name: Build and inspect committed PDF
         run: bash scripts/build-paper.sh --check-committed
+      - name: Build restructured preview
+        run: bash scripts/build-restructured-paper.sh
       - name: Preserve rebuilt PDF
         uses: actions/upload-artifact@v7
         with:
           name: resolution-semantics-paper
           path: build/paper/Resolution_Semantics_Adrian_Puha.pdf
+      - name: Preserve restructured preview
+        uses: actions/upload-artifact@v7
+        with:
+          name: resolution-semantics-restructured-preview
+          path: build/paper/Resolution_Semantics_Restructured_Preview.pdf
