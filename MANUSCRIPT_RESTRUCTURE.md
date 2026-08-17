@@ -1,17 +1,23 @@
 # Manuscript restructure map
 
-This file records the branch-only editorial reconstruction of the paper around the checked master-theorem architecture. It is not part of the mathematical API and does not replace the stable manuscript until the preview has passed CI and review.
+This file records the branch-only editorial reconstruction of the paper around
+the checked master-theorem architecture. The reconstruction has passed its
+promotion gate and is now the official manuscript source on the working branch.
 
-## Safety rule
+## Safety rule and current state
 
 - Working branch: `agent/relative-pattern-orbit-compression`.
 - PR #6 remains draft and must not be merged during the restructuring audit.
-- `paper/latex/revised.tex` and the committed review PDF remain the stable fallback until explicit promotion on this branch.
-- The experimental manuscript is `paper/latex/restructured.tex` plus `restructured-*.tex` section files.
+- `paper/latex/revised.tex` now uses the promoted master-theorem structure.
+- `paper/Resolution_Semantics_Adrian_Puha.pdf` was rebuilt deterministically
+  from the promoted source and committed by branch CI.
+- The strict `build-paper.sh --check-committed` guardrail has been restored.
+- `paper/latex/restructured.tex` and the `restructured-*.tex` files remain as
+  the audited section source/preview path during branch review.
 
-## Old presentation -> new role
+## Old presentation -> promoted role
 
-| Existing result / section | New role |
+| Existing result / section | Promoted role |
 |---|---|
 | Normalized generated Answer algebra | Established free-compatible-completion substrate |
 | Free compatible completion | Background/foundation, retained but not novelty headline |
@@ -27,12 +33,12 @@ This file records the branch-only editorial reconstruction of the paper around t
 | Compression + escape | **Combined properness theorem / structural center** |
 | Finite-base properness iff evaluator partial | Exact finite-base instance/corollary |
 | Old-fixing properness | Arbitrary-base sufficient instance/corollary |
-| `(m+2)!/(m+3)!` old-fixing witness | Superseded by sharper `(m+1)!/(m+2)!` witness |
+| Earlier old-fixing factorial indexing | Superseded by the sharp `(m+1)!/(m+2)!` witness |
 | Exact equation preservation | Independent major consequence of the completed filtered algebra |
 | Natural/integer arithmetic | Concrete infinite-base instances of combined mechanism |
 | Diaconescu many-sorted formalization | Provenance/compatibility layer, not a third novelty axis |
 
-## New logical spine
+## Promoted logical spine
 
 1. **Free compatible completion substrate.**
 2. **Master I — relative finite-pattern realization.**
@@ -56,7 +62,8 @@ This file records the branch-only editorial reconstruction of the paper around t
 - `ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster`
 - `ResolutionSemantics.MasterTheorems.oldFixingRanksUnbounded`
 
-These declarations are now included in `lean/AxiomAudit.lean`.
+These declarations are included in `lean/AxiomAudit.lean` and in the official
+manuscript/API checker.
 
 ## Novelty discipline
 
@@ -66,7 +73,8 @@ Do not claim novelty for:
 - finite selected-subterm/sink constructions in isolation;
 - finite-state eventual periodicity;
 - factorial synchronization;
-- the tautology that a Cauchy sequence with no limit witnesses incompleteness;
+- the generic implication from a nonconvergent Cauchy sequence to
+  incompleteness;
 - Diaconescu's encoding or its established adjunction theory.
 
 The strongest defensible novelty target is the interaction of:
@@ -78,14 +86,25 @@ The strongest defensible novelty target is the interaction of:
 - finite-pattern escape witnesses that exclude every finite generated candidate;
 - resulting proper observational completions and their finite/infinite-base instances.
 
-## Promotion gate
+## Promotion gate — passed
 
-Do not replace `revised.tex` with the restructured manuscript until all of the following hold:
+The branch promotion was accepted only after all of the following succeeded:
 
-1. `bash scripts/verify.sh` passes with the expanded master-theorem axiom audit.
-2. `bash scripts/build-paper.sh --check-committed` still passes for the stable manuscript.
-3. `bash scripts/build-restructured-paper.sh` passes with no unresolved citations/references.
-4. The restructured PDF is visually inspected for theorem flow, layout, and obvious prose regressions.
-5. Every new `\leanname{...}` in the promoted manuscript is present in `AxiomAudit.lean`.
-6. The contribution/scope section distinguishes standard machinery from Resolution-specific claims.
-7. The old-fixing statement uses the sharpened `(n+1)!/(n+2)!` bound.
+1. `bash scripts/verify.sh` with the expanded master-theorem axiom audit.
+2. Independent build of the restructured preview with no unresolved
+   citations/references.
+3. Visual inspection of the preview, including the abstract and the central
+   compression/escape theorem pages.
+4. Official manuscript/API checking against every cited `\leanname{...}`.
+5. Deterministic rebuild of the promoted official PDF.
+6. Visual inspection of the official 18-page PDF and its metadata.
+7. CI commit of that exact PDF on the working branch.
+8. Restoration and successful execution of
+   `bash scripts/build-paper.sh --check-committed`, confirming byte-for-byte
+   agreement between promoted source and committed PDF.
+9. Explicit scope language separating standard machinery from
+   Resolution-specific claims.
+10. Use of the sharp old-fixing `(n+1)!/(n+2)!` stage witness.
+
+The branch remains a review branch; passing this gate is not a recommendation
+to merge PR #6.
