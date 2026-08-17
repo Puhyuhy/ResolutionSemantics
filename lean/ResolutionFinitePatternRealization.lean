@@ -50,8 +50,9 @@ theorem root_mem_patternSelected
       simp only [List.mem_cons] at hr
       simp only [patternSelected, List.mem_append]
       rcases hr with h | h
-      · cases h
-        exact Or.inl (self_mem_subterms D a)
+      · exact Or.inl (by
+          rw [← h]
+          exact self_mem_subterms D r)
       · exact Or.inr (ih h)
 
 /-- The arbitrary selected list is closed under children. -/
@@ -288,13 +289,11 @@ theorem rawRoot_mem
   | nil => simp at hx
   | cons a xs ih =>
       simp only [List.mem_cons] at hx
-      simp only [rawRoots, List.map_cons, List.mem_cons]
       rcases hx with h | h
-      · left
-        cases h
-        rfl
-      · right
-        exact ih h
+      · subst a
+        simp [rawRoots]
+      · have iht := ih h
+        simp [rawRoots, iht]
 
 /-- One finite-tag observer is simultaneously injective on any finite list of
 generated Answers.  This is the finite-pattern strengthening of pairwise
