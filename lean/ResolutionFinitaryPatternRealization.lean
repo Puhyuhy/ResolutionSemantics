@@ -349,7 +349,7 @@ theorem no_old_hit_on_selected_susp
         rw [harg] at henc
         simp only [encode] at henc
         have ha : a = z.args i := Sum.inl.inj henc
-        rw [harg, ha]
+        exact congrArg RawAns.old ha
     | susp g subargs =>
         have hmem : RawAns.susp g subargs ∈ selected := by
           simpa [harg] using hclosed hs i
