@@ -43,6 +43,16 @@ as the main public interface.
 - `Resolution.Diaconescu.ManySorted.gamma_preserves_initiality`
 - `Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial`
 - `Resolution.Diaconescu.ManySorted.initial_partial_exists_of_encoded_initial_exists`
+- `Resolution.Diaconescu.BinarySpecialization.toFromPartialAlgEquiv`
+- `Resolution.Diaconescu.BinarySpecialization.toManySorted_satisfiesGamma`
+- `Resolution.Diaconescu.BinarySpecialization.fromManySorted_satisfiesGamma`
+- `Resolution.Diaconescu.BinarySpecialization.generatedEquiv`
+- `Resolution.Diaconescu.BinarySpecialization.sameOld_iff`
+- `Resolution.Diaconescu.BinarySpecialization.gammaTruthEquiv`
+- `Resolution.Diaconescu.BinarySpecialization.gammaEquiv`
+- `Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_op`
+- `Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_existenceEq`
+- `Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_true`
 - `Resolution.Conditional.termModel_initial`
 - `Resolution.Conditional.initial_model_exists`
 - `Resolution.Diaconescu.InitialExistence.modelsGamma_iff_satisfiesGamma`
@@ -70,6 +80,18 @@ as a continuation and machine-checked specialization of the paper's
 framework, not as a claim to replace its broader institution-theoretic
 development.
 
+`ResolutionDiaconescuBinarySpecialization.lean` formally checks the overlap
+between these two presentations. It embeds a binary signature as a singleton
+sort with no designated-total symbols and with every original operation as a
+binary partial symbol. It translates partial algebras, homomorphisms, and the
+Horn theory `Gamma` in both directions. The two free-completion universal
+properties yield the canonical carrier equivalence `generatedEquiv`; the
+old-diagonal predicate and the auxiliary truth carriers are transported along
+it. Finally, `gammaEquiv` identifies the existing binary `gamma D` with the
+binary one-sorted instance of the many-sorted `gamma D`, commuting with data
+operations, existence equality, and the distinguished truth value. The
+inverse maps satisfy the same operation laws.
+
 `ResolutionDiaconescuContinuation.lean` packages the bridge functorially. It
 checks the identity and composition laws for `beta`, upgrades persistent
 liberality to the explicit hom-set equivalence
@@ -81,8 +103,9 @@ semantic consequence equivalence corresponding to Corollary 4.3. Finally,
 the generated-old, generated-total, and generated-partial theorems expose the
 data carrier of `gamma` as the functorial many-sorted Resolution normal-form
 construction. These remain formalized continuations of established results;
-the Resolution-specific contribution is the explicit normal-form interface
-used by the rest of this repository.
+the Resolution-specific contribution is the explicit normal-form interface,
+now formally connected by `BinarySpecialization.gammaEquiv` to the binary
+normal-form carrier used by the rest of this repository.
 
 `ResolutionDiaconescuAdjunction.lean` proves that the hom-set equivalence is
 natural in both the partial source and encoded target. It constructs the

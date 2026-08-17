@@ -28,7 +28,12 @@ the fixed-signature, operations-only initial-model conclusion used in
 Diaconescu's Corollary~4.2.  We also derive preservation and reflection of semantic
 consequence for arbitrary theories of closed formulas.  This part is positioned as a machine-checked
 continuation in a concrete Lean representation, not as a novelty claim for
-the underlying encoding.
+the underlying encoding.  For the singleton-sort signature with no designated
+total symbols and only binary partial symbols, we additionally prove that this
+many-sorted construction is formally equivalent to the pre-existing binary
+Resolution implementation.  The equivalence covers the generated data and
+truth carriers and commutes with the totalized operations, existence equality,
+and the distinguished truth value.
 
 In the binary Resolution layer, we formalize a normalized free compatible completion of binary partial
 algebras.  Old-defined applications reduce to old values; old-undefined
@@ -79,7 +84,10 @@ bridge allows arbitrary finite operation arities and distinguishes designated
 total symbols from partial symbols.  Second, the separation, filtration,
 completion, properness, and arithmetic developments specialize to the
 one-sorted binary setting used by the original Resolution project.  Claims
-below state explicitly which of these two scopes is in force.
+below state explicitly which of these two scopes is in force.  On their exact
+overlap, a separate Lean module identifies the singleton-sort, no-$TF$,
+binary-$PF$ instance of the first scope with the original binary
+implementation used by the second.
 
 Let $D$ be a one-sorted binary partial algebra with carrier $A$, operation
 symbols $\Sigma$, and evaluator
@@ -160,6 +168,11 @@ Lean presentation developed here:
           \quad\Longleftrightarrow\quad
           \alpha(E)\cup\Gamma\models_{ALG}\alpha(E').
         \]
+  \item when the signature has one sort, no designated-total symbols, and only
+        binary partial symbols, the generated carrier and the canonical
+        $\gamma$ model are equivalent to the pre-existing binary Resolution
+        implementation, with operations, existence equality, and the truth
+        constant preserved in both directions.
 \end{enumerate}
 \end{theorem}
 
@@ -321,6 +334,35 @@ Finally,
 constructs the lift of every $D\to\beta(M)$ and proves uniqueness from the
 free interpreter on data and the homomorphism laws on the truth carrier.
 
+\subsection{The binary one-sorted specialization}
+
+The many-sorted normal-form development above is implemented autonomously
+from the earlier binary core.  The module
+\texttt{ResolutionDiaconescuBinarySpecialization.lean} supplies the formal
+comparison rather than relying on their structural resemblance.  It sends a
+binary signature to a universe-polymorphic singleton data sort, an empty
+family of designated-total symbols, and the original operation family as
+partial symbols of arity two.  Forgetting and restoring the unique sort gives
+the partial-algebra equivalence
+\leanname{Resolution.Diaconescu.BinarySpecialization.toFromPartialAlgEquiv},
+and the three binary Horn clauses are shown equivalent to the specialized
+many-sorted $\Gamma$ record.
+
+At the free-completion level, the interpreters in the two directions are
+constructed from the respective universal properties.  Uniqueness proves
+that their composites are identities, yielding
+\leanname{Resolution.Diaconescu.BinarySpecialization.generatedEquiv}.
+The equivalence preserves old elements and generated binary operations.  It
+also transports the old-diagonal predicate, failure witnesses, and the
+auxiliary truth carrier.  These components are assembled in
+\leanname{Resolution.Diaconescu.BinarySpecialization.gammaEquiv}, which
+formally identifies the original binary $\gamma(D)$ with the binary
+one-sorted reduct of the many-sorted $\gamma(D)$.  Its forward and inverse
+maps commute with the operation symbols, existence equality, and the
+distinguished truth value.  Thus the general layer and the binary layer use
+different Lean types but agree canonically on their shared mathematical
+fragment.
+
 \subsection{The concrete adjunction, initiality, and semantic consequence}
 
 The continuation module makes the categorical content explicit while keeping
@@ -399,7 +441,9 @@ Theorems
 \leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedPartial}
 show that the functorial action preserves old values and the two generated
 operation constructors.  This is the explicit interface between the
-established encoding and the Resolution normal-form layer used here.
+established encoding and the Resolution normal-form layer used here; the
+specialization equivalence above connects it formally to the binary
+\texttt{GeneratedAns} carrier used in the remainder of the paper.
 
 There are two deliberate scope boundaries.  The Lean theorem uses canonical
 partial-algebra equivalence rather than identifying
@@ -1300,6 +1344,7 @@ import ResolutionArithmeticPropernessPublic
 import ResolutionDiaconescuManySorted
 import ResolutionDiaconescuContinuation
 import ResolutionDiaconescuAdjunction
+import ResolutionDiaconescuBinarySpecialization
 import ResolutionDiaconescuInitialExistence
 
 #check ResolutionSemantics.freeCompletionUniversal
@@ -1343,6 +1388,9 @@ import ResolutionDiaconescuInitialExistence
 #check Resolution.Diaconescu.ManySorted.gammaBeta_triangle_gamma
 #check Resolution.Diaconescu.ManySorted.gamma_preserves_initiality
 #check Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial
+#check Resolution.Diaconescu.BinarySpecialization.toFromPartialAlgEquiv
+#check Resolution.Diaconescu.BinarySpecialization.generatedEquiv
+#check Resolution.Diaconescu.BinarySpecialization.gammaEquiv
 #check Resolution.Conditional.termModel_initial
 #check Resolution.Diaconescu.InitialExistence.translateQuasiEquation_sat_iff_partial
 #check Resolution.Diaconescu.InitialExistence.initialEncodedModel_is_initial
@@ -1372,7 +1420,9 @@ completion lemmas are summarized and linked to exact declarations in
 \begin{enumerate}
   \item The $\Gamma$--$\alpha$--$\beta$--$\gamma$ bridge is many-sorted and
         supports arbitrary finite arities and separate $TF/PF$ families.  The
-        finite-complement separation and observational-completion layer remains
+        singleton-sort, no-$TF$, binary-$PF$ instance is formally identified
+        with the original binary Resolution core.  The finite-complement
+        separation and observational-completion layer nevertheless remains
         one-sorted and binary.  Extending that second layer, and comparing it
         directly with the full Schmidt construction, remains open.
   \item The bridge checks the concrete operations-only sentence and model
@@ -1408,7 +1458,10 @@ completion lemmas are summarized and linked to exact declarations in
 The many-sorted bridge places the project explicitly downstream of
 Diaconescu's total-algebra encoding: the concrete $TF/PF$ Horn theory, the
 $\alpha$--$\beta$ satisfaction condition, and the canonical $\gamma$ lift are
-all checked in Lean.  The guarded conditional translation and term-model
+all checked in Lean.  The singleton-sort, no-$TF$, binary-$PF$ instance is
+canonically equivalent to the original binary implementation, including its
+generated and truth carriers and all encoded operations.  The guarded
+conditional translation and term-model
 construction also give the fixed-signature initial partial model for the
 formalized quasi-existence theories.  Their mathematical priority remains with the
 established source.  Resolution semantics is then best understood as a normalized structured

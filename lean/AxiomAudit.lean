@@ -10,6 +10,7 @@ import ResolutionDiaconescuEncoding
 import ResolutionDiaconescuManySorted
 import ResolutionDiaconescuContinuation
 import ResolutionDiaconescuAdjunction
+import ResolutionDiaconescuBinarySpecialization
 import ResolutionDiaconescuInitialExistence
 
 /-!
@@ -105,6 +106,17 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #check Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial
 #check Resolution.Diaconescu.ManySorted.initial_partial_exists_of_encoded_initial_exists
 
+#check Resolution.Diaconescu.BinarySpecialization.toFromPartialAlgEquiv
+#check Resolution.Diaconescu.BinarySpecialization.toManySorted_satisfiesGamma
+#check Resolution.Diaconescu.BinarySpecialization.fromManySorted_satisfiesGamma
+#check Resolution.Diaconescu.BinarySpecialization.generatedEquiv
+#check Resolution.Diaconescu.BinarySpecialization.sameOld_iff
+#check Resolution.Diaconescu.BinarySpecialization.gammaTruthEquiv
+#check Resolution.Diaconescu.BinarySpecialization.gammaEquiv
+#check Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_op
+#check Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_existenceEq
+#check Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_true
+
 #check Resolution.Conditional.termModel_initial
 #check Resolution.Conditional.initial_model_exists
 #check Resolution.Diaconescu.InitialExistence.modelsGamma_iff_satisfiesGamma
@@ -147,6 +159,10 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #print axioms Resolution.Diaconescu.ManySorted.gammaBeta_triangle_gamma
 #print axioms Resolution.Diaconescu.ManySorted.gamma_preserves_initiality
 #print axioms Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial
+#print axioms Resolution.Diaconescu.BinarySpecialization.generatedEquiv
+#print axioms Resolution.Diaconescu.BinarySpecialization.sameOld_iff
+#print axioms Resolution.Diaconescu.BinarySpecialization.gammaEquiv
+#print axioms Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_existenceEq
 #print axioms Resolution.Conditional.termModel_initial
 #print axioms Resolution.Diaconescu.InitialExistence.translateQuasiEquation_sat_iff_partial
 #print axioms Resolution.Diaconescu.InitialExistence.initialEncodedModel_is_initial

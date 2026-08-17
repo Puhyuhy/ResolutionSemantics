@@ -45,6 +45,10 @@ historical-priority claim is made.
 - an explicit interface identifying the data of `gamma` with the many-sorted
   Resolution normal forms and showing how induced maps act on their old,
   total-operation, and partial-operation constructors;
+- a formal equivalence between the existing binary `gamma` implementation and
+  the singleton-sort, no-`TF`, binary-`PF` instance of the many-sorted
+  construction, including the generated data carrier, auxiliary truth
+  carrier, operations, existence equality, and distinguished truth value;
 - normalized free compatible completion of a binary partial algebra;
 - quotient presentation by equality after resolution;
 - intrinsic finite-complement separation over a pointwise-preserved base;

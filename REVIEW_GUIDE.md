@@ -20,8 +20,11 @@ reviewed commit when reporting results so comments remain reproducible.
    the `beta`-reduct step used in Corollary 4.2), the conditional term-model
    construction and initial-partial-model existence theorem for the explicit
    class of quasi-existence equations, and the semantic consequence
-   equivalence. The generated-normal-form interface
-   should also agree with the stated Resolution presentation. This is a
+   equivalence. The generated-normal-form interface should also agree with the
+   stated Resolution presentation. In particular, `generatedEquiv` and
+   `gammaEquiv` should correctly identify the singleton-sort, no-`TF`,
+   binary-`PF` instance with the pre-existing binary core, including both data
+   and truth carriers and all encoded operations. This is a
    verification/continuation claim, not a novelty claim for those results.
 2. Generated Answers form a normalized free compatible total extension of a
    binary partial algebra and admit the stated quotient presentation.
@@ -60,6 +63,9 @@ reviewed commit when reporting results so comments remain reproducible.
   equivalence the right conservative replacement for definitional equality in
   the recovery statement? Does the explicit satisfaction-transport theorem
   correctly bridge that equivalence in the proof of semantic consequence?
+- Does `BinarySpecialization.gammaEquiv` genuinely commute with the binary
+  operation, existence equality, and truth constant in both directions, and
+  does its singleton-sort signature capture exactly the original binary core?
 - Do `termModel_initial`, `translateQuasiEquation_sat_iff_partial`, and
   `quasiTheory_has_initial_partial_model` correctly supply the classical
   existence step and the fixed-signature, operations-only conclusion of
