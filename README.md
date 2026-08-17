@@ -52,6 +52,19 @@ case the sharp stage-`n` witness is
 
 which gives unbounded finite separation ranks.
 
+## Why Master I is not just the standard product trick
+
+Abstract finite-family discrimination is classical, but the usual proof that
+combines pairwise separators by taking their finite Cartesian product does not
+stay inside the Resolution observer class over an infinite fixed base.  This
+is now Lean-checked already at carrier level: each embedding
+`Nat -> Nat ⊕ Unit` has one-point relative complement, whereas the diagonal
+embedding of `Nat` into the product of two such one-point extensions has an
+infinite family of mixed outside points `(a, star)`.  Therefore the class
+"pointwise-fixed base + finite external complement" is not closed under binary
+products, and the direct finite-pattern construction used by Master I does
+additional work beyond the standard product-of-separators argument.
+
 ## Other main formal results
 
 - normalized free compatible completion of a binary partial algebra and its
