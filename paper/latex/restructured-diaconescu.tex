@@ -1,0 +1,69 @@
+\section{A Lean-Checked Bridge to Diaconescu's Encoding}
+\label{sec:diaconescu-bridge}
+
+The main separation and completion theorems above are one-sorted and binary.
+Their free-completion substrate sits inside a broader partial-to-total theory.
+To make that provenance explicit, the repository contains an independent
+many-sorted Lean development of the operations-only fragment of Diaconescu's
+encoding \cite{Diaconescu2009}.
+
+A many-sorted signature has sorts $S$, designated-total operation symbols
+$TF$, and partial operation symbols $PF$, each with arbitrary finite arity and
+typed argument and result sorts.  Encoded total models extend the data carriers
+with an auxiliary truth carrier and existence-equality operations.  The Horn
+conditions $\Gamma$ ensure that the defined elements form the partial reduct
+$\beta(M)$.
+
+The translation $\alpha$ sends existence-equality atoms to equality with the
+truth constant and guards universal quantification by definedness.  Lean proves
+the term soundness and completeness lemmas and hence the satisfaction
+condition
+\[
+  M\models\alpha(\rho)
+  \quad\Longleftrightarrow\quad
+  \beta(M)\models\rho.
+\]
+The relevant declarations are
+\leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_sound},
+\leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_complete}, and
+\leanname{Resolution.Diaconescu.ManySorted.alpha\_satisfaction\_condition}.
+
+For every partial algebra $D$, the canonical model $\gamma(D)$ uses normalized
+formal applications as its total carrier.  Lean checks $\gamma(D)\models\Gamma$
+and a canonical partial-algebra equivalence
+$\beta(\gamma(D))\simeq D$ through
+\leanname{Resolution.Diaconescu.ManySorted.gamma\_satisfiesGamma} and
+\leanname{Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv}.
+The universal lift from a partial homomorphism into a reduct is formalized as a
+hom-set equivalence; identity, composition, naturality, unit/counit behavior,
+and both triangle identities are checked.
+
+At fixed signature and universe bound, the development proves the initiality
+transfers needed for the operations-only quasi-existence theories considered
+here.  A conditional term-model construction supplies the initial translated
+encoded model, and the $\beta$ reduct yields the corresponding initial partial
+model.  Semantic consequence is preserved and reflected by the translation.
+Representative declarations include
+\leanname{Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv},
+\leanname{Resolution.Diaconescu.ManySorted.gamma\_preserves\_initiality},
+\leanname{Resolution.Diaconescu.ManySorted.beta\_of\_initial\_encoded\_is\_initial},
+\leanname{Resolution.Diaconescu.ManySorted.semantic\_consequence\_equivalence},
+and
+\leanname{Resolution.Diaconescu.InitialExistence.quasiTheory\_has\_initial\_partial\_model}.
+
+Finally, when the signature has one sort, no designated-total symbols, and only
+binary partial symbols, Lean constructs canonical equivalences between the
+many-sorted generated carrier and the original binary Resolution carrier, and
+between the corresponding encoded models.  The principal declarations are
+\leanname{Resolution.Diaconescu.BinarySpecialization.generatedEquiv} and
+\leanname{Resolution.Diaconescu.BinarySpecialization.gammaEquiv}.
+
+\begin{remark}[Role of the bridge]
+The bridge verifies that the binary implementation used by the observer theory
+is a specialization of an established many-sorted partial-to-total encoding.
+It is supporting formal provenance.  We do not claim Diaconescu's encoding,
+the adjunction, or the existence of free partial completions as new results.
+Nor does the present paper extend the finite-complement separation and
+compression--escape completion theory to the full many-sorted setting; that
+remains an open direction.
+\end{remark}
