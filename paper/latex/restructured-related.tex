@@ -1,0 +1,62 @@
+\section{Relation to Prior Work}\label{sec:related-work}
+
+\subsection{Free completion and partial algebras}
+The free compatible completion underlying \cref{sec:free-completion} belongs to
+an established line of work on partial algebras and Schmidt-type completions
+\cite{ClimentVidalCosmeLlopez2023}.  Diaconescu's many-sorted encoding provides
+a closely related partial-to-total perspective \cite{Diaconescu2009}.  These
+results motivate the substrate but are not novelty claims of the present paper.
+
+\subsection{Recognizable trees and finite separators}
+For finite bases and finite signatures, the normalized ground-equational
+presentation lies within classical tree-automata and recognizability theory
+\cite{Kozen1977,Brainerd1969,DauchetTison1990,ComonEtAl2008}.  Finite selected
+subterm closures plus a sink state are familiar constructions.  The relative
+feature studied here is the requirement that every observer preserve an
+arbitrary partial base pointwise while only the complement over that base is
+budgeted.  This permits infinite codomains with finite external complexity.
+
+\subsection{Filtered and profinite completions}
+Cauchy completion of separated filtrations and factorial synchronization of
+finite deterministic dynamics are standard.  Profinite completions organize
+observations by finite quotients or finite recognizing algebras
+\cite{DaveyGouveiaHaviarPriestley2011,ChenAdamekMiliusUrbat2016,Moreau2024}.
+Resolution stages differ because the preserved base may be infinite.  The
+compression theorem deliberately isolates the standard dynamic ingredient:
+only the trajectory relevant to the chosen unary family needs a finite code.
+The new structural interaction is with the relative finite-pattern escape
+observer that prevents convergence to any finite generated candidate.
+
+\subsection{Finite complements and Rees-index analogies}
+Finite-complement extensions and residual finiteness are classical in semigroup
+theory \cite{CainMaltcev2013,RuskucThomas1998}.  The analogy is useful but not
+literal here.  In a genuinely partial Resolution algebra, the embedded old
+carrier is not closed under the generated total operations; by
+\cref{prop:old-image-closed}, closure occurs exactly when the evaluator was
+already total.  Hence the observer class is better described as relative to a
+pointwise-fixed partial base than as an ordinary finite-Rees-index extension.
+
+\subsection{Tree metrics}
+Classical infinite-tree completions are based on prefix depth
+\cite{ArnoldNivat1980,Courcelle1983}.  Resolution uses semantic finite-tag
+observation instead.  The formal comb counterexample in \cref{sec:completion}
+shows that the two Cauchy notions differ: a sequence may be depth-Cauchy while a
+fixed low-budget Resolution observer continues to distinguish adjacent terms.
+
+\subsection{Contribution and scope}
+The contribution claimed by this paper is concentrated in the following
+package:
+\begin{enumerate}
+  \item an intrinsic finite-complement observer class over a pointwise-fixed,
+        possibly infinite partial base, together with finite-pattern
+        realization;
+  \item the induced observational filtration and its trajectory-level
+        compression theorem;
+  \item the Resolution-specific finite-pattern escape mechanism and the
+        resulting compression--escape properness theorem;
+  \item the exact finite-base criterion, infinite-base old-fixing instance,
+        sharper unbounded-rank witnesses, and exact equational conservativity.
+\end{enumerate}
+The factorial-periodicity argument itself is treated as standard machinery.
+Likewise, the many-sorted Diaconescu development is a verified compatibility and
+provenance layer rather than an independent novelty claim.
