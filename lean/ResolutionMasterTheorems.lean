@@ -1,21 +1,22 @@
 import ResolutionIntrinsicFiniteComplementAPI
 import ResolutionFiniteBasePropernessPublic
 import ResolutionOldFixingContextPropernessPublic
+import ResolutionOldFixingContextSharperOrbitPublic
 
 /-!
 # Master theorem facade for relative separation and orbit compression
 
-This module does not introduce a new proof mechanism. It reorganizes the
-checked public results around the two structural principles isolated by the
-post-audit reduction:
+This module reorganizes the checked public results around two structural
+principles isolated by the post-audit reduction:
 
 1. relative finite-complement separation over the pointwise-fixed partial base;
 2. finite orbit compression, whose old-fixing instance yields a Cauchy orbit
    with no generated limit and hence a proper completion.
 
-The point is to make the dependency structure explicit before attempting the
-stronger finite-pattern and sharper `(n+1)!` orbit bounds on this research
-branch.
+The old-fixing branch now also uses the sharper observation that a stage-`n`
+orbit either enters the fixed base and stabilizes or remains in only `n+1`
+outside states. Consequently the consecutive factorial pair `(n+1)!`,
+`(n+2)!` already agrees at stage `n`.
 -/
 
 universe u v
@@ -86,15 +87,15 @@ theorem oldFixingOrbitCompression
   intro x
   exact OldFixingContextCompletion.factorialSequenceNoLimit D W x
 
-/-- Unbounded finite-complement separation ranks are part of the same
-old-fixing orbit-compression package. -/
+/-- Sharper unbounded-rank witness: at stage `n`, the distinct consecutive
+factorial iterates `(n+1)!` and `(n+2)!` still agree. -/
 theorem oldFixingRanksUnbounded
     (D : Resolution.PartialAlg.{u,v} Sigma)
     (W : OldFixingContextCompletion.Witness D) (n : Nat) :
     n < Resolution.External.finiteSeparationRank D
-      (OldFixingContextCompletion.factorialSequence D W (n + 2))
-      (OldFixingContextCompletion.factorialSequence D W (n + 3)) :=
-  OldFixingContextCompletion.separationRankGreaterThanBudget D W n
+      (OldFixingContextCompletion.factorialSequence D W (n + 1))
+      (OldFixingContextCompletion.factorialSequence D W (n + 2)) :=
+  OldFixingContextCompletion.sharperSeparationRankGreaterThanBudget D W n
 
 end MasterTheorems
 end ResolutionSemantics
