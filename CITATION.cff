@@ -12,7 +12,7 @@ url: "https://github.com/Puhyuhy/ResolutionSemantics"
 license: MIT
 preferred-citation:
   type: article
-  title: "Resolution Semantics for Partial Algebras: A Lean-Checked Many-Sorted Encoding Bridge and a Binary Observational Completion"
+  title: "Resolution Semantics for Partial Algebras: Intrinsic Finite-Complement Separation and Observational Completion, with a Lean-Checked Many-Sorted Encoding Bridge"
   authors:
     - family-names: Puha
       given-names: Adrian

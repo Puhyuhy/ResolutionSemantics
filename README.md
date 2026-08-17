@@ -1,7 +1,8 @@
 # Resolution Semantics
 
-**Resolution Semantics for Partial Algebras: A Lean-Checked Many-Sorted
-Encoding Bridge and a Binary Observational Completion**
+**Resolution Semantics for Partial Algebras: Intrinsic Finite-Complement
+Separation and Observational Completion, with a Lean-Checked Many-Sorted
+Encoding Bridge**
 
 Author: **Adrian Puha**
 
@@ -23,32 +24,6 @@ historical-priority claim is made.
 
 ## Main formal results
 
-- a many-sorted, arbitrary-finite-arity bridge to Diaconescu's total-algebra
-  encoding, with separate `TF`/`PF` symbols, the Horn theory `Gamma`, the
-  translations `alpha` and `beta`, and the satisfaction condition;
-- a canonical many-sorted `gamma` construction, recovery by `beta` up to
-  partial-algebra equivalence, and the unique encoded lift (persistent
-  liberality); these are positioned as a continuation of established work,
-  not as new encoding theorems;
-- explicit identity and composition laws for `beta` and the induced `gamma`,
-  a checked hom-set equivalence, and preservation/reflection of semantic
-  consequence for theories of closed formulas;
-- naturality of that hom-set equivalence in both variables, explicit unit and
-  counit maps with both triangle identities, and both fixed-signature
-  initiality transfers; in particular, the `beta` reduct of an initial encoded
-  model is an initial partial model;
-- an explicit syntax for quasi-existence equations, their guarded conditional
-  translation, a semantic term-model construction for many-sorted conditional
-  theories, and the resulting fixed-signature, operations-only initial-model
-  conclusion of Diaconescu's Corollary 4.2; this is a formalization of an
-  established result, not a novelty claim;
-- an explicit interface identifying the data of `gamma` with the many-sorted
-  Resolution normal forms and showing how induced maps act on their old,
-  total-operation, and partial-operation constructors;
-- a formal equivalence between the existing binary `gamma` implementation and
-  the singleton-sort, no-`TF`, binary-`PF` instance of the many-sorted
-  construction, including the generated data carrier, auxiliary truth
-  carrier, operations, existence equality, and distinguished truth value;
 - normalized free compatible completion of a binary partial algebra;
 - quotient presentation by equality after resolution;
 - intrinsic finite-complement separation over a pointwise-preserved base;
@@ -66,7 +41,26 @@ historical-priority claim is made.
 - a formal proof that these two properness hypotheses are incomparable, using
   the one-point algebra and natural arithmetic as opposite witnesses;
 - natural- and integer-arithmetic instances with proper completions and
-  unbounded finite separation ranks.
+  unbounded finite separation ranks;
+- a supporting many-sorted, arbitrary-finite-arity bridge to Diaconescu's
+  total-algebra encoding, with separate `TF`/`PF` symbols, the Horn theory
+  `Gamma`, the translations `alpha` and `beta`, and the satisfaction condition;
+- a canonical many-sorted `gamma` construction, recovery by `beta` up to
+  partial-algebra equivalence, and the unique encoded lift (persistent
+  liberality), together with the functor laws, hom-set equivalence, naturality,
+  unit and counit, triangle identities, semantic consequence, and both
+  fixed-signature initiality transfers;
+- an explicit quasi-existence syntax and conditional term-model construction
+  checking the fixed-signature, operations-only initial-model conclusion used
+  in Diaconescu's Corollary 4.2;
+- a formal equivalence between the pre-existing binary Resolution
+  implementation and the singleton-sort, no-`TF`, binary-`PF` instance of the
+  many-sorted construction, including the generated data and truth carriers
+  and all encoded operations.
+
+The final four items establish provenance and exact formal compatibility with
+the cited encoding. They are a machine-checked continuation of established
+work, not the novelty claim of this paper.
 
 Division by zero is represented by a structured non-old Answer. The paper does
 not assign an ordinary numerical value to a/0, and it does not prove Strong

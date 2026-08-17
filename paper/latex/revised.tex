@@ -2,7 +2,8 @@
 \usepackage{resolution-paper}
 
 \title{\textbf{Resolution Semantics for Partial Algebras}\\
-A Lean-Checked Many-Sorted Encoding Bridge and a Binary Observational Completion}
+Intrinsic Finite-Complement Separation and Observational Completion,\\
+with a Lean-Checked Many-Sorted Encoding Bridge}
 \author{Adrian Puha}
 \date{17 August 2026}
 
@@ -10,84 +11,75 @@ A Lean-Checked Many-Sorted Encoding Bridge and a Binary Observational Completion
 \maketitle
 
 \begin{abstract}
-Starting from Diaconescu's total-algebra encoding of partial algebras, we give
-a concrete Lean-checked bridge for many-sorted signatures with arbitrary
-finite arities and disjoint total and partial operation families.  The bridge
-implements the Horn theory $\Gamma$, the model reduct $\beta$, the sentence
-translation $\alpha$, and a canonical free model $\gamma$.  It checks the two
-term-evaluation lemmas, the $\alpha$--$\beta$ satisfaction condition, recovery
-of the source partial algebra up to canonical equivalence, and the unique-lift
-property of $\gamma$.  We also check the functor laws, package the lift as a
-hom-set equivalence natural in both variables, construct its unit and counit,
-verify both triangle identities, and prove both fixed-signature initiality
-transfers.  In particular, the $\beta$ reduct of an initial encoded model is
-initial on the partial side.  For an explicit syntax of quasi-existence
-equations, we additionally construct the initial conditional term model of
-$\Gamma\cup\alpha(E)$ and obtain an initial partial model of $E$.  This checks
-the fixed-signature, operations-only initial-model conclusion used in
-Diaconescu's Corollary~4.2.  We also derive preservation and reflection of semantic
-consequence for arbitrary theories of closed formulas.  This part is positioned as a machine-checked
-continuation in a concrete Lean representation, not as a novelty claim for
-the underlying encoding.  For the singleton-sort signature with no designated
-total symbols and only binary partial symbols, we additionally prove that this
-many-sorted construction is formally equivalent to the pre-existing binary
-Resolution implementation.  The equivalence covers the generated data and
-truth carriers and commutes with the totalized operations, existence equality,
-and the distinguished truth value.
+We study one-sorted binary partial algebras through a normalized free
+compatible completion.  Old-defined applications reduce to old values, while
+old-undefined applications remain structured finite-tree Answers.  The
+generated Answer algebra has the expected universal property and is the
+expression algebra modulo equality after resolution.  On this established
+free-completion substrate, the main object of study is the class of compatible
+total extensions that fix the old carrier pointwise and have finite complement
+over it.
 
-In the binary Resolution layer, we formalize a normalized free compatible completion of binary partial
-algebras.  Old-defined applications reduce to old values; old-undefined
-applications become structured finite-tree Answers.  The Answer algebra has
-the expected universal property and is the expression algebra modulo equality
-after resolution.
-
-Our additional construction is an intrinsic finite-complement separating
-semantics.  Every distinct pair is distinguished by a compatible total
-extension that fixes the old carrier pointwise and whose complement injects
-into $\Fin(n+1)$.  At each budget, pair separation by this intrinsic class is
-equivalent to pair separation by the canonical finite-tag models
+Every distinct pair of generated Answers is separated by such an extension.
+At each budget, separation by this class is equivalent to separation by the
+canonical finite-tag models
 \[
   D.\mathrm{Carrier}\;\sqcup\;\Fin(n)\;\sqcup\;\{\overflow\}.
 \]
-The fresh-tag count is at most the combined constructor size; this is a
-construction bound, not an optimality claim.
-When the old carrier is finitely coded, the same witnesses are finite in the
-ordinary sense, so the generated Answer algebra is residually finite with an
-explicit total-state bound.  For a finite operation signature, the qualitative
-residual-finiteness conclusion also follows from classical recognizability of
-finite ground-equation congruence classes; the construction here additionally
-keeps the old carrier faithful and supplies the displayed bound.
+The number of fresh tags is bounded by the combined constructor size; over a
+finitely coded old carrier this gives finite separating targets with an
+explicit total-state bound.  Finite-tag agreement induces a separated
+filtration whose Cauchy completion supports canonical operations and preserves
+exactly the universal equations in the language with named old-carrier
+constants.  The completion is proper precisely when the old evaluator is
+partial for finitely coded carriers.  Without a finiteness assumption, an
+old-fixing context yields an explicit Cauchy orbit outside the generated image,
+strictly nontrivial finite stages, and unbounded separation ranks.  Natural and
+integer arithmetic instantiate this criterion while retaining division by
+zero as a structured non-old Answer rather than an ordinary number.
 
-Finite-tag agreement induces a separated filtration whose Cauchy completion
-supports canonical operations and has exactly the same universal equations in
-the language with named old-carrier constants.
-For a finitely coded old carrier, the embedding is surjective exactly when the
-old evaluator is total.  Without any finiteness assumption, an undefined old
-application plus a context $x\mapsto u(x,e)$ fixing every old element yields a
-factorial Cauchy orbit with no generated limit.  Every finite stage is strictly
-coarser than equality, and least separating budgets are unbounded.  Natural
-and integer arithmetic satisfy this criterion using $0/0$ and $x\mapsto x+0$,
-so both completion embeddings are proper.  Division by zero remains a
-structured non-old Answer, not an ordinary number.  Lean~4.33.0 checks the
-development.  The exact priority of this combined package remains under
-specialist review.
+To locate these results precisely within established partial-to-total methods,
+we also give a Lean-checked many-sorted development of Diaconescu's encoding.
+It treats arbitrary finite arities and separate total and partial operation
+families, implements $\Gamma$, $\alpha$, $\beta$, and $\gamma$, and checks the
+satisfaction, adjunction, semantic-consequence, and fixed-signature initiality
+results used here, including the operations-only existence step for the
+formalized quasi-existence theories.  Its singleton-sort, no-$TF$, binary-$PF$
+instance is proved canonically equivalent to the original binary Resolution
+implementation, including the generated and truth carriers and all encoded
+operations.  This bridge records provenance and formal compatibility; it is
+not included in the novelty claim for the separation--completion results.
+Lean~4.33.0 checks both layers.  The exact historical priority of the combined
+relative separation--completion package remains under specialist review.
 \end{abstract}
 
 \tableofcontents
 
 \section{Introduction}\label{sec:introduction}
 
-The paper has two deliberately separated scopes.  First, it connects the
-Resolution normal-form construction directly to Diaconescu's many-sorted
-encoding of partial algebras as total algebras \cite{Diaconescu2009}.  This
-bridge allows arbitrary finite operation arities and distinguishes designated
-total symbols from partial symbols.  Second, the separation, filtration,
-completion, properness, and arithmetic developments specialize to the
-one-sorted binary setting used by the original Resolution project.  Claims
-below state explicitly which of these two scopes is in force.  On their exact
-overlap, a separate Lean module identifies the singleton-sort, no-$TF$,
-binary-$PF$ instance of the first scope with the original binary
-implementation used by the second.
+Free completion and partial-to-total encoding provide the established starting
+point for this paper.  Climent Vidal and Cosme Ll\'opez prove that the
+inclusion of total algebras into partial algebras has a left adjoint and develop
+the functorial Schmidt construction
+\cite{ClimentVidalCosmeLlopez2023}.  Diaconescu gives the many-sorted
+Horn-style encoding of partial algebras as total algebras
+\cite{Diaconescu2009}; it is the closest encoding framework to the normalized
+construction used here.  Related completion questions also occur for partial
+combinatory algebras and term-rewriting models
+\cite{BethkeKlopDeVrijer1996,BethkeKlopDeVrijer1999,Nesin2011}.
+Accordingly, neither the existence of a free compatible extension nor the
+partial-to-total encoding itself is claimed as new.
+
+Against that background, the paper studies a more specific binary question:
+separation by compatible total extensions that preserve an arbitrary partial
+base pointwise while only their complement over that base is required to be
+finite, and the observational completion induced by all such finite budgets.
+The main separation, properness, and completion results are one-sorted and
+binary.  To make their dependence on established encoding theory precise,
+\cref{sec:diaconescu-bridge} develops a many-sorted Lean comparison with
+Diaconescu's construction and proves that its singleton-sort, no-$TF$,
+binary-$PF$ instance agrees canonically with the original binary Resolution
+implementation.
 
 Let $D$ be a one-sorted binary partial algebra with carrier $A$, operation
 symbols $\Sigma$, and evaluator
@@ -101,17 +93,7 @@ We call $A$ \emph{finitely coded} when it admits an injection into $\Fin(m)$
 for some $m$.  This is classically equivalent to finiteness and is the exact
 hypothesis used by the Lean statements below.
 
-There is extensive prior work on completing or encoding partial algebras.
-Climent Vidal and Cosme Ll\'opez prove that the inclusion of total algebras into
-partial algebras has a left adjoint, the absolutely free completion functor,
-and develop the functorial Schmidt construction
-\cite{ClimentVidalCosmeLlopez2023}.  Diaconescu gives the Horn-style encoding
-of partial algebras as total algebras on which our first bridge is based
-\cite{Diaconescu2009}.  Completion questions
-also occur in partial combinatory algebra and term-rewriting models
-\cite{BethkeKlopDeVrijer1996,BethkeKlopDeVrijer1999,Nesin2011}.  Accordingly,
-this paper does not claim that the existence of a free or total extension is
-new.  Classical tree-automata results also imply ordinary residual finiteness
+Classical tree-automata results imply ordinary residual finiteness
 for the finite-base, finite-signature ground-equational presentation discussed
 below \cite{Kozen1977,ComonEtAl2008,ClimentVidalCosmeLlopez2020}; that
 qualitative special case is not claimed as new either.
@@ -123,7 +105,7 @@ operation symbol, and its resolved children.  The resulting finite trees are
 called \emph{Answers}.  This gives a normalized representative for a free
 compatible total extension.
 
-After checking that encoding bridge, the binary Resolution layer asks two
+On top of the established free-completion substrate, the paper asks two
 narrower questions.
 
 \begin{enumerate}[label=(Q\arabic*)]
@@ -135,46 +117,8 @@ narrower questions.
         equations are unchanged?
 \end{enumerate}
 
-The answer to both is yes.  The paper therefore separates one bridge result
-from two principal binary Resolution results.
-
-\begin{theorem}[Many-sorted encoding bridge]
-\label{thm:diaconescu-bridge}
-Let $\Sigma=(S,TF,PF)$ be a many-sorted partial-algebra signature whose
-operations have arbitrary finite arities.  In the concrete operations-only
-Lean presentation developed here:
-\begin{enumerate}[label=\textup{(\alph*)}]
-  \item the Horn clauses $\Gamma$ define a reduct $\beta$ and the translation
-        $\alpha$ satisfies
-        $M\models\alpha(\rho)$ if and only if
-        $\beta(M)\models\rho$;
-  \item every partial $\Sigma$-algebra $D$ has a canonical encoded model
-        $\gamma(D)$ satisfying $\Gamma$, and $\beta(\gamma(D))$ is canonically
-        equivalent to $D$ as a partial algebra;
-  \item every partial homomorphism $D\to\beta(M)$ has a unique encoded lift
-        $\gamma(D)\to M$ agreeing with it under that equivalence;
-  \item the induced maps on homomorphisms respect identities and composition,
-        the lift is an explicit hom-set equivalence natural in both variables,
-        and its unit and counit satisfy both triangle identities;
-  \item at a fixed signature and universe bound, $\gamma$ sends initial partial
-        models to initial encoded models, while the $\beta$ reduct of an
-        initial model of $\Gamma\cup\alpha(E)$ is an initial partial model of
-        $E$; for every theory $E$ in the concrete syntax of quasi-existence
-        equations, a semantic conditional term model supplies the required
-        initial encoded model and hence an initial partial model; moreover, for arbitrary sets
-        $E,E'$ of closed formulas,
-        \[
-          E\models_{PA}E'
-          \quad\Longleftrightarrow\quad
-          \alpha(E)\cup\Gamma\models_{ALG}\alpha(E').
-        \]
-  \item when the signature has one sort, no designated-total symbols, and only
-        binary partial symbols, the generated carrier and the canonical
-        $\gamma$ model are equivalent to the pre-existing binary Resolution
-        implementation, with operations, existence equality, and the truth
-        constant preserved in both directions.
-\end{enumerate}
-\end{theorem}
+The answer to both is yes.  The following two statements summarize the
+principal binary Resolution results.
 
 \begin{theorem}[Structured free completion and finite separation]
 \label{thm:free-and-separation}
@@ -219,6 +163,47 @@ terms $s,t$,
 \]
 \end{theorem}
 
+The next theorem records the supporting many-sorted formalization that locates
+the binary construction within Diaconescu's established encoding.
+
+\begin{theorem}[Many-sorted encoding bridge]
+\label{thm:diaconescu-bridge}
+Let $\Sigma=(S,TF,PF)$ be a many-sorted partial-algebra signature whose
+operations have arbitrary finite arities.  In the concrete operations-only
+Lean presentation developed here:
+\begin{enumerate}[label=\textup{(\alph*)}]
+  \item the Horn clauses $\Gamma$ define a reduct $\beta$ and the translation
+        $\alpha$ satisfies
+        $M\models\alpha(\rho)$ if and only if
+        $\beta(M)\models\rho$;
+  \item every partial $\Sigma$-algebra $D$ has a canonical encoded model
+        $\gamma(D)$ satisfying $\Gamma$, and $\beta(\gamma(D))$ is canonically
+        equivalent to $D$ as a partial algebra;
+  \item every partial homomorphism $D\to\beta(M)$ has a unique encoded lift
+        $\gamma(D)\to M$ agreeing with it under that equivalence;
+  \item the induced maps on homomorphisms respect identities and composition,
+        the lift is an explicit hom-set equivalence natural in both variables,
+        and its unit and counit satisfy both triangle identities;
+  \item at a fixed signature and universe bound, $\gamma$ sends initial partial
+        models to initial encoded models, while the $\beta$ reduct of an
+        initial model of $\Gamma\cup\alpha(E)$ is an initial partial model of
+        $E$; for every theory $E$ in the concrete syntax of quasi-existence
+        equations, a semantic conditional term model supplies the required
+        initial encoded model and hence an initial partial model; moreover, for
+        arbitrary sets $E,E'$ of closed formulas,
+        \[
+          E\models_{PA}E'
+          \quad\Longleftrightarrow\quad
+          \alpha(E)\cup\Gamma\models_{ALG}\alpha(E').
+        \]
+  \item when the signature has one sort, no designated-total symbols, and only
+        binary partial symbols, the generated carrier and the canonical
+        $\gamma$ model are equivalent to the pre-existing binary Resolution
+        implementation, with operations, existence equality, and the truth
+        constant preserved in both directions.
+\end{enumerate}
+\end{theorem}
+
 The first two clauses of \cref{thm:free-and-separation} place the generated
 construction within established free-completion theory.  The more specific
 ingredients are the intrinsic finite-complement observer class over a
@@ -240,223 +225,6 @@ Diaconescu's construction and is not included in the novelty claim.  We have
 not found the exact separation--completion package in the literature reviewed so
 far, but this is not a claim of historical priority.
 
-\section{A Lean-Checked Bridge to Diaconescu's Encoding}
-\label{sec:diaconescu-bridge}
-
-This section records the exact connection to
-\cite{Diaconescu2009}.  It is intentionally phrased as a bridge and
-specialization; the underlying encoding results and their priority remain
-with the cited work.  Diaconescu works with a many-sorted signature
-$\Sigma=(S,TF,PF)$, where symbols in $TF$ are total and symbols in $PF$ are
-partial.  The Lean structure assigns each symbol a natural-number arity, a
-sort at every finite argument position, and a result sort.  Neither the set of
-sorts nor either symbol family is required to be finite.
-
-\subsection{The encoded models, $\beta$, and $\alpha$}
-
-An encoded total model $M$ consists of a data carrier $M_s$ for each
-$s\in S$, an auxiliary truth carrier $M_b$, total interpretations of all
-$TF$ and $PF$ symbols on the data carriers, operations
-\[
-  {\mathrel{e_s}}:M_s\times M_s\longrightarrow M_b,
-  \qquad \mathsf{true}\in M_b,
-\]
-and the Horn conditions $\Gamma$.  The implemented clauses say that total
-symbols preserve and reflect definedness, partial symbols reflect
-definedness, and
-\[
-  x\mathrel{e_s}y=\mathsf{true}
-  \quad\Longrightarrow\quad
-  x\mathrel{e_s}x=\mathsf{true}
-  \quad\text{and}\quad x=y.
-\]
-Thus the carrier of the reduct is
-\[
-  \beta(M)_s=\{x\in M_s\mid
-    x\mathrel{e_s}x=\mathsf{true}\}.
-\]
-Designated-total operations restrict to total operations on these subtypes;
-a $PF$ symbol is defined precisely when its totalized result is marked as
-defined.  Encoded homomorphisms induce partial-algebra homomorphisms between
-the corresponding reducts.
-
-The formula syntax is indexed by a list of bound-variable sorts.  Typed de
-Bruijn variables make quantifier extension explicit.  It is generated by
-existence-equality atoms, conjunction, negation, and one-variable universal
-quantification; iterating the last constructor represents a finite sorted
-variable block.  The translation sends
-\[
-  t\mathrel{\stackrel{e}{=}}t'
-  \quad\longmapsto\quad
-  (t\mathrel{e_s}t'=\mathsf{true}),
-\]
-commutes with the Boolean constructors, and guards a total universal
-quantifier by definedness of the newly bound variable.
-
-The two term lemmas corresponding to Lemmas~3.3 and~3.4 of
-\cite{Diaconescu2009} are
-\leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_sound} and
-\leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_complete}.
-Structural induction on formulas, with the guard handling the quantifier
-case, then gives
-\leanname{Resolution.Diaconescu.ManySorted.alpha\_satisfaction\_condition}.
-The theorem is stated for assignments and hence also yields the closed-sentence
-instance in \cref{thm:diaconescu-bridge}(a).
-
-\subsection{The canonical model $\gamma$ and its lift}
-
-For a partial algebra $D$, raw values at each sort are either old values or
-formal applications.  The normalizer treats the two symbol families
-differently:
-\begin{itemize}
-  \item a $TF$ application whose arguments are old always reduces to the old
-        total result;
-  \item a $PF$ application whose arguments are old reduces exactly when the
-        source partial evaluator returns a value;
-  \item every remaining application is retained as a sorted formal
-        suspension with its normalized arguments.
-\end{itemize}
-The generated subtype consists of raw values having a term witness.  Its
-interpreter into any compatible total target exists and is unique.  This is
-the many-sorted finite-arity free-completion argument used for the data sorts
-of $\gamma(D)$.
-
-The auxiliary carrier of $\gamma(D)$ has one true element and a failure value
-for each sorted pair that is not the same diagonal old value.  Existence
-equality returns true exactly on that old diagonal.  Lean checks that this
-model satisfies all clauses of $\Gamma$ in
-\leanname{Resolution.Diaconescu.ManySorted.gamma\_satisfiesGamma}.  The old
-embedding is bijective onto the defined part, and it respects both the total
-and partial evaluators; this is packaged by
-\leanname{Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv}.
-Finally,
-\leanname{Resolution.Diaconescu.ManySorted.gamma\_persistent\_liberality}
-constructs the lift of every $D\to\beta(M)$ and proves uniqueness from the
-free interpreter on data and the homomorphism laws on the truth carrier.
-
-\subsection{The binary one-sorted specialization}
-
-The many-sorted normal-form development above is implemented autonomously
-from the earlier binary core.  The module
-\texttt{ResolutionDiaconescuBinarySpecialization.lean} supplies the formal
-comparison rather than relying on their structural resemblance.  It sends a
-binary signature to a universe-polymorphic singleton data sort, an empty
-family of designated-total symbols, and the original operation family as
-partial symbols of arity two.  Forgetting and restoring the unique sort gives
-the partial-algebra equivalence
-\leanname{Resolution.Diaconescu.BinarySpecialization.toFromPartialAlgEquiv},
-and the three binary Horn clauses are shown equivalent to the specialized
-many-sorted $\Gamma$ record.
-
-At the free-completion level, the interpreters in the two directions are
-constructed from the respective universal properties.  Uniqueness proves
-that their composites are identities, yielding
-\leanname{Resolution.Diaconescu.BinarySpecialization.generatedEquiv}.
-The equivalence preserves old elements and generated binary operations.  It
-also transports the old-diagonal predicate, failure witnesses, and the
-auxiliary truth carrier.  These components are assembled in
-\leanname{Resolution.Diaconescu.BinarySpecialization.gammaEquiv}, which
-formally identifies the original binary $\gamma(D)$ with the binary
-one-sorted reduct of the many-sorted $\gamma(D)$.  Its forward and inverse
-maps commute with the operation symbols, existence equality, and the
-distinguished truth value.  Thus the general layer and the binary layer use
-different Lean types but agree canonically on their shared mathematical
-fragment.
-
-\subsection{The concrete adjunction, initiality, and semantic consequence}
-
-The continuation module makes the categorical content explicit while keeping
-the formal dependency surface small.  It proves the identity and composition
-laws for $\beta$, packages persistent liberality as the checked bijection
-\[
-  \operatorname{Hom}_{ALG_\Gamma}(\gamma(D),M)
-  \cong
-  \operatorname{Hom}_{PA}(D,\beta(M)),
-\]
-and defines the induced action of $\gamma$ on homomorphisms.  The latter
-respects identities and composition.  The hom-set equivalence is natural in
-both variables; its unit $D\to\beta\gamma(D)$ and counit
-$\gamma\beta(M)\to M$ are explicit and satisfy both triangle identities.
-These statements are exposed by
-\leanname{Resolution.Diaconescu.ManySorted.betaHom\_comp},
-\leanname{Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv}, and
-\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_comp}, together with
-\leanname{Resolution.Diaconescu.ManySorted.gammaRestrict\_natural\_target},
-\leanname{Resolution.Diaconescu.ManySorted.gammaRestrict\_natural\_source},
-\leanname{Resolution.Diaconescu.ManySorted.gammaBetaCounit\_natural}, and
-\leanname{Resolution.Diaconescu.ManySorted.gammaBeta\_triangle\_gamma}.
-
-The left-adjoint content gives a direct initial-semantics consequence.  For a
-fixed signature and a fixed carrier universe closed under $\gamma$, define an
-initial partial model of a theory $E$ by the usual unique-map property among
-models of $E$, and define initiality on the encoded side among models of
-$\Gamma$ and $\alpha(E)$.  The theorem
-\leanname{Resolution.Diaconescu.ManySorted.gamma\_preserves\_initiality}
-proves that $\gamma$ sends the former initial model to the latter.  In the
-direction used by Diaconescu's Corollary~4.2,
-\leanname{Resolution.Diaconescu.ManySorted.beta\_of\_initial\_encoded\_is\_initial}
-proves that the $\beta$ reduct of an initial encoded model is an initial
-partial model.  This isolates the categorical transfer in the published
-argument.
-
-The remaining existence step is supplied in two separate modules.  First,
-\leanname{Resolution.Conditional.termModel\_initial} treats an arbitrary
-many-sorted conditional-equational theory.  Sorted ground terms are quotiented
-by semantic equality in every model of the theory.  Lean proves that the
-resulting term algebra satisfies the theory and that evaluation induces the
-unique homomorphism from it to every other model.
-
-Second, the syntax formalized for a quasi-existence equation consists of a
-finite sorted variable context, a finite list of existence-equality premises,
-and one existence-equality conclusion.  Its conditional translation adds a
-definedness guard for every context variable and translates each atom using
-$e_s$ and $\mathsf{true}$.  The equivalence between satisfaction of this
-conditional clause and satisfaction in the $\beta$ reduct is
-\leanname{Resolution.Diaconescu.InitialExistence.translateQuasiEquation\_sat\_iff\_partial}.
-The five families of $\Gamma$ clauses are included in the same conditional
-theory.  Applying the term-model construction to
-$\Gamma\cup\alpha(E)$ gives the initial encoded model in
-\leanname{Resolution.Diaconescu.InitialExistence.initialEncodedModel\_is\_initial};
-the adjunction transfer then yields
-\leanname{Resolution.Diaconescu.InitialExistence.quasiTheory\_has\_initial\_partial\_model}.
-Thus the fixed-signature, same-universe, operations-only initial-model
-conclusion used in Corollary~4.2 is checked end to end.  This is a
-formalization of the established existence argument, not a novelty claim.
-
-Because Lean represents $\beta(\gamma(D))$ as canonically equivalent to $D$
-rather than definitionally equal to it, reflection of consequence requires an
-explicit transport result.  The theorem
-\leanname{Resolution.Diaconescu.ManySorted.Formula.sat\_iff\_of\_equiv}
-proves invariance of satisfaction under partial-algebra equivalence, including
-the negation and sorted-quantifier cases.  Combining this with the
-$\alpha$--$\beta$ satisfaction condition and the canonical $\gamma$ model
-gives
-\leanname{Resolution.Diaconescu.ManySorted.semantic\_consequence\_equivalence},
-the concrete Lean form of Corollary~4.3 of \cite{Diaconescu2009}.
-
-The data carrier is exposed as the many-sorted Resolution normal-form type.
-Theorems
-\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedOld},
-\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedTotal}, and
-\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedPartial}
-show that the functorial action preserves old values and the two generated
-operation constructors.  This is the explicit interface between the
-established encoding and the Resolution normal-form layer used here; the
-specialization equivalence above connects it formally to the binary
-\texttt{GeneratedAns} carrier used in the remainder of the paper.
-
-There are two deliberate scope boundaries.  The Lean theorem uses canonical
-partial-algebra equivalence rather than identifying
-$\beta(\gamma(D))$ and $D$ by definitional equality.  It does not mechanize
-the surrounding institution/comorphism infrastructure, arbitrary signature
-morphisms, the full institution-level form of Corollary~4.2, or the
-proof-theoretic Birkhoff completeness result of Section~5.  The categorical
-fixed-signature transfer and the quasi-existence initial-model construction
-used inside Corollary~4.2 are checked, but their packaging over arbitrary
-signature morphisms is not.  These
-boundaries are why the result is described here as a
-many-sorted encoding bridge and not as a replacement for the broader theory
-of \cite{Diaconescu2009}.
 
 \section{Generated Answers as a Free Compatible Completion}
 \label{sec:free-completion}
@@ -813,7 +581,7 @@ finite: $A$ may be infinite, while only the added tags and $\overflow$ are
 counted.  A further computational analogy is the separating-words problem.
 Sublinear worst-case bounds were established by
 Goral{\v{c}}{\'i}k and
-Koubek, Robson, and Chase \cite{GoralcikKoubek1986,Robson1989,Chase2020}.
+Koubek, Robson, and Chase \cite{GoralcikKoubek1986,Robson1989,Chase2021}.
 Along a unary comb, a Resolution observer likewise iterates one transition map
 from a fixed starting state.  This analogy confirms that our linear estimate is
 a baseline, but it does not transfer word bounds automatically: arbitrary
@@ -1163,6 +931,228 @@ extension with infinity- and error-like behavior
 Resolution chooses provenance retention rather than a fixed old value or one
 undifferentiated error.
 
+\section{A Lean-Checked Bridge to Diaconescu's Encoding}
+\label{sec:diaconescu-bridge}
+
+The preceding sections develop the binary separation--completion results.  We
+now record their exact connection to the total-algebra encoding of
+\cite{Diaconescu2009}.  The purpose is to verify the inherited foundation and
+the interface used by Resolution, not to include the underlying encoding in
+the novelty claim.  Diaconescu works with a many-sorted signature
+$\Sigma=(S,TF,PF)$, where symbols in $TF$ are total and symbols in $PF$ are
+partial.  The Lean structure assigns each symbol a natural-number arity, a
+sort at every finite argument position, and a result sort.  Neither the set of
+sorts nor either symbol family is required to be finite.
+
+\subsection{The encoded models, \texorpdfstring{$\beta$}{beta}, and
+\texorpdfstring{$\alpha$}{alpha}}
+
+An encoded total model $M$ consists of a data carrier $M_s$ for each
+$s\in S$, an auxiliary truth carrier $M_b$, total interpretations of all
+$TF$ and $PF$ symbols on the data carriers, operations
+\[
+  {\mathrel{e_s}}:M_s\times M_s\longrightarrow M_b,
+  \qquad \mathsf{true}\in M_b,
+\]
+and the Horn conditions $\Gamma$.  The implemented clauses say that total
+symbols preserve and reflect definedness, partial symbols reflect
+definedness, and
+\[
+  x\mathrel{e_s}y=\mathsf{true}
+  \quad\Longrightarrow\quad
+  x\mathrel{e_s}x=\mathsf{true}
+  \quad\text{and}\quad x=y.
+\]
+Thus the carrier of the reduct is
+\[
+  \beta(M)_s=\{x\in M_s\mid
+    x\mathrel{e_s}x=\mathsf{true}\}.
+\]
+Designated-total operations restrict to total operations on these subtypes;
+a $PF$ symbol is defined precisely when its totalized result is marked as
+defined.  Encoded homomorphisms induce partial-algebra homomorphisms between
+the corresponding reducts.
+
+The formula syntax is indexed by a list of bound-variable sorts.  Typed de
+Bruijn variables make quantifier extension explicit.  It is generated by
+existence-equality atoms, conjunction, negation, and one-variable universal
+quantification; iterating the last constructor represents a finite sorted
+variable block.  The translation sends
+\[
+  t\mathrel{\stackrel{e}{=}}t'
+  \quad\longmapsto\quad
+  (t\mathrel{e_s}t'=\mathsf{true}),
+\]
+commutes with the Boolean constructors, and guards a total universal
+quantifier by definedness of the newly bound variable.
+
+The two term lemmas corresponding to Lemmas~3.3 and~3.4 of
+\cite{Diaconescu2009} are
+\leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_sound} and
+\leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_complete}.
+Structural induction on formulas, with the guard handling the quantifier
+case, then gives
+\leanname{Resolution.Diaconescu.ManySorted.alpha\_satisfaction\_condition}.
+The theorem is stated for assignments and hence also yields the closed-sentence
+instance in \cref{thm:diaconescu-bridge}(a).
+
+\subsection{The canonical model \texorpdfstring{$\gamma$}{gamma} and its lift}
+
+For a partial algebra $D$, raw values at each sort are either old values or
+formal applications.  The normalizer treats the two symbol families
+differently:
+\begin{itemize}
+  \item a $TF$ application whose arguments are old always reduces to the old
+        total result;
+  \item a $PF$ application whose arguments are old reduces exactly when the
+        source partial evaluator returns a value;
+  \item every remaining application is retained as a sorted formal
+        suspension with its normalized arguments.
+\end{itemize}
+The generated subtype consists of raw values having a term witness.  Its
+interpreter into any compatible total target exists and is unique.  This is
+the many-sorted finite-arity free-completion argument used for the data sorts
+of $\gamma(D)$.
+
+The auxiliary carrier of $\gamma(D)$ has one true element and a failure value
+for each sorted pair that is not the same diagonal old value.  Existence
+equality returns true exactly on that old diagonal.  Lean checks that this
+model satisfies all clauses of $\Gamma$ in
+\leanname{Resolution.Diaconescu.ManySorted.gamma\_satisfiesGamma}.  The old
+embedding is bijective onto the defined part, and it respects both the total
+and partial evaluators; this is packaged by
+\leanname{Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv}.
+Finally,
+\leanname{Resolution.Diaconescu.ManySorted.gamma\_persistent\_liberality}
+constructs the lift of every $D\to\beta(M)$ and proves uniqueness from the
+free interpreter on data and the homomorphism laws on the truth carrier.
+
+\subsection{The binary one-sorted specialization}
+
+The many-sorted normal-form development above is implemented autonomously
+from the earlier binary core.  The module
+\texttt{ResolutionDiaconescuBinarySpecialization.lean} supplies the formal
+comparison rather than relying on their structural resemblance.  It sends a
+binary signature to a universe-polymorphic singleton data sort, an empty
+family of designated-total symbols, and the original operation family as
+partial symbols of arity two.  Forgetting and restoring the unique sort gives
+the partial-algebra equivalence
+\leanname{Resolution.Diaconescu.BinarySpecialization.toFromPartialAlgEquiv},
+and the three binary Horn clauses are shown equivalent to the specialized
+many-sorted $\Gamma$ record.
+
+At the free-completion level, the interpreters in the two directions are
+constructed from the respective universal properties.  Uniqueness proves
+that their composites are identities, yielding
+\leanname{Resolution.Diaconescu.BinarySpecialization.generatedEquiv}.
+The equivalence preserves old elements and generated binary operations.  It
+also transports the old-diagonal predicate, failure witnesses, and the
+auxiliary truth carrier.  These components are assembled in
+\leanname{Resolution.Diaconescu.BinarySpecialization.gammaEquiv}, which
+formally identifies the original binary $\gamma(D)$ with the binary
+one-sorted reduct of the many-sorted $\gamma(D)$.  Its forward and inverse
+maps commute with the operation symbols, existence equality, and the
+distinguished truth value.  Thus the general layer and the binary layer use
+different Lean types but agree canonically on their shared mathematical
+fragment.
+
+\subsection{The concrete adjunction, initiality, and semantic consequence}
+
+The continuation module makes the categorical content explicit while keeping
+the formal dependency surface small.  It proves the identity and composition
+laws for $\beta$, packages persistent liberality as the checked bijection
+\[
+  \operatorname{Hom}_{ALG_\Gamma}(\gamma(D),M)
+  \cong
+  \operatorname{Hom}_{PA}(D,\beta(M)),
+\]
+and defines the induced action of $\gamma$ on homomorphisms.  The latter
+respects identities and composition.  The hom-set equivalence is natural in
+both variables; its unit $D\to\beta\gamma(D)$ and counit
+$\gamma\beta(M)\to M$ are explicit and satisfy both triangle identities.
+These statements are exposed by
+\leanname{Resolution.Diaconescu.ManySorted.betaHom\_comp},
+\leanname{Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv}, and
+\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_comp}, together with
+\leanname{Resolution.Diaconescu.ManySorted.gammaRestrict\_natural\_target},
+\leanname{Resolution.Diaconescu.ManySorted.gammaRestrict\_natural\_source},
+\leanname{Resolution.Diaconescu.ManySorted.gammaBetaCounit\_natural}, and
+\leanname{Resolution.Diaconescu.ManySorted.gammaBeta\_triangle\_gamma}.
+
+The left-adjoint content gives a direct initial-semantics consequence.  For a
+fixed signature and a fixed carrier universe closed under $\gamma$, define an
+initial partial model of a theory $E$ by the usual unique-map property among
+models of $E$, and define initiality on the encoded side among models of
+$\Gamma$ and $\alpha(E)$.  The theorem
+\leanname{Resolution.Diaconescu.ManySorted.gamma\_preserves\_initiality}
+proves that $\gamma$ sends the former initial model to the latter.  In the
+direction used by Diaconescu's Corollary~4.2,
+\leanname{Resolution.Diaconescu.ManySorted.beta\_of\_initial\_encoded\_is\_initial}
+proves that the $\beta$ reduct of an initial encoded model is an initial
+partial model.  This isolates the categorical transfer in the published
+argument.
+
+The remaining existence step is supplied in two separate modules.  First,
+\leanname{Resolution.Conditional.termModel\_initial} treats an arbitrary
+many-sorted conditional-equational theory.  Sorted ground terms are quotiented
+by semantic equality in every model of the theory.  Lean proves that the
+resulting term algebra satisfies the theory and that evaluation induces the
+unique homomorphism from it to every other model.
+
+Second, the syntax formalized for a quasi-existence equation consists of a
+finite sorted variable context, a finite list of existence-equality premises,
+and one existence-equality conclusion.  Its conditional translation adds a
+definedness guard for every context variable and translates each atom using
+$e_s$ and $\mathsf{true}$.  The equivalence between satisfaction of this
+conditional clause and satisfaction in the $\beta$ reduct is
+\leanname{Resolution.Diaconescu.InitialExistence.translateQuasiEquation\_sat\_iff\_partial}.
+The five families of $\Gamma$ clauses are included in the same conditional
+theory.  Applying the term-model construction to
+$\Gamma\cup\alpha(E)$ gives the initial encoded model in
+\leanname{Resolution.Diaconescu.InitialExistence.initialEncodedModel\_is\_initial};
+the adjunction transfer then yields
+\leanname{Resolution.Diaconescu.InitialExistence.quasiTheory\_has\_initial\_partial\_model}.
+Thus the fixed-signature, same-universe, operations-only initial-model
+conclusion used in Corollary~4.2 is checked end to end.  This is a
+formalization of the established existence argument, not a novelty claim.
+
+Because Lean represents $\beta(\gamma(D))$ as canonically equivalent to $D$
+rather than definitionally equal to it, reflection of consequence requires an
+explicit transport result.  The theorem
+\leanname{Resolution.Diaconescu.ManySorted.Formula.sat\_iff\_of\_equiv}
+proves invariance of satisfaction under partial-algebra equivalence, including
+the negation and sorted-quantifier cases.  Combining this with the
+$\alpha$--$\beta$ satisfaction condition and the canonical $\gamma$ model
+gives
+\leanname{Resolution.Diaconescu.ManySorted.semantic\_consequence\_equivalence},
+the concrete Lean form of Corollary~4.3 of \cite{Diaconescu2009}.
+
+The data carrier is exposed as the many-sorted Resolution normal-form type.
+Theorems
+\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedOld},
+\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedTotal}, and
+\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedPartial}
+show that the functorial action preserves old values and the two generated
+operation constructors.  This is the explicit interface between the
+established encoding and the Resolution normal-form layer used here; the
+specialization equivalence above connects it formally to the binary
+\texttt{GeneratedAns} carrier used in \cref{sec:free-completion,sec:finite-separation,sec:completion,sec:equations,sec:arithmetic}.
+
+There are two deliberate scope boundaries.  The Lean theorem uses canonical
+partial-algebra equivalence rather than identifying
+$\beta(\gamma(D))$ and $D$ by definitional equality.  It does not mechanize
+the surrounding institution/comorphism infrastructure, arbitrary signature
+morphisms, the full institution-level form of Corollary~4.2, or the
+proof-theoretic Birkhoff completeness result of Section~5 of
+\cite{Diaconescu2009}.  The categorical
+fixed-signature transfer and the quasi-existence initial-model construction
+used inside Corollary~4.2 are checked, but their packaging over arbitrary
+signature morphisms is not.  These
+boundaries are why the result is described here as a
+many-sorted encoding bridge and not as a replacement for the broader theory
+of \cite{Diaconescu2009}.
+
+
 \section{Relation to Prior Work}\label{sec:related-work}
 
 \subsection{Free completion and partial algebras}
@@ -1311,22 +1301,27 @@ the provenance of old-undefined applications.
 
 The established ingredients include free completion, operation-tree syntax,
 finite-signature ground-term recognizability, and standard Cauchy-completion
-machinery.  Against that background, the package submitted for specialist
-assessment has three parts:
+machinery.  Against that background, the candidate contribution submitted for
+specialist assessment is concentrated in two connected parts:
 \begin{enumerate}
   \item an intrinsic relative observer class that fixes an arbitrary, possibly
         infinite partial base pointwise and budgets only its complement,
         together with a canonical finite-tag presentation, pairwise separation,
-        and an explicit base-faithful construction bound;
+        and an explicit base-faithful construction bound; the central result is
+        \cref{thm:finite-external-separation};
   \item the induced observational completion, including an exact finite-base
         properness criterion, an independent arbitrary-base old-fixing-context
         criterion, their formal incomparability, the contrast with prefix-depth
-        completion, and exact universal equational conservativity;
-  \item an audited Lean development comprising the many-sorted encoding
-        bridge and the binary separation--completion results, with natural-
-        and integer-arithmetic instances and explicit unbounded-rank
-        witnesses.
+        completion, and exact universal equational conservativity; in
+        particular, \cref{thm:old-fixing-proper-completion} extends the
+        non-surjectivity argument beyond finitely coded bases.
 \end{enumerate}
+The audited Lean development checks these binary results, their natural- and
+integer-arithmetic instances, and the explicit unbounded-rank witnesses.  The
+many-sorted development of \cref{sec:diaconescu-bridge} has a different role:
+it verifies the inherited encoding theory and proves that the binary
+implementation used by the two items above is its exact specialization.  That
+bridge is supporting formal provenance, not a third novelty claim.
 Our search has not found this exact relative separation--completion package.
 That reports the present search result, not proof of historical priority or a
 claim that each constituent is new.
@@ -1418,31 +1413,32 @@ completion lemmas are summarized and linked to exact declarations in
 \section{Limitations and Open Questions}\label{sec:limitations}
 
 \begin{enumerate}
+  \item For finite bases and finite signatures, ordinary residual finiteness is
+        already explained by classical ground-term recognizability.  The
+        precise relation of the arbitrary-base, pointwise-preserving
+        finite-complement observer class to known relative residual-finiteness
+        constructions remains under review.
+  \item The linear tag bound in \cref{thm:finite-external-separation} is a
+        baseline upper bound, not an optimality
+        theorem; its relative state complexity is open.
+  \item Properness is classified exactly for finitely coded old carriers.  The
+        old-fixing-context hypothesis is sufficient but not necessary, and
+        neither of the two stated hypotheses subsumes the other; a full
+        arbitrary-carrier classification remains open.
   \item The $\Gamma$--$\alpha$--$\beta$--$\gamma$ bridge is many-sorted and
-        supports arbitrary finite arities and separate $TF/PF$ families.  The
+        supports arbitrary finite arities and separate $TF/PF$ families.  Its
         singleton-sort, no-$TF$, binary-$PF$ instance is formally identified
-        with the original binary Resolution core.  The finite-complement
-        separation and observational-completion layer nevertheless remains
-        one-sorted and binary.  Extending that second layer, and comparing it
-        directly with the full Schmidt construction, remains open.
+        with the original binary Resolution core, but the finite-complement
+        separation and observational-completion results remain one-sorted and
+        binary.  Extending those results and comparing them directly with the
+        full Schmidt construction remains open.
   \item The bridge checks the concrete operations-only sentence and model
         constructions used here, including the fixed-signature adjunction laws
         and both initiality transfers.  For the explicit quasi-existence syntax,
         it also constructs the initial translated conditional model and the
         resulting initial partial model.  It does not formalize institution
         morphisms, arbitrary signature morphisms, the institution-level form
-        of Corollary~4.2, or Birkhoff proof-theoretic completeness.
-  \item For finite bases and finite signatures, ordinary residual finiteness is
-        already explained by classical ground-term recognizability.  The
-        precise relation of the arbitrary-base, pointwise-preserving
-        finite-complement observer class to known relative residual-finiteness
-        constructions remains under review.
-  \item The linear tag bound is a baseline upper bound, not an optimality
-        theorem; its relative state complexity is open.
-  \item Properness is classified exactly for finitely coded old carriers.  The
-        old-fixing-context hypothesis is sufficient but not necessary, and
-        neither of the two stated hypotheses subsumes the other; a full
-        arbitrary-carrier classification remains open.
+        of Diaconescu's Corollary~4.2, or Birkhoff proof-theoretic completeness.
   \item The construction is semantic, not an efficiency claim.  Retaining full
         provenance can produce large finite trees.
   \item No ordinary field law is asserted globally on singular Answers unless
@@ -1455,20 +1451,12 @@ completion lemmas are summarized and linked to exact declarations in
 
 \section{Conclusion}
 
-The many-sorted bridge places the project explicitly downstream of
-Diaconescu's total-algebra encoding: the concrete $TF/PF$ Horn theory, the
-$\alpha$--$\beta$ satisfaction condition, and the canonical $\gamma$ lift are
-all checked in Lean.  The singleton-sort, no-$TF$, binary-$PF$ instance is
-canonically equivalent to the original binary implementation, including its
-generated and truth carriers and all encoded operations.  The guarded
-conditional translation and term-model
-construction also give the fixed-signature initial partial model for the
-formalized quasi-existence theories.  Their mathematical priority remains with the
-established source.  Resolution semantics is then best understood as a normalized structured
-presentation of a free compatible completion of a partial algebra.  Its basic
-conservativity follows from the reduction rule.  The substantive additional
-construction is intrinsic finite-complement separation over the
-pointwise-preserved old fragment.  It separates every generated pair while
+Resolution semantics gives a normalized structured presentation of a free
+compatible completion of a partial algebra.  Its free-completion character and
+basic conservativity follow from established ideas and the reduction rule.
+The central additional construction studied here is intrinsic
+finite-complement separation over the pointwise-preserved old fragment.  It
+separates every generated pair while
 adding only finitely many states beyond the base; a derived finite-tag normal
 form supplies the explicit witnesses and induces a separated observational
 filtration.  For finitely coded bases this implies ordinary residual finiteness
@@ -1492,11 +1480,27 @@ than equality, the separation ranks are unbounded, and the factorial
 repeated-$+0$ family supplies an explicit completion point outside the
 generated image.  At the same time, $0/0$ remains a structured element outside
 the old numerical image; the construction does not replace ordinary
-arithmetic with a new numerical convention.  The formal results are
-reproducible in Lean, while the novelty claim is intentionally limited to the
-specific verified combination described above.
+arithmetic with a new numerical convention.
 
+The many-sorted Lean development locates this binary framework precisely
+relative to Diaconescu's total-algebra encoding.  It checks the concrete
+$TF/PF$ Horn theory, the $\alpha$--$\beta$ satisfaction condition, the
+canonical $\gamma$ lift, the fixed-signature adjunction and initiality results,
+and the operations-only existence step for the formalized quasi-existence
+theories.  Its singleton-sort, no-$TF$, binary-$PF$ instance is canonically
+equivalent to the original binary implementation, including the generated and
+truth carriers and all encoded operations.  These results establish formal
+provenance and compatibility; their mathematical priority remains with the
+established source and they are not part of the separation--completion novelty
+claim.  The complete development is reproducible in Lean, while the exact
+historical status of the specific verified combination remains open to
+specialist assessment.
+
+\begingroup
+\small
+\setlength{\bibsep}{0.25em}
 \bibliographystyle{abbrvnat}
 \bibliography{../references,../references-completion,../references-separation}
+\endgroup
 
 \end{document}
