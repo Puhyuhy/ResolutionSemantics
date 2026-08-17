@@ -49,6 +49,20 @@ recorded by:
 - `ResolutionSemantics.intrinsicExtensionHasCanonicalPresentation`
 - `ResolutionSemantics.intrinsicSeparationIffFiniteTag`
 
+A supporting obstruction explains why finite-family realization over an
+infinite fixed base is not obtained by the standard residual-finiteness product
+trick. `ResolutionRelativeProductObstruction.lean` proves at carrier level that
+both embeddings `Nat -> Nat ⊕ Unit` have finite relative complement, while the
+diagonal embedding into their Cartesian product does not. The product contains
+infinitely many mixed outside points `(a, star)`. The headline declaration is:
+
+- `ResolutionSemantics.RelativeObservers.finiteRelativeComplement_not_closed_under_binary_products`
+
+Thus the restricted observer class is not binary-product closed over an
+infinite base, so the direct finite-pattern construction in Master I performs
+work that cannot be replaced by simply multiplying pairwise separators inside
+the same class.
+
 ## 3. Observational filtration and completed algebra
 
 Headline declarations:
