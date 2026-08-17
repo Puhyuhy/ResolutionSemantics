@@ -1,368 +1,236 @@
 # Resolution Semantics theorem map
 
-The core paper-facing names live in `ResolutionSemantics.lean`; the explicit
-one-point facade lives in `ResolutionSemanticsCompletion.lean`; the intrinsic
-finite-complement facade lives in `ResolutionIntrinsicFiniteComplementAPI.lean`;
-the residual-finiteness and Rees-index comparison lives in
-`ResolutionResidualComparisonPublic.lean`;
-the finite-base criterion lives in `ResolutionFiniteBasePropernessPublic.lean`;
-the arbitrary-base old-fixing-context criterion and its arithmetic instances
-live in `ResolutionOldFixingContextPropernessPublic.lean`; their formal
-incomparability is recorded in `ResolutionPropernessCriteriaComparison.lean`;
-and the original natural-arithmetic facade lives in
-`ResolutionArithmeticPropernessPublic.lean`.
-Implementation declarations remain available for audit but are not presented
-as the main public interface.
+The publication-facing structural facade is
+`lean/ResolutionMasterTheorems.lean`. The manuscript is organized around the
+following dependency chain rather than around the historical order in which the
+individual properness lemmas were developed.
 
-## Diaconescu encoding bridge
+## 1. Free compatible completion substrate
 
-- `Resolution.Diaconescu.gamma_satisfiesGamma`
-- `Resolution.Diaconescu.betaGammaPartialAlgEquiv`
-- `Resolution.Diaconescu.gamma_persistent_liberality`
+Headline declarations:
+
+- `ResolutionSemantics.freeCompletionUniversal`
+- `ResolutionSemantics.expressionKernelQuotientInjective`
+- `ResolutionSemantics.expressionKernelQuotientSurjective`
+
+This is the normalized free-compatible-completion substrate. It is established
+partial-algebra infrastructure and is not the paper's novelty headline.
+
+## 2. Master I — relative finite-pattern realization
+
+Headline declarations:
+
+- `ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization`
+- `ResolutionSemantics.MasterTheorems.relativeFiniteComplementSeparation`
+- `ResolutionSemantics.finiteSeparationBound`
+- `ResolutionSemantics.finiteObservationComplete`
+
+Core modules:
+
+- `ResolutionFinitePatternRealization.lean`
+- `ResolutionFinitePatternRealizationPublic.lean`
+- `ResolutionIntrinsicFiniteComplement.lean`
+- `ResolutionIntrinsicFiniteComplementAPI.lean`
+- `ResolutionFiniteTagProof.lean`
+
+One compatible finite-complement observer is simultaneously injective on any
+chosen finite family of generated Answers while fixing the entire partial base
+pointwise. Pairwise finite-tag separation is the two-point consequence. The
+older pair-specific implementation retains the explicit constructor-size bound.
+
+The intrinsic observer budget counts only genuinely outside states. The base may
+therefore be infinite. Canonical finite-tag carriers have the form
+`D.Carrier ⊔ Fin(n) ⊔ {overflow}`. The intrinsic/canonical correspondence is
+recorded by:
+
+- `ResolutionSemantics.OutsideOld`
+- `ResolutionSemantics.oldOrOutsideEquiv`
+- `ResolutionSemantics.outsideEquiv`
+- `ResolutionSemantics.intrinsicExtensionHasCanonicalPresentation`
+- `ResolutionSemantics.intrinsicSeparationIffFiniteTag`
+
+## 3. Observational filtration and completed algebra
+
+Headline declarations:
+
+- `ResolutionSemantics.completedAlgebra`
+- `ResolutionSemantics.completionComplete`
+- `Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra_initial`
+- `ResolutionSemantics.equationConservative`
+
+The finite-tag stages induce a separated filtration. Cauchy sequences modulo
+stagewise eventual agreement form the observational completion. Primitive
+operations extend continuously, and the completed algebra preserves and
+reflects exactly the constant-bearing universal equations of the generated
+Answer algebra.
+
+The prefix-depth comparison is formally witnessed by
+`Resolution.Probe.depthCauchy_not_observationalCauchy`, so this is not simply
+the classical tree-prefix completion under different notation.
+
+## 4. Master II — relative trajectory compression
+
+Headline declaration:
+
+- `ResolutionSemantics.MasterTheorems.orbitCompressionCauchy`
+
+Core module: `ResolutionOrbitCompressionMaster.lean`.
+
+At every stage only the deterministic observer trajectory relevant to the
+chosen generated unary family needs a finite code. The whole observer carrier
+may remain infinite. Standard pigeonhole periodicity plus factorial divisibility
+gives the Cauchy half; this finite-dynamics argument is explicitly background
+machinery rather than a novelty claim.
+
+## 5. Finite-pattern escape — the anti-limit mechanism
+
+Headline declaration:
+
+- `ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit`
+
+Core module: `ResolutionFinitePatternAntiLimit.lean`.
+
+For growing unary syntax
+`t_(k+1) = susp(u, t_k, old(e))`, a candidate-tailored finite-pattern observer
+realizes a generated candidate and a sufficiently long orbit prefix exactly.
+The next unseen iterate falls outside the selected finite subterm pattern and is
+sent to overflow; overflow is absorbing along the continuation. Hence no
+generated Answer can be the limit of the factorial sample.
+
+This theorem is independent of finite-state periodicity. It is the
+Resolution-specific no-limit half of the properness argument.
+
+## 6. Combined compression–escape properness theorem
+
+Headline declarations:
+
+- `ResolutionSemantics.MasterTheorems.compressedEscapingOrbitNotComplete`
+- `ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective`
+
+Logical form:
+
+`finite trajectory compression + finite-pattern escape`
+
+`=> factorial Cauchy + no generated limit`
+
+`=> incomplete generated filtered space`
+
+`=> proper observational completion`.
+
+This is the structural center of the promoted manuscript.
+
+## 7. Finite-base instance
+
+Headline declaration:
+
+- `ResolutionSemantics.MasterTheorems.finiteBasePropernessCriterion`
+
+Equivalent public results include:
+
+- `ResolutionSemantics.FiniteBaseCompletion.completeIffTotal`
+- `ResolutionSemantics.FiniteBaseCompletion.embeddingNotSurjectiveIffExistsUndefined`
+
+When the old carrier injects into `Fin(baseSize)`, the whole stage observer is
+finite, so trajectory compression is automatic. The exact criterion is:
+`completion proper <=> some base application undefined`.
+
+Finite-base residual-finiteness consequences remain available through:
+
+- `ResolutionSemantics.ResidualComparison.finiteBaseCompatibleSeparationBound`
+- `ResolutionSemantics.ResidualComparison.finiteBaseGeneratedResiduallyFinite`
+- `ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal`
+
+The qualitative finite-signature ground-term residual-finiteness subcase is
+positioned as classical recognizability, not new mathematics.
+
+## 8. Infinite-base old-fixing instance
+
+Headline declarations:
+
+- `ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster`
+- `ResolutionSemantics.MasterTheorems.oldFixingRanksUnbounded`
+
+Related public declarations:
+
+- `ResolutionSemantics.OldFixingContextCompletion.factorialSequenceCauchy`
+- `ResolutionSemantics.OldFixingContextCompletion.factorialSequenceNoLimit`
+- `ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective`
+
+If an undefined seed exists and a unary context fixes every old element
+pointwise, the relevant observer trajectory has finite external complexity even
+when the old carrier itself is infinite. The sharp checked stage witness is
+`c_(n+1)! ~_n c_(n+2)!`, and therefore the least finite separation rank is
+strictly greater than `n`.
+
+The finite-base and old-fixing hypotheses are incomparable; the supporting
+comparison lives in `ResolutionPropernessCriteriaComparison.lean`.
+
+## 9. Arithmetic instances
+
+Natural arithmetic:
+
+- `ResolutionSemantics.NatDivision.singularFamilyInjective`
+- `ResolutionSemantics.NatDivision.singularFamilyDisjoint`
+- `ResolutionSemantics.NatDivision.oldFixingCriterion`
+- `ResolutionSemantics.NatDivision.separationRanksUnbounded`
+
+Integer arithmetic:
+
+- `ResolutionSemantics.IntDivision.singularFamilyInjective`
+- `ResolutionSemantics.IntDivision.zeroDivZeroNotOld`
+- `ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective`
+- `ResolutionSemantics.IntDivision.separationRanksUnbounded`
+
+The undefined seed is `0/0`; the old-fixing context is `x ↦ x + 0`. Division by
+zero remains a structured unresolved Answer rather than an ordinary number.
+
+## 10. Many-sorted Diaconescu provenance bridge
+
+The bridge is supporting formalization of established partial-to-total
+infrastructure, not a third novelty axis.
+
+Core declarations include:
+
 - `Resolution.Diaconescu.ManySorted.term_evalPartial_sound`
 - `Resolution.Diaconescu.ManySorted.term_evalPartial_complete`
 - `Resolution.Diaconescu.ManySorted.alpha_satisfaction_condition`
 - `Resolution.Diaconescu.ManySorted.gamma_satisfiesGamma`
 - `Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv`
 - `Resolution.Diaconescu.ManySorted.gamma_persistent_liberality`
-- `Resolution.Diaconescu.ManySorted.betaHom_identity`
-- `Resolution.Diaconescu.ManySorted.betaHom_comp`
 - `Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv`
-- `Resolution.Diaconescu.ManySorted.gammaHom_identity`
-- `Resolution.Diaconescu.ManySorted.gammaHom_comp`
-- `Resolution.Diaconescu.ManySorted.gammaHom_generatedOld`
-- `Resolution.Diaconescu.ManySorted.gammaHom_generatedTotal`
-- `Resolution.Diaconescu.ManySorted.gammaHom_generatedPartial`
-- `Resolution.Diaconescu.ManySorted.Formula.sat_iff_of_equiv`
 - `Resolution.Diaconescu.ManySorted.semantic_consequence_equivalence`
-- `Resolution.Diaconescu.ManySorted.gammaRestrict_natural_target`
-- `Resolution.Diaconescu.ManySorted.gammaRestrict_natural_source`
-- `Resolution.Diaconescu.ManySorted.gammaBetaCounit_natural`
-- `Resolution.Diaconescu.ManySorted.gammaBeta_triangle_beta`
-- `Resolution.Diaconescu.ManySorted.gammaBeta_triangle_gamma`
 - `Resolution.Diaconescu.ManySorted.gamma_preserves_initiality`
 - `Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial`
-- `Resolution.Diaconescu.ManySorted.initial_partial_exists_of_encoded_initial_exists`
-- `Resolution.Diaconescu.BinarySpecialization.toFromPartialAlgEquiv`
-- `Resolution.Diaconescu.BinarySpecialization.toManySorted_satisfiesGamma`
-- `Resolution.Diaconescu.BinarySpecialization.fromManySorted_satisfiesGamma`
-- `Resolution.Diaconescu.BinarySpecialization.generatedEquiv`
-- `Resolution.Diaconescu.BinarySpecialization.sameOld_iff`
-- `Resolution.Diaconescu.BinarySpecialization.gammaTruthEquiv`
-- `Resolution.Diaconescu.BinarySpecialization.gammaEquiv`
-- `Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_op`
-- `Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_existenceEq`
-- `Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_true`
-- `Resolution.Conditional.termModel_initial`
-- `Resolution.Conditional.initial_model_exists`
-- `Resolution.Diaconescu.InitialExistence.modelsGamma_iff_satisfiesGamma`
-- `Resolution.Diaconescu.InitialExistence.translateQuasiEquation_sat_iff_partial`
-- `Resolution.Diaconescu.InitialExistence.clause_sat_roundtrip`
-- `Resolution.Diaconescu.InitialExistence.initialEncodedModel_is_initial`
 - `Resolution.Diaconescu.InitialExistence.quasiTheory_has_initial_partial_model`
+- `Resolution.Diaconescu.BinarySpecialization.generatedEquiv`
+- `Resolution.Diaconescu.BinarySpecialization.gammaEquiv`
 
-`ResolutionDiaconescuEncoding.lean` formalizes the one-sorted binary core of
-Diaconescu's `gamma` construction.  All operation symbols are treated as
-partial.  The canonical encoded algebra satisfies the relevant existence-
-equality Horn clauses, its `beta` reduct is canonically equivalent to the
-original partial algebra, and every partial homomorphism into a `beta` reduct
-has a unique encoded lift.  This module remains the compact **binary
-one-sorted core**.
+Relevant modules:
 
-`ResolutionDiaconescuManySorted.lean` extends that bridge to a sort-indexed
-signature with arbitrary finite arities and separate designated-total (`TF`)
-and partial (`PF`) operation families.  It defines the sentence translation
-`alpha`, proves the term-evaluation lemmas and the `alpha`/`beta` satisfaction
-condition, constructs the canonical `gamma` model, proves recovery of the
-source partial algebra by `beta (gamma D)`, and proves the corresponding
-persistent-liberality universal property.  These declarations are presented
-as a continuation and machine-checked specialization of the paper's
-framework, not as a claim to replace its broader institution-theoretic
-development.
+- `ResolutionDiaconescuEncoding.lean`
+- `ResolutionDiaconescuManySorted.lean`
+- `ResolutionDiaconescuContinuation.lean`
+- `ResolutionDiaconescuAdjunction.lean`
+- `ResolutionDiaconescuBinarySpecialization.lean`
+- `ResolutionConditionalInitial.lean`
+- `ResolutionDiaconescuInitialExistence.lean`
 
-`ResolutionDiaconescuBinarySpecialization.lean` formally checks the overlap
-between these two presentations. It embeds a binary signature as a singleton
-sort with no designated-total symbols and with every original operation as a
-binary partial symbol. It translates partial algebras, homomorphisms, and the
-Horn theory `Gamma` in both directions. The two free-completion universal
-properties yield the canonical carrier equivalence `generatedEquiv`; the
-old-diagonal predicate and the auxiliary truth carriers are transported along
-it. Finally, `gammaEquiv` identifies the existing binary `gamma D` with the
-binary one-sorted instance of the many-sorted `gamma D`, commuting with data
-operations, existence equality, and the distinguished truth value. The
-inverse maps satisfy the same operation laws.
+The formalization covers the fixed-signature operations-only fragment used by
+the paper: arbitrary finite arities, separate total/partial operation families,
+the satisfaction condition, recovery, persistent liberality, hom-set
+adjunction laws, semantic consequence, initiality transfers, and the
+singleton-sort binary specialization. Arbitrary signature morphisms and the
+full institution/comorphism layer remain outside scope.
 
-`ResolutionDiaconescuContinuation.lean` packages the bridge functorially. It
-checks the identity and composition laws for `beta`, upgrades persistent
-liberality to the explicit hom-set equivalence
-`Hom(gamma D, M) ~= Hom(D, beta M)`, and derives the action of `gamma` on
-homomorphisms with its identity and composition laws. It also proves that
-closed-formula satisfaction is invariant under the canonical Lean
-partial-algebra equivalence and uses that transport theorem to formalize the
-semantic consequence equivalence corresponding to Corollary 4.3. Finally,
-the generated-old, generated-total, and generated-partial theorems expose the
-data carrier of `gamma` as the functorial many-sorted Resolution normal-form
-construction. These remain formalized continuations of established results;
-the Resolution-specific contribution is the explicit normal-form interface,
-now formally connected by `BinarySpecialization.gammaEquiv` to the binary
-normal-form carrier used by the rest of this repository.
+## 11. Formal audit
 
-`ResolutionDiaconescuAdjunction.lean` proves that the hom-set equivalence is
-natural in both the partial source and encoded target. It constructs the
-unit and counit, checks their naturality and both triangle identities, and
-therefore supplies the concrete fixed-signature content of `gamma ⊣ beta`
-without importing a category-theory library. It then defines
-universe-bounded initial models of a fixed theory and proves both relevant
-transfers: `gamma` sends an initial partial model to an initial encoded model,
-while the `beta` reduct of an initial encoded model is initial among partial
-models. The latter is the categorical transfer used in Corollary 4.2. The
-formalization remains fixed-signature and operations-only.
+`lean/AxiomAudit.lean` checks every manuscript-linked declaration and prints
+axiom dependencies for the principal theorems. `scripts/verify.sh` accepts only
+Lean's standard:
 
-`ResolutionConditionalInitial.lean` supplies the classical existence input in
-a self-contained many-sorted total-algebra language. For an arbitrary theory
-of conditional equations, it quotients sorted ground terms by equality in all
-models, proves that the quotient term algebra is itself a model, and proves
-its unique-map property.
+- `propext`
+- `Classical.choice`
+- `Quot.sound`
 
-`ResolutionDiaconescuInitialExistence.lean` identifies the five families of
-`Gamma` axioms with conditional clauses, represents a quasi-existence equation
-as a finite sorted context, a finite conjunction of existence-equality atoms,
-and one existence-equality conclusion, and proves that its guarded conditional
-translation is satisfied exactly when the original equation holds in the
-`beta` reduct. It applies the conditional term-model theorem to
-`Gamma + alpha(E)`, converts the result to an encoded algebra, and uses the
-adjunction theorem to obtain an initial partial model of `E`. This checks the
-fixed-signature, same-universe, operations-only initial-model conclusion used
-in Corollary 4.2. It is presented as a formalization of the cited classical
-result, not as new mathematics. Arbitrary signature morphisms, the surrounding
-institution/comorphism layer, and Birkhoff proof-theoretic completeness remain
-outside the claim.
-
-## Free compatible completion
-
-- `ResolutionSemantics.freeCompletionUniversal`
-- `ResolutionSemantics.expressionKernelQuotientInjective`
-- `ResolutionSemantics.expressionKernelQuotientSurjective`
-
-Supporting declarations:
-
-- `Resolution.Free.generatedAns_has_unique_compatibleHom`
-- `Resolution.Free.compatibleHom_unique`
-- `Resolution.Free.quotientToGenerated_injective`
-- `Resolution.Free.quotientToGenerated_surjective`
-
-## Intrinsic finite-complement separation
-
-- `ResolutionSemantics.OutsideOld`
-- `ResolutionSemantics.oldOrOutsideEquiv`
-- `ResolutionSemantics.outsideEquiv`
-- `ResolutionSemantics.intrinsicExtensionHasCanonicalPresentation`
-- `ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem`
-- `ResolutionSemantics.intrinsicSeparationIffFiniteTag`
-
-Supporting declarations:
-
-- `Resolution.External.OutsideOld`
-- `Resolution.External.oldOrOutsideEquiv`
-- `Resolution.External.outsideEquiv`
-- `Resolution.External.intrinsicExtensionHasCanonicalPresentation`
-- `Resolution.External.qualitativeFiniteComplementSeparating_theorem`
-- `Resolution.External.intrinsicFiniteComplementSeparatesAt_iff_finiteTagSeparatesAt`
-
-`OutsideOld D T` is the actual complement of the embedded old carrier.  The
-primitive budget asks only for an injection of that subtype into `Fin (n+1)`.
-`intrinsicExtensionHasCanonicalPresentation` derives a base-fixing injection
-into the canonical finite-tag carrier; it does not assert a bijection when the
-budget is not tight.  `outsideEquiv` is a genuine bijection only for the
-outside part of the canonical finite-tag model.
-
-## Canonical finite-tag consequences
-
-- `ResolutionSemantics.finiteExternalSeparation`
-- `ResolutionSemantics.finiteObservationComplete`
-- `ResolutionSemantics.finiteSeparationBound`
-
-Supporting declarations:
-
-- `Resolution.External.finiteTagSeparating_theorem`
-- `Resolution.External.finiteTag_full_abstraction_verified`
-- `Resolution.External.finiteTagSeparatesAt_size_bound`
-- `Resolution.External.finiteSeparationRank_le_size`
-
-The paper uses the intrinsic finite-complement theorem as its headline
-statement.  Finite external separation and observational completeness are
-canonical consequences via the same-budget equivalence.  It does not use
-“full abstraction” as a novelty headline.  The constructor-count estimate is a
-valid baseline construction bound, not an optimal state-complexity theorem.
-
-## Residual finiteness and the Rees-index distinction
-
-- `ResolutionSemantics.ResidualComparison.finiteBaseCompatibleSeparationBound`
-- `ResolutionSemantics.ResidualComparison.finiteBaseGeneratedResiduallyFinite`
-- `ResolutionSemantics.ResidualComparison.undefinedApplicationEscapesOldImage`
-- `ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal`
-
-Supporting declarations:
-
-- `Resolution.ResidualComparison.FiniteCompatibleSeparatesAt`
-- `Resolution.ResidualComparison.GeneratedResiduallyFinite`
-- `Resolution.ResidualComparison.finiteBaseCompatibleSeparationBound`
-- `Resolution.ResidualComparison.finiteBaseGeneratedResiduallyFinite`
-- `Resolution.ResidualComparison.undefinedApplicationEscapesOldImage`
-- `Resolution.ResidualComparison.generatedOldClosed_iff_evaluatorTotal`
-
-If the old carrier injects into `Fin baseSize`, the existing finite-tag
-separator becomes a finite compatible target whose whole carrier injects into
-`Fin (baseSize + nodeCount x + nodeCount y + 1)`.  Hence the generated Answer
-algebra is residually finite for every finitely coded base.  Independently,
-the embedded old image is closed under the generated total operations exactly
-when the old evaluator is total.  In the genuinely partial case it is therefore
-not a total subalgebra, so the finite-complement inclusion is not literally an
-ordinary finite-Rees-index inclusion.
-
-When the operation signature is also finite, the qualitative ordinary
-residual-finiteness conclusion is classical: the Answer algebra is the ground
-term algebra modulo the finite congruence presentation formed by the defined
-old applications, and Kozen's recognizability theorem yields finite syntactic
-quotients separating distinct classes. The formal declarations above record
-the repository's direct separator, its explicit whole-target bound, and the
-fact that no finiteness assumption on the operation signature is required;
-they are not presented as a novelty claim for the classical subcase.
-
-## Completion, properness, and equations
-
-- `ResolutionSemantics.completedAlgebra`
-- `ResolutionSemantics.completionComplete`
-- `ResolutionSemantics.equationConservative`
-- `ResolutionSemantics.OnePointCompletion.embeddingNotSurjective`
-- `ResolutionSemantics.OnePointCompletion.addsPoint`
-- `ResolutionSemantics.FiniteBaseCompletion.completeIffTotal`
-- `ResolutionSemantics.FiniteBaseCompletion.embeddingSurjectiveIffTotal`
-- `ResolutionSemantics.FiniteBaseCompletion.embeddingNotSurjectiveIffExistsUndefined`
-- `ResolutionSemantics.OldFixingContextCompletion.factorialSequenceCauchy`
-- `ResolutionSemantics.OldFixingContextCompletion.factorialSequenceNoLimit`
-- `ResolutionSemantics.OldFixingContextCompletion.everyFiniteStageNotEquality`
-- `ResolutionSemantics.OldFixingContextCompletion.separationRankGreaterThanBudget`
-- `ResolutionSemantics.OldFixingContextCompletion.notComplete`
-- `ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective`
-- `ResolutionSemantics.OldFixingContextCompletion.addsPoint`
-- `ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing`
-- `ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding`
-- `ResolutionSemantics.NatDivision.stageZeroNotSeparating`
-- `ResolutionSemantics.NatDivision.everyFiniteStageNotEquality`
-- `ResolutionSemantics.NatDivision.factorialAddZeroCauchy`
-- `ResolutionSemantics.NatDivision.factorialAddZeroNoLimit`
-- `ResolutionSemantics.NatDivision.notComplete`
-- `ResolutionSemantics.NatDivision.completionEmbeddingNotSurjective`
-- `ResolutionSemantics.NatDivision.completionAddsPoint`
-- `ResolutionSemantics.NatDivision.oldFixingCriterion`
-- `ResolutionSemantics.NatDivision.separationRanksUnbounded`
-- `ResolutionSemantics.IntDivision.everyFiniteStageNotEquality`
-- `ResolutionSemantics.IntDivision.factorialOldFixingCauchy`
-- `ResolutionSemantics.IntDivision.factorialOldFixingNoLimit`
-- `ResolutionSemantics.IntDivision.notComplete`
-- `ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective`
-- `ResolutionSemantics.IntDivision.completionAddsPoint`
-- `ResolutionSemantics.IntDivision.separationRanksUnbounded`
-
-Supporting declarations:
-
-- `Resolution.External.completedResolutionTotalAlg`
-- `Resolution.External.completedResolutionFilteredTotalAlg_complete`
-- `Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra_initial`
-- `Resolution.External.completionConstantEquation_iff_generatedConstantEquation`
-- `Resolution.OnePoint.factorialCombs_cauchy`
-- `Resolution.OnePoint.noLimit`
-- `Resolution.OnePoint.not_complete`
-- `Resolution.OnePoint.completionWitness_ne_embed`
-- `Resolution.OnePoint.completionEmbedding_not_surjective`
-- `Resolution.OnePoint.completion_adds_point`
-- `Resolution.FiniteBaseProperness.factorialCombs_cauchy`
-- `Resolution.FiniteBaseProperness.factorialCombs_noLimit`
-- `Resolution.FiniteBaseProperness.not_complete_of_coded_of_undefined`
-- `Resolution.FiniteBaseProperness.complete_iff_total`
-- `Resolution.FiniteBaseProperness.completionEmbedding_not_surjective_iff_exists_undefined`
-- `Resolution.OldFixingContextProperness.factorialIterates_cauchy`
-- `Resolution.OldFixingContextProperness.factorialIterates_noLimit`
-- `Resolution.OldFixingContextProperness.every_stage_not_equality`
-- `Resolution.OldFixingContextProperness.factorialPair_separationRank_gt`
-- `Resolution.OldFixingContextProperness.not_complete`
-- `Resolution.OldFixingContextProperness.completionWitness_ne_embed`
-- `Resolution.OldFixingContextProperness.completionEmbedding_not_surjective`
-- `Resolution.OldFixingContextProperness.completion_adds_point`
-- `Resolution.ArithmeticProperness.stageZero_not_separating`
-- `Resolution.ArithmeticProperness.every_stage_not_equality`
-- `Resolution.ArithmeticProperness.factorialAddZeros_cauchy`
-- `Resolution.ArithmeticProperness.factorialAddZeros_noLimit`
-- `Resolution.ArithmeticProperness.not_complete`
-- `Resolution.ArithmeticProperness.completionWitness_ne_embed`
-- `Resolution.ArithmeticProperness.completionEmbedding_not_surjective`
-- `Resolution.ArithmeticProperness.completion_adds_point`
-
-The relative completion target is deliberately narrower than the ordinary
-free-completion target.  `Resolution.External.FilteredTotalAlg` packages a
-compatible total extension with an injective old embedding, a separated
-descending filtration, nonexpansive generated interpretation and operations,
-and (for the universal theorem) completeness.  The theorem
-`completedResolutionFilteredAlgebra_initial` supplies the canonical morphism
-and uniqueness of its underlying nonexpansive algebra-homomorphism function.
-This is the precise target class behind the manuscript's qualified use of
-“initial.”
-
-For a finitely coded old carrier, the completion is proper exactly when at
-least one old application is undefined.  The one-point result is the smallest
-explicit corollary.  For an arbitrary old carrier, an undefined old seed plus
-a context `x ↦ u(x,e)` fixing every old element is sufficient for properness.
-Its factorial orbit is Cauchy with no generated limit, every finite stage is
-strictly coarser than equality, and explicit stage-`m` pairs have separation
-rank greater than `m`.  Natural and integer arithmetic both instantiate this
-criterion with `0 / 0` and `x ↦ x + 0`.
-
-The two properness hypotheses are incomparable.  The one-point
-always-undefined algebra has a one-state code and a proper completion but no
-old-fixing-context witness.  Natural arithmetic has the old-fixing witness
-`x ↦ x + 0` and a proper completion, but `Nat` admits no injection into any
-finite code bound.  The latter fact is proved from the repository's explicit
-pigeonhole theorem.
-
-## Distinction from prefix-depth completion
-
-- `Resolution.Probe.depthCauchy_not_observationalCauchy`
-- `Resolution.Probe.comb_separatesAt_one`
-- `Resolution.Probe.NatProbe.natComb_pairwise_separated_at_zero`
-
-These theorems show that fixed finite observational budgets can detect
-arbitrarily deep comb differences. The first theorem proves that the
-prefix-depth and observational uniformities differ; it does not claim that
-either filtration refines the other. The results also show that the general
-linear tag bound is far from tight on this family.
-
-## Arithmetic examples
-
-Natural numbers:
-
-- `ResolutionSemantics.NatDivision.singularFamilyInjective`
-- `ResolutionSemantics.NatDivision.singularFamilyDisjoint`
-- `ResolutionSemantics.NatDivision.stageZeroNotSeparating`
-- `ResolutionSemantics.NatDivision.everyFiniteStageNotEquality`
-- `ResolutionSemantics.NatDivision.factorialAddZeroCauchy`
-- `ResolutionSemantics.NatDivision.factorialAddZeroNoLimit`
-- `ResolutionSemantics.NatDivision.notComplete`
-- `ResolutionSemantics.NatDivision.completionEmbeddingNotSurjective`
-- `ResolutionSemantics.NatDivision.completionAddsPoint`
-- `ResolutionSemantics.NatDivision.oldFixingCriterion`
-- `ResolutionSemantics.NatDivision.separationRanksUnbounded`
-
-Integers:
-
-- `ResolutionSemantics.IntDivision.singularFamilyInjective`
-- `ResolutionSemantics.IntDivision.zeroDivZeroNotOld`
-- `ResolutionSemantics.IntDivision.everyFiniteStageNotEquality`
-- `ResolutionSemantics.IntDivision.factorialOldFixingCauchy`
-- `ResolutionSemantics.IntDivision.factorialOldFixingNoLimit`
-- `ResolutionSemantics.IntDivision.notComplete`
-- `ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective`
-- `ResolutionSemantics.IntDivision.completionAddsPoint`
-- `ResolutionSemantics.IntDivision.separationRanksUnbounded`
-
-The manuscript does not state that `0 / 0` is an ordinary number. It states that it is a structured completed Answer outside the old numerical image.
+The promoted manuscript/API checker additionally requires the master-theorem
+headlines above and rejects superseded old-fixing indexing.
