@@ -50,7 +50,7 @@ def Normal : RawAns Sigma D.Carrier -> Prop
 end PartialAlg
 
 abbrev FiniteTagCarrier
-    (D : PartialAlg.{u,v} Sigma) (n : Nat) : Type (max u v) :=
+    (D : PartialAlg.{u,v} Sigma) (n : Nat) : Type v :=
   D.Carrier ⊕ (Fin n ⊕ Unit)
 
 structure FiniteTagAlg
@@ -62,7 +62,8 @@ structure FiniteTagAlg
       (args : Fin (Sigma.arity f) -> D.Carrier)
       (c : D.Carrier),
     D.eval f args = some c ->
-      op f (fun i => Sum.inl (args i)) = Sum.inl c
+      op f (fun i => (Sum.inl (args i) : FiniteTagCarrier D n)) =
+        (Sum.inl c : FiniteTagCarrier D n)
 
 namespace FiniteTagAlg
 
@@ -269,7 +270,7 @@ structure OldHit
   args : Fin (Sigma.arity f) -> D.Carrier
   result : D.Carrier
   eval_eq : D.eval f args = some result
-  input_eq : p = fun i => Sum.inl (args i)
+  input_eq : p = fun i => (Sum.inl (args i) : FiniteTagCarrier D selected.length)
 
 /-- Conservative total operation: preserve every old-defined base application
 before consulting the finite selected-node table. -/
@@ -291,26 +292,30 @@ theorem finiteOp_preserve
     (args : Fin (Sigma.arity f) -> D.Carrier)
     (c : D.Carrier)
     (hbase : D.eval f args = some c) :
-    finiteOp D selected f (fun i => Sum.inl (args i)) = Sum.inl c := by
+    finiteOp D selected f
+        (fun i => (Sum.inl (args i) : FiniteTagCarrier D selected.length)) =
+      (Sum.inl c : FiniteTagCarrier D selected.length) := by
   classical
-  let w : OldHit D f (fun i => Sum.inl (args i)) := {
+  let w : OldHit D f
+      (fun i => (Sum.inl (args i) : FiniteTagCarrier D selected.length)) := {
     args := args
     result := c
     eval_eq := hbase
     input_eq := rfl
   }
-  have hn : Nonempty (OldHit D f (fun i => Sum.inl (args i))) := ⟨w⟩
+  have hn : Nonempty (OldHit D f
+      (fun i => (Sum.inl (args i) : FiniteTagCarrier D selected.length))) := ⟨w⟩
   unfold finiteOp
   rw [dif_pos hn]
   let z := Classical.choice hn
   have hargs : z.args = args := by
     funext i
     have hi := congrFun z.input_eq i
-    exact Sum.inl.inj hi.symm
+    exact (Sum.inl.inj hi).symm
   have hres : z.result = c := by
     have hz := z.eval_eq
     rw [hargs, hbase] at hz
-    exact Option.some.inj hz
+    exact (Option.some.inj hz).symm
   exact congrArg Sum.inl hres
 
 noncomputable def patternAlg
@@ -337,7 +342,8 @@ theorem no_old_hit_on_selected_susp
   have hold : forall i, args i = RawAns.old (z.args i) := by
     intro i
     have hi := congrFun z.input_eq i
-    have henc : encode D selected (args i) = Sum.inl (z.args i) := hi
+    have henc : encode D selected (args i) =
+        (Sum.inl (z.args i) : FiniteTagCarrier D selected.length) := hi
     cases harg : args i with
     | old a =>
         rw [harg] at henc
