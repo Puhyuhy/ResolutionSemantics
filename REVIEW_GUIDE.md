@@ -15,9 +15,11 @@ reviewed commit when reporting results so comments remain reproducible.
    signatures with separate total and partial symbols, the Horn theory
    `Gamma`, `alpha`, `beta`, the satisfaction condition, `gamma`, recovery up
    to canonical equivalence, the persistent-liberality lift, the functor laws,
-   the hom-set equivalence, and the semantic consequence equivalence. The
-   generated-normal-form interface should also agree with the stated
-   Resolution presentation. This is a
+   the hom-set equivalence and its two-variable naturality, the unit/counit
+   triangle identities, both fixed-signature initiality transfers (including
+   the `beta`-reduct step used in Corollary 4.2), and the semantic consequence
+   equivalence. The generated-normal-form interface
+   should also agree with the stated Resolution presentation. This is a
    verification/continuation claim, not a novelty claim for those results.
 2. Generated Answers form a normalized free compatible total extension of a
    binary partial algebra and admit the stated quotient presentation.
@@ -56,6 +58,9 @@ reviewed commit when reporting results so comments remain reproducible.
   equivalence the right conservative replacement for definitional equality in
   the recovery statement? Does the explicit satisfaction-transport theorem
   correctly bridge that equivalence in the proof of semantic consequence?
+- Does `beta_of_initial_encoded_is_initial` correctly isolate the categorical
+  transfer in Corollary 4.2, while leaving the classical existence theorem for
+  initial conditional-equational total models outside its stated scope?
 - Is intrinsic finite-complement separation already known under another name?
 - Has separation by homomorphisms into extensions with finite complement over
   a pointwise-fixed partial base been studied under a generalized Rees-index,
@@ -76,7 +81,8 @@ The paper does not:
 - establish optimal separator complexity;
 - prove Strong Totality;
 - formalize the institution/comorphism layer, arbitrary signature morphisms,
-  Corollary 4.2's initial-model construction, or Birkhoff completeness;
+  the unconditional existence part of Corollary 4.2 from a syntactic class of
+  quasi-existence equations, or Birkhoff completeness;
 - claim historical priority.
 
 ## Verification

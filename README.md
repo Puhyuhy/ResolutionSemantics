@@ -33,6 +33,10 @@ historical-priority claim is made.
 - explicit identity and composition laws for `beta` and the induced `gamma`,
   a checked hom-set equivalence, and preservation/reflection of semantic
   consequence for theories of closed formulas;
+- naturality of that hom-set equivalence in both variables, explicit unit and
+  counit maps with both triangle identities, and both fixed-signature
+  initiality transfers; in particular, the `beta` reduct of an initial encoded
+  model is an initial partial model;
 - an explicit interface identifying the data of `gamma` with the many-sorted
   Resolution normal forms and showing how induced maps act on their old,
   total-operation, and partial-operation constructors;

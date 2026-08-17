@@ -35,6 +35,14 @@ as the main public interface.
 - `Resolution.Diaconescu.ManySorted.gammaHom_generatedPartial`
 - `Resolution.Diaconescu.ManySorted.Formula.sat_iff_of_equiv`
 - `Resolution.Diaconescu.ManySorted.semantic_consequence_equivalence`
+- `Resolution.Diaconescu.ManySorted.gammaRestrict_natural_target`
+- `Resolution.Diaconescu.ManySorted.gammaRestrict_natural_source`
+- `Resolution.Diaconescu.ManySorted.gammaBetaCounit_natural`
+- `Resolution.Diaconescu.ManySorted.gammaBeta_triangle_beta`
+- `Resolution.Diaconescu.ManySorted.gammaBeta_triangle_gamma`
+- `Resolution.Diaconescu.ManySorted.gamma_preserves_initiality`
+- `Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial`
+- `Resolution.Diaconescu.ManySorted.initial_partial_exists_of_encoded_initial_exists`
 
 `ResolutionDiaconescuEncoding.lean` formalizes the one-sorted binary core of
 Diaconescu's `gamma` construction.  All operation symbols are treated as
@@ -68,6 +76,21 @@ data carrier of `gamma` as the functorial many-sorted Resolution normal-form
 construction. These remain formalized continuations of established results;
 the Resolution-specific contribution is the explicit normal-form interface
 used by the rest of this repository.
+
+`ResolutionDiaconescuAdjunction.lean` proves that the hom-set equivalence is
+natural in both the partial source and encoded target. It constructs the
+unit and counit, checks their naturality and both triangle identities, and
+therefore supplies the concrete fixed-signature content of `gamma ⊣ beta`
+without importing a category-theory library. It then defines
+universe-bounded initial models of a fixed theory and proves both relevant
+transfers: `gamma` sends an initial partial model to an initial encoded model,
+while the `beta` reduct of an initial encoded model is initial among partial
+models. The latter is the categorical transfer used in Corollary 4.2. The
+formalization does not itself construct the classical initial total algebra
+for a conditional-equational presentation, so it does not claim the full
+existence theorem for quasi-existence-equational specifications. Arbitrary
+signature morphisms and the surrounding institution layer also remain outside
+the claim.
 
 ## Free compatible completion
 

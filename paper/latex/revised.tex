@@ -18,7 +18,10 @@ translation $\alpha$, and a canonical free model $\gamma$.  It checks the two
 term-evaluation lemmas, the $\alpha$--$\beta$ satisfaction condition, recovery
 of the source partial algebra up to canonical equivalence, and the unique-lift
 property of $\gamma$.  We also check the functor laws, package the lift as a
-hom-set equivalence, and derive preservation and reflection of semantic
+hom-set equivalence natural in both variables, construct its unit and counit,
+verify both triangle identities, and prove both fixed-signature initiality
+transfers.  In particular, the $\beta$ reduct of an initial encoded model is
+initial on the partial side.  We also derive preservation and reflection of semantic
 consequence for arbitrary theories of closed formulas.  This part is positioned as a machine-checked
 continuation in a concrete Lean representation, not as a novelty claim for
 the underlying encoding.
@@ -137,9 +140,14 @@ Lean presentation developed here:
         $\gamma(D)$ satisfying $\Gamma$, and $\beta(\gamma(D))$ is canonically
         equivalent to $D$ as a partial algebra;
   \item every partial homomorphism $D\to\beta(M)$ has a unique encoded lift
-        $\gamma(D)\to M$ agreeing with it under that equivalence.
+        $\gamma(D)\to M$ agreeing with it under that equivalence;
   \item the induced maps on homomorphisms respect identities and composition,
-        the lift is an explicit hom-set equivalence, and for arbitrary sets
+        the lift is an explicit hom-set equivalence natural in both variables,
+        and its unit and counit satisfy both triangle identities;
+  \item at a fixed signature and universe bound, $\gamma$ sends initial partial
+        models to initial encoded models, while the $\beta$ reduct of an
+        initial model of $\Gamma\cup\alpha(E)$ is an initial partial model of
+        $E$; moreover, for arbitrary sets
         $E,E'$ of closed formulas,
         \[
           E\models_{PA}E'
@@ -307,7 +315,7 @@ Finally,
 constructs the lift of every $D\to\beta(M)$ and proves uniqueness from the
 free interpreter on data and the homomorphism laws on the truth carrier.
 
-\subsection{Functor laws and semantic consequence}
+\subsection{The concrete adjunction, initiality, and semantic consequence}
 
 The continuation module makes the categorical content explicit while keeping
 the formal dependency surface small.  It proves the identity and composition
@@ -318,10 +326,33 @@ laws for $\beta$, packages persistent liberality as the checked bijection
   \operatorname{Hom}_{PA}(D,\beta(M)),
 \]
 and defines the induced action of $\gamma$ on homomorphisms.  The latter
-respects identities and composition.  These statements are exposed by
+respects identities and composition.  The hom-set equivalence is natural in
+both variables; its unit $D\to\beta\gamma(D)$ and counit
+$\gamma\beta(M)\to M$ are explicit and satisfy both triangle identities.
+These statements are exposed by
 \leanname{Resolution.Diaconescu.ManySorted.betaHom\_comp},
 \leanname{Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv}, and
-\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_comp}.
+\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_comp}, together with
+\leanname{Resolution.Diaconescu.ManySorted.gammaRestrict\_natural\_target},
+\leanname{Resolution.Diaconescu.ManySorted.gammaRestrict\_natural\_source},
+\leanname{Resolution.Diaconescu.ManySorted.gammaBetaCounit\_natural}, and
+\leanname{Resolution.Diaconescu.ManySorted.gammaBeta\_triangle\_gamma}.
+
+The left-adjoint content gives a direct initial-semantics consequence.  For a
+fixed signature and a fixed carrier universe closed under $\gamma$, define an
+initial partial model of a theory $E$ by the usual unique-map property among
+models of $E$, and define initiality on the encoded side among models of
+$\Gamma$ and $\alpha(E)$.  The theorem
+\leanname{Resolution.Diaconescu.ManySorted.gamma\_preserves\_initiality}
+proves that $\gamma$ sends the former initial model to the latter.  In the
+direction used by Diaconescu's Corollary~4.2,
+\leanname{Resolution.Diaconescu.ManySorted.beta\_of\_initial\_encoded\_is\_initial}
+proves that the $\beta$ reduct of an initial encoded model is an initial
+partial model.  This isolates the categorical transfer in the published
+argument.  It assumes the initial encoded model; the separate classical
+existence theorem for initial total algebras of conditional-equational
+presentations, and the syntactic restriction to quasi-existence equations,
+are not mechanized here.
 
 Because Lean represents $\beta(\gamma(D))$ as canonically equivalent to $D$
 rather than definitionally equal to it, reflection of consequence requires an
@@ -347,8 +378,11 @@ There are two deliberate scope boundaries.  The Lean theorem uses canonical
 partial-algebra equivalence rather than identifying
 $\beta(\gamma(D))$ and $D$ by definitional equality.  It does not mechanize
 the surrounding institution/comorphism infrastructure, arbitrary signature
-signature morphisms, the initial-model construction of Corollary~4.2, or the
-proof-theoretic Birkhoff completeness result of Section~5.  These boundaries are why the result is described here as a
+morphisms, the full institution-level form of Corollary~4.2, or the
+proof-theoretic Birkhoff completeness result of Section~5.  The categorical
+fixed-signature transfer used inside Corollary~4.2 is checked, but the classical
+initial-total-model existence step is not.  These
+boundaries are why the result is described here as a
 many-sorted encoding bridge and not as a replacement for the broader theory
 of \cite{Diaconescu2009}.
 
@@ -1237,6 +1271,7 @@ import ResolutionPropernessCriteriaComparison
 import ResolutionArithmeticPropernessPublic
 import ResolutionDiaconescuManySorted
 import ResolutionDiaconescuContinuation
+import ResolutionDiaconescuAdjunction
 
 #check ResolutionSemantics.freeCompletionUniversal
 #check ResolutionSemantics.OutsideOld
@@ -1272,6 +1307,13 @@ import ResolutionDiaconescuContinuation
 #check Resolution.Diaconescu.ManySorted.gammaHom_generatedOld
 #check Resolution.Diaconescu.ManySorted.gammaHom_generatedTotal
 #check Resolution.Diaconescu.ManySorted.gammaHom_generatedPartial
+#check Resolution.Diaconescu.ManySorted.gammaRestrict_natural_target
+#check Resolution.Diaconescu.ManySorted.gammaRestrict_natural_source
+#check Resolution.Diaconescu.ManySorted.gammaBetaCounit_natural
+#check Resolution.Diaconescu.ManySorted.gammaBeta_triangle_beta
+#check Resolution.Diaconescu.ManySorted.gammaBeta_triangle_gamma
+#check Resolution.Diaconescu.ManySorted.gamma_preserves_initiality
+#check Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial
 \end{lstlisting}
 The repository pins Lean~4.33.0.  The command
 \begin{lstlisting}[style=lean]
@@ -1301,9 +1343,11 @@ completion lemmas are summarized and linked to exact declarations in
         one-sorted and binary.  Extending that second layer, and comparing it
         directly with the full Schmidt construction, remains open.
   \item The bridge checks the concrete operations-only sentence and model
-        constructions used here; it does not formalize institution morphisms,
-        arbitrary signature morphisms, or the initial-specification corollaries
-        of persistent liberality.
+        constructions used here, including the fixed-signature adjunction laws
+        and both initiality transfers.  It does not formalize institution
+        morphisms, arbitrary signature morphisms, or the classical construction
+        of an initial encoded total model for every translated
+        quasi-existence-equational presentation.
   \item For finite bases and finite signatures, ordinary residual finiteness is
         already explained by classical ground-term recognizability.  The
         precise relation of the arbitrary-base, pointwise-preserving

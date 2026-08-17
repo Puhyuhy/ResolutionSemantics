@@ -9,6 +9,7 @@ import ResolutionCompletionProbe
 import ResolutionDiaconescuEncoding
 import ResolutionDiaconescuManySorted
 import ResolutionDiaconescuContinuation
+import ResolutionDiaconescuAdjunction
 
 /-!
 # Paper-facing declaration and axiom audit
@@ -91,6 +92,17 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #check Resolution.Diaconescu.ManySorted.gammaHom_generatedPartial
 #check Resolution.Diaconescu.ManySorted.Formula.sat_iff_of_equiv
 #check Resolution.Diaconescu.ManySorted.semantic_consequence_equivalence
+#check Resolution.Diaconescu.ManySorted.gammaRestrict_natural_target
+#check Resolution.Diaconescu.ManySorted.gammaRestrict_natural_source
+#check Resolution.Diaconescu.ManySorted.gammaBetaCounit_natural
+#check Resolution.Diaconescu.ManySorted.gammaBeta_triangle_beta
+#check Resolution.Diaconescu.ManySorted.gammaBeta_triangle_gamma
+#check Resolution.Diaconescu.ManySorted.beta_models_partial_iff_encoded_translation
+#check Resolution.Diaconescu.ManySorted.gamma_models_translation_iff_partial
+#check Resolution.Diaconescu.ManySorted.gamma_preserves_initiality
+#check Resolution.Diaconescu.ManySorted.betaHom_counit_eq_betaGammaInverseHom
+#check Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial
+#check Resolution.Diaconescu.ManySorted.initial_partial_exists_of_encoded_initial_exists
 
 #print axioms ResolutionSemantics.freeCompletionUniversal
 #print axioms ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem
@@ -122,3 +134,7 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #print axioms Resolution.Diaconescu.ManySorted.gammaHom_comp
 #print axioms Resolution.Diaconescu.ManySorted.Formula.sat_iff_of_equiv
 #print axioms Resolution.Diaconescu.ManySorted.semantic_consequence_equivalence
+#print axioms Resolution.Diaconescu.ManySorted.gammaBetaCounit_natural
+#print axioms Resolution.Diaconescu.ManySorted.gammaBeta_triangle_gamma
+#print axioms Resolution.Diaconescu.ManySorted.gamma_preserves_initiality
+#print axioms Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial
