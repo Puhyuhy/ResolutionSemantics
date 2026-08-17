@@ -19,36 +19,40 @@ Two existing hypotheses implement this mechanism:
 1. **finite base:** the whole observer is finite;
 2. **base-fixing context:** every base state is fixed, so only the finite complement can support nontrivial motion.
 
-`lean/ResolutionMasterTheorems.lean` packages the already-checked consequences under this organization without changing their proofs.
+`lean/ResolutionMasterTheorems.lean` packages the checked consequences under this organization.
 
-## Sharper old-fixing bound to formalize
+## Verified sharper old-fixing bound
 
-The current proof collapses the pointwise-fixed base to one settled state, producing an `(m+2)`-state quotient and the checked witness pair
+The original proof collapsed the pointwise-fixed base to one settled state, producing an `(m+2)`-state quotient and the witness pair
 
 `c_(m+2)!  ~_m  c_(m+3)!`.
 
-There is a sharper direct argument that should be formalized separately:
+The research branch now contains a Lean-checked sharper proof in
+`lean/ResolutionOldFixingContextSharperOrbit.lean`.
 
-- a stage-m observer has only `m+1` states outside the base (`m` tags plus overflow);
-- if the orbit ever enters the base, it is fixed forever;
-- otherwise the entire moving orbit remains in those at most `m+1` external states.
+A stage-m observer has only `m+1` states outside the base (`m` tags plus overflow). The proof splits an observer orbit into two exhaustive cases:
 
-This suggests the stronger statement
+- if the orbit enters the base, the base-fixing law makes it constant forever;
+- otherwise the orbit remains in the `m+1` external states, so a repetition occurs by pigeonhole and its period divides `(m+1)!`.
 
-`c_(m+1)!  ~_m  c_(m+2)!`,
+Consequently the stronger statement is formally verified:
 
-whose `m = 0` instance subsumes the separate checked fact `c_1 ~_0 c_2`.
+`c_(m+1)!  ~_m  c_(m+2)!`.
 
-This strengthening is intentionally documented as a **research target**, not a theorem, until Lean and CI verify it.
+The public research API exposes both this stage-equivalence theorem and the resulting strict separation-rank bound
 
-## Intended end state
+`m < rank(c_(m+1)!, c_(m+2)!)`.
 
-If the strengthening succeeds, the paper-facing architecture should become:
+The `m = 0` instance yields `c_1 ~_0 c_2`, so the former separate stage-zero phenomenon is subsumed by the sharper general orbit theorem.
 
-- Master I: relative finite-pattern realization;
+## Current end state
+
+The branch now supports the following architecture:
+
+- Master I: pairwise relative finite-complement realization, with finite-pattern realization still the next strengthening to test;
 - Master II: finite orbit compression implies proper completion;
-- finite-base properness and old-fixing properness as corollaries;
-- Theorem 3.3 as the two-point instance of Master I;
-- the existing factorial mechanism explicitly credited as standard finite/profinite orbit technology.
+- finite-base properness and old-fixing properness as instances of the dynamic mechanism;
+- the old-fixing unbounded-rank witness sharpened from `(m+2)!/(m+3)!` to `(m+1)!/(m+2)!`;
+- the factorial mechanism explicitly treated as standard finite/profinite orbit technology rather than a novelty claim.
 
 This organization narrows the mathematical novelty claim while making the actual dependency structure cleaner and more reusable.
