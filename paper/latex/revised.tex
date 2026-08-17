@@ -12,12 +12,13 @@ with a Lean-Checked Many-Sorted Encoding Bridge}
 
 \begin{abstract}
 We study one-sorted binary partial algebras through a normalized free
-compatible completion.  Old-defined applications reduce to old values, while
-old-undefined applications remain structured finite-tree Answers.  The
+compatible completion.  Applications defined in the base algebra reduce to
+embedded base elements, while applications undefined there remain structured
+finite-tree Answers.  The
 generated Answer algebra has the expected universal property and is the
 expression algebra modulo equality after resolution.  On this established
 free-completion substrate, the main object of study is the class of compatible
-total extensions that fix the old carrier pointwise and have finite complement
+total extensions that fix the base carrier pointwise and have finite complement
 over it.
 
 Every distinct pair of generated Answers is separated by such an extension.
@@ -26,17 +27,19 @@ canonical finite-tag models
 \[
   D.\mathrm{Carrier}\;\sqcup\;\Fin(n)\;\sqcup\;\{\overflow\}.
 \]
-The number of fresh tags is bounded by the combined constructor size; over a
-finitely coded old carrier this gives finite separating targets with an
+The number of fresh tags is bounded by the combined constructor size; when the
+base carrier is equipped with a finite code this gives finite separating targets with an
 explicit total-state bound.  Finite-tag agreement induces a separated
 filtration whose Cauchy completion supports canonical operations and preserves
-exactly the universal equations in the language with named old-carrier
-constants.  The completion is proper precisely when the old evaluator is
-partial for finitely coded carriers.  Without a finiteness assumption, an
-old-fixing context yields an explicit Cauchy orbit outside the generated image,
+exactly the universal equations in the language with named base-carrier
+constants.  When the base carrier is finitely coded, the completion is proper
+exactly when some application in the base algebra is undefined.  Without a
+finiteness assumption, a context fixing the base pointwise yields an explicit
+Cauchy orbit outside the generated image,
 strictly nontrivial finite stages, and unbounded separation ranks.  Natural and
 integer arithmetic instantiate this criterion while retaining division by
-zero as a structured non-old Answer rather than an ordinary number.
+zero as a structured Answer outside the base image rather than an ordinary
+number.
 
 To locate these results precisely within established partial-to-total methods,
 we also give a Lean-checked many-sorted development of Diaconescu's encoding.
@@ -48,9 +51,8 @@ formalized quasi-existence theories.  Its singleton-sort, no-$TF$, binary-$PF$
 instance is proved canonically equivalent to the original binary Resolution
 implementation, including the generated and truth carriers and all encoded
 operations.  This bridge records provenance and formal compatibility; it is
-not included in the novelty claim for the separation--completion results.
-Lean~4.33.0 checks both layers.  The exact historical priority of the combined
-relative separation--completion package remains under specialist review.
+an explicit compatibility link between the two implementations.  Lean~4.33.0
+checks both layers.
 \end{abstract}
 
 \tableofcontents
@@ -87,11 +89,13 @@ symbols $\Sigma$, and evaluator
   \eval_D : \Sigma \longrightarrow A \longrightarrow A
     \longrightarrow \operatorname{Option}(A).
 \]
-The value $\operatorname{some}(c)$ records that the old application is defined
-and equals $c$; $\operatorname{none}$ records old undefinedness.
+The value $\operatorname{some}(c)$ records that the application is defined in
+$D$ and equals $c$; $\operatorname{none}$ records that it is undefined in $D$.
 We call $A$ \emph{finitely coded} when it admits an injection into $\Fin(m)$
-for some $m$.  This is classically equivalent to finiteness and is the exact
-hypothesis used by the Lean statements below.
+for some $m$.  Classically this is equivalent to finiteness, but retaining the
+explicit code is mathematically useful: the parameter $m$ enters the
+quantitative bounds $m+n+1$ for stage-$n$ targets and
+$m+|x|+|y|+1$ for pair-dependent separating targets.
 
 Classical tree-automata results imply ordinary residual finiteness
 for the finite-base, finite-signature ground-equational presentation discussed
@@ -99,11 +103,11 @@ below \cite{Kozen1977,ComonEtAl2008,ClimentVidalCosmeLlopez2020}; that
 qualitative special case is not claimed as new either.
 
 Our starting presentation is operationally simple.  Resolve an expression
-bottom-up.  If a node has two old operands and the old evaluator returns a
-value, replace the node by that old value.  Otherwise retain the node, its
-operation symbol, and its resolved children.  The resulting finite trees are
-called \emph{Answers}.  This gives a normalized representative for a free
-compatible total extension.
+bottom-up.  If a node has two embedded base operands and the evaluator of $D$
+returns a value, replace the node by that embedded base value.  Otherwise
+retain the node, its operation symbol, and its resolved children.  The
+resulting finite trees are called \emph{Answers}.  This gives a normalized
+representative for a free compatible total extension.
 
 On top of the established free-completion substrate, the paper asks two
 narrower questions.
@@ -111,7 +115,7 @@ narrower questions.
 \begin{enumerate}[label=(Q\arabic*)]
   \item Can equality of generated Answers be characterized by total models
         that do not themselves contain Answer trees, while preserving every
-        old-defined application?
+        application defined in the base algebra?
   \item Can those finite observations support a completion on which the
         operations remain canonical and all constant-bearing universal
         equations are unchanged?
@@ -125,7 +129,7 @@ principal binary Resolution results.
 For every one-sorted binary partial algebra $D$:
 \begin{enumerate}[label=\textup{(\alph*)}]
   \item the generated Answer algebra $\RAlg{D}$ is initial among compatible
-        total algebras equipped with a map from the old carrier;
+        total algebras equipped with a map from the base carrier;
   \item $\RAlg{D}$ is represented by the quotient of the absolutely free
         expression algebra by the kernel of the resolution evaluator;
   \item every distinct $x,y\in\RAlg{D}$ is separated by a compatible total
@@ -142,12 +146,12 @@ Finite-tag agreement defines a separated descending filtration on $\RAlg{D}$.
 Its Cauchy completion $\Comp{\RAlg{D}}$ is complete, contains an injective
 stage-dense image of $\RAlg{D}$, and carries the unique jointly
 nonexpansive extensions of the primitive operations.  Relative to complete,
-separated filtered compatible total extensions whose old embedding is
+separated filtered compatible total extensions whose base embedding is
 injective, the completed algebra has the expected universal extension
-property.  If the old carrier is finitely coded, the canonical embedding is
-surjective exactly when the old evaluator is total; equivalently, the
-completion is proper exactly when some old application is undefined.  Without
-assuming finite coding of the old carrier, suppose some old application is
+property.  If the base carrier is finitely coded, the canonical embedding is
+surjective exactly when the evaluator of $D$ is total; equivalently, the
+completion is proper exactly when some application in $D$ is undefined.  Without
+assuming finite coding of the base carrier, suppose some application in $D$ is
 undefined and
 there are $u\in\Sigma$ and $e\in A$ with
 $\eval_D(u,a,e)=\operatorname{some}(a)$ for every $a\in A$.  Then every finite
@@ -214,16 +218,14 @@ coded base it also gives an explicit, base-faithful bound on the entire
 separating target; ordinary residual finiteness itself is classical in the
 finite-signature subcase.  The finite-base
 properness criterion explains exactly when the Cauchy construction adds
-genuinely new points over a finitely coded old carrier; the old-fixing-context
+genuinely new points over a finitely coded base carrier; the base-fixing-context
 criterion shows that properness is not confined to finite bases.  The two
 hypotheses are incomparable: the one-point algebra is finitely coded and
-partial but has no old-fixing context, whereas natural arithmetic has an
-old-fixing context but no finite code for its carrier.  Natural and integer arithmetic
+partial but has no base-fixing context, whereas natural arithmetic has a
+base-fixing context but no finite code for its carrier.  Natural and integer arithmetic
 are concrete corollaries.
-Theorem~\ref{thm:diaconescu-bridge} is a checked continuation of
-Diaconescu's construction and is not included in the novelty claim.  We have
-not found the exact separation--completion package in the literature reviewed so
-far, but this is not a claim of historical priority.
+Theorem~\ref{thm:diaconescu-bridge} supplies supporting formal provenance by
+connecting the binary construction to Diaconescu's established encoding.
 
 
 \section{Generated Answers as a Free Compatible Completion}
@@ -242,7 +244,8 @@ Finite input expressions and raw Answers are defined by separate grammars:
 \]
 The separation is intentional.  Expressions are input syntax.  Answers are
 normal forms produced by the partial evaluator together with the suspension
-rule.
+rule.  The constructor $\old(a)$ is retained as notation for the embedded
+element $\eta_0(a)$; in the prose these are called base elements.
 
 \begin{definition}[One-step resolution]\label{def:liftop}
 For $f\in\Sigma$ and raw Answers $x,y$, let
@@ -272,7 +275,7 @@ The generated carrier is the image of this evaluator:
   =
   \{r\mid \exists e,\ \Res_D(e)=r\}.
 \]
-The old embedding is $\eta_0(a)=\old(a)$.  Generated operations are
+The canonical base embedding is $\eta_0(a)=\old(a)$.  Generated operations are
 \[
   f_{\RAlg{D}}(x,y)=\operatorname{liftOp}_D(f,x,y).
 \]
@@ -289,7 +292,7 @@ The map $\eta_0$ is injective.
 \end{proposition}
 
 The proposition is immediate from \cref{def:liftop}.  Its role is not depth but
-control: no old-defined calculation is reinterpreted.
+control: no calculation defined in $D$ is reinterpreted.
 
 \subsection{Universal property}
 
@@ -314,8 +317,8 @@ The preservation law gives
   \Phi_T(\operatorname{liftOp}_D(f,x,y))
   =f_T(\Phi_T(x),\Phi_T(y)).
 \]
-The only non-structural case is the old-defined branch, where the equation is
-exactly the compatibility condition.
+The only non-structural case is the branch defined in $D$, where the equation
+is exactly the compatibility condition.
 
 \begin{theorem}[Free compatible completion]\label{thm:free-completion}
 For every compatible total algebra $T$ over $D$, there is a unique homomorphism
@@ -334,9 +337,9 @@ the two maps agree everywhere.
 \end{proof}
 
 The Lean-facing theorem is
-\leanname{ResolutionSemantics.freeCompletionUniversal}.  This result confirms
-that the generated construction belongs to free-completion theory rather than
-constituting a new category-theoretic notion.
+\leanname{ResolutionSemantics.freeCompletionUniversal}.  It identifies the
+generated construction as a concrete normalized presentation of the
+free-completion universal property.
 
 \subsection{Quotient presentation}
 
@@ -369,8 +372,8 @@ direct prior art \cite{ClimentVidalCosmeLlopez2023}.  Our formal theorem proves
 the corresponding universal property for the concrete one-sorted binary
 presentation used here.  A fully explicit categorical isomorphism between the
 Lean object and every formulation of the many-sorted Schmidt construction is
-not needed for the results below and is not claimed.  The correct positioning
-is that $\RAlg{D}$ is a normalized free compatible completion.
+not needed for the results below.  Thus $\RAlg{D}$ is positioned as a
+normalized free compatible completion.
 \end{remark}
 
 \section{Intrinsic Finite-Complement Separation}\label{sec:finite-separation}
@@ -379,7 +382,7 @@ The free-completion theorem alone does not show that distinctions between
 suspended Answers are visible in independently specified models.  The
 primitive observer condition should not depend on a particular sum encoding.
 
-Let $T$ be a compatible total extension with injective old embedding
+Let $T$ be a compatible total extension with injective base embedding
 $i:A\hookrightarrow T$.  Define its genuine outside part by
 \[
   \operatorname{Out}_D(T)
@@ -391,7 +394,7 @@ An observer has budget $n$ when there is an injection
 \[
   \operatorname{Out}_D(T)\hookrightarrow\Fin(n+1).
 \]
-Thus only the complement over the pointwise-preserved base is finite; the old
+Thus only the complement over the pointwise-preserved base is finite; the base
 carrier itself may be infinite.  The budget is an upper bound, so no ordering,
 chosen tags, or distinguished overflow point is part of this definition.
 \end{definition}
@@ -408,7 +411,7 @@ For $n\in\mathbb N$, a finite-tag model over $D$ has carrier
 \[
   A\sqcup\Fin(n)\sqcup\{\overflow\}
 \]
-and total operations preserving every old-defined application:
+and total operations preserving every application defined in $D$:
 \[
   \eval_D(f,a,b)=\operatorname{some}(c)
   \Longrightarrow
@@ -446,12 +449,12 @@ q(s)=\operatorname{tag}(\operatorname{index}(s))
 for selected suspended nodes $s$.  The encoding is injective on the selected
 closure.
 
-The model operation first preserves an old-defined application.  Otherwise it
+The model operation first preserves an application defined in $D$.  Otherwise it
 attempts to decode both inputs, constructs one suspended node, and re-encodes
 that node if it belongs to the selected closure; all unrelated cases go to
 $\overflow$.  There is no branch conflict.  A generated normal Answer cannot
-contain a suspended node with two old children whose old application is
-defined, because resolution would already have reduced it.
+contain a suspended node with two base children whose application is defined
+in $D$, because resolution would already have reduced it.
 
 Induction on selected subterms gives
 \[
@@ -489,13 +492,13 @@ The canonical finite-tag consequences remain exposed as
 \leanname{ResolutionSemantics.finiteSeparationBound}.
 
 \begin{remark}[Interpretation of the result]
-The old carrier $A$ may be infinite.  The theorem is therefore not finite
+The base carrier $A$ may be infinite.  The theorem is therefore not finite
 residuality of the whole carrier.  It says intrinsically that a chosen pair
 requires only finitely many \emph{new} semantic states beyond $A$; the
 finite-tag sum is a derived normal form.  The displayed linear estimate is a
-baseline construction bound, not an optimality theorem.  We avoid
-using “full abstraction” as a novelty label; the mathematical content is the
-explicit model class and separator.
+baseline construction bound, not an optimality theorem.  The mathematical
+content is the explicit model class and separator; no additional ``full
+abstraction'' terminology is needed.
 
 More precisely, let $\mathcal C_D$ be the class of compatible total extensions
 that fix $A$ pointwise and have finite complement over $A$.  The theorem says
@@ -507,7 +510,7 @@ claim that the terminology or general residual paradigm is new.
 
 \begin{corollary}[Finite-base residual finiteness]
 \label{cor:finite-base-residual}
-Suppose the old carrier admits an injective code into $\Fin(m)$.  Then
+Suppose the base carrier admits an injective code into $\Fin(m)$.  Then
 $\RAlg{D}$ is residually finite in the ordinary homomorphic sense.  More
 precisely, distinct $x,y$ are separated by a finite compatible algebra with an
 injective code into
@@ -520,7 +523,7 @@ The formal statements are
 \leanname{ResolutionSemantics.ResidualComparison.finiteBaseCompatibleSeparationBound}
 and
 \leanname{ResolutionSemantics.ResidualComparison.finiteBaseGeneratedResiduallyFinite}.
-The target produced by the proof still embeds the old carrier injectively, so
+The target produced by the proof still embeds the base carrier injectively, so
 the formal result is slightly stronger than ordinary residual finiteness,
 whose separating homomorphisms need not be faithful on the chosen generators.
 
@@ -547,35 +550,34 @@ finite-signature subcase follows from that classical result.  Foundational
 regular-tree systems, finite ground rewriting, standard tree-automata
 treatments, and many-sorted recognizability theorems provide the broader context
 \cite{Brainerd1969,DauchetTison1990,ComonEtAl2008,
-ClimentVidalCosmeLlopez2020}.  We therefore make no novelty
-claim for that qualitative consequence.  The explicit construction above
-retains the old carrier injectively, gives the stated whole-target bound, and
-continues to arbitrary old carriers by bounding only the complement; those are
+ClimentVidalCosmeLlopez2020}.  That qualitative consequence is therefore
+classical.  The explicit construction above retains the base carrier
+injectively, gives the stated whole-target bound, and continues to arbitrary
+base carriers by bounding only the complement; those are
 the features used in the remainder of the paper.  The Lean corollary itself
 does not assume that the operation signature is finite.
 \end{remark}
 
-\begin{proposition}[Closure of the old image]
+\begin{proposition}[Closure of the base image]
 \label{prop:old-image-closed}
-Let $\iota_D:A\hookrightarrow\RAlg{D}$ be the canonical old embedding.  Its
+Let $\iota_D:A\hookrightarrow\RAlg{D}$ be the canonical base embedding.  Its
 image is closed under every total operation of $\RAlg{D}$ if and only if the
-old evaluator is total.
+evaluator of $D$ is total.
 \end{proposition}
 
-Indeed, a defined old application reduces to an old value.  If
+Indeed, an application defined in $D$ reduces to an embedded base value.  If
 $\eval_D(f,a,b)=\operatorname{none}$, however, then
 \[
   f^{\RAlg{D}}(\iota_D(a),\iota_D(b))
     =\operatorname{susp}(f,\old(a),\old(b)),
 \]
-which is not in the old image.  Lean checks both the pointwise escape statement
+which is not in the base image.  Lean checks both the pointwise escape statement
 \leanname{ResolutionSemantics.ResidualComparison.undefinedApplicationEscapesOldImage}
 and the equivalence
 \leanname{ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal}.
 
 The selected-subterm encoding together with an overflow state has familiar
-tree-automata antecedents \cite{ComonEtAl2008}; it is not presented as a new
-automaton architecture.  Its use here is constrained by compatibility with a
+tree-automata antecedents \cite{ComonEtAl2008}.  Its use here is constrained by compatibility with a
 pointwise-preserved partial base.  The resulting targets are generally not
 finite: $A$ may be infinite, while only the added tags and $\overflow$ are
 counted.  A further computational analogy is the separating-words problem.
@@ -603,6 +605,10 @@ agreement at every smaller budget.  By
 \]
 Thus the filtration is separated.
 
+This filtration is not the classical prefix-depth filtration on finite trees.
+The explicit contrast is established in
+\cref{prop:depth-observation-contrast} after the completion construction.
+
 A symbolic non-Archimedean distance can be read from the least separating
 stage.  Equal points have distance zero; a distinct pair receives the level of
 its least finite separator.  The strong triangle law follows from transitivity
@@ -623,18 +629,18 @@ usual late-term argument.  A diagonal construction proves completeness.
 
 \begin{theorem}[Finite-base properness criterion]
 \label{prop:proper-completion}
-Suppose the old carrier $A$ admits an injection into $\Fin(m)$ for some $m$.
+Suppose the base carrier $A$ admits an injection into $\Fin(m)$ for some $m$.
 Then the canonical embedding
 \[
   \RAlg{D}\longrightarrow\Comp{\RAlg{D}}
 \]
-is surjective if and only if the old evaluator is total.  Equivalently, this
+is surjective if and only if the evaluator of $D$ is total.  Equivalently, this
 embedding is not surjective if and only if there exist $f\in\Sigma$ and
 $a,z\in A$ with $\eval_D(f,a,z)=\operatorname{none}$.
 \end{theorem}
 
 \begin{proof}
-A stage-$n$ observer has at most $m+n+1$ states: the finitely coded old carrier,
+A stage-$n$ observer has at most $m+n+1$ states: the finitely coded base carrier,
 $n$ fresh tags, and overflow.  If $\eval_D(f,a,z)$ is undefined, let $c_k$ be
 the left comb obtained by iterating this application.  Along the comb family
 every observer acts by the orbit of one self-map.  Hence
@@ -650,8 +656,8 @@ child, making overflow absorbing along the rest of the comb.  Thus this single
 finite stage separates $x$ from every sufficiently late factorial comb.  No
 generated Answer is a limit.
 
-Conversely, if the old evaluator is total, structural induction shows that
-every generated Answer is old.  Cauchy agreement at a fixed separating stage
+Conversely, if the evaluator of $D$ is total, structural induction shows that
+every generated Answer lies in the base image.  Cauchy agreement at a fixed separating stage
 then makes every Cauchy sequence eventually constant, so the generated space
 is complete.  Completeness is equivalent to surjectivity of the canonical
 completion embedding.  The checked public statements are
@@ -665,10 +671,10 @@ provides an explicit represented completion point through
 not by itself decide infinite-base examples.  The following independent
 criterion does.
 
-\begin{theorem}[Old-fixing-context properness]
+\begin{theorem}[Properness from a base-fixing context]
 \label{thm:old-fixing-proper-completion}
 Let $D$ be any binary partial algebra; no finiteness assumption is made on its
-old carrier.  Suppose
+base carrier.  Suppose
 \[
   \eval_D(g,a,b)=\operatorname{none}
   \quad\text{and}\quad
@@ -696,10 +702,10 @@ surjective.
 Let $T$ be a stage-$m$ preserving observer and let
 $F(s)=u_T(s,\old(e))$.  Preservation gives
 $F(\old(x))=\old(x)$ for every $x\in A$.  For this orbit, collapse the entire
-old carrier to one settled state while retaining the $m$ fresh tags and
+base carrier to one settled state while retaining the $m$ fresh tags and
 overflow.  The collapse commutes with $F$ and has $m+2$ states.  Equality in
 the collapsed orbit lifts to the original orbit: complement states were
-retained injectively, while an orbit that reaches an old value $\old(x)$ stays
+retained injectively, while an orbit that reaches a base value $\old(x)$ stays
 at that exact value because $F(\old(x))=\old(x)$.  Finite-orbit periodicity
 therefore implies that sufficiently late indices whose difference is divisible
 by $(m+2)!$ have equal $T$-values.  Applying this simultaneously to factorial
@@ -709,7 +715,7 @@ pair agrees at stage $m$, the exact rank characterization makes its least
 separating budget greater than $m$.
 
 At stage zero the complement consists only of overflow.  If $F$ sends overflow
-to an old value, the next application fixes that value; if it sends overflow
+to a base value, the next application fixes that value; if it sends overflow
 to overflow, the same table entry fixes it.  Thus $F^2=F$, proving
 $c_1\stageeq{0}c_2$, while constructor count again proves $c_1\ne c_2$.
 
@@ -728,7 +734,7 @@ and
 \end{proof}
 
 Natural and integer arithmetic both satisfy the hypotheses with undefined
-seed $0/0$ and old-fixing context $x\mapsto x+0$.  Thus
+seed $0/0$ and base-fixing context $x\mapsto x+0$.  Thus
 \cref{thm:old-fixing-proper-completion} proves that both arithmetic completion
 embeddings are non-surjective and that neither filtration has a finite stage
 equal to equality.  The direct public corollaries include
@@ -743,15 +749,15 @@ Neither properness hypothesis subsumes the other.
 
 \begin{enumerate}[label=\textup{(\roman*)}]
   \item The one-point always-undefined algebra has a one-state code, an
-        undefined old application, and a proper completion, but it admits no
-        old-fixing-context witness.
-  \item Natural arithmetic has the old-fixing witness $x\mapsto x+0$ and a
-        proper completion, but its old carrier admits no finite code.
+        application undefined in the base algebra, and a proper completion,
+        but it admits no base-fixing-context witness.
+  \item Natural arithmetic has the base-fixing witness $x\mapsto x+0$ and a
+        proper completion, but its base carrier admits no finite code.
 \end{enumerate}
 \end{proposition}
 
 \begin{proof}
-For the one-point algebra, any old-fixing witness would require its sole
+For the one-point algebra, any base-fixing witness would require its sole
 operation to satisfy
 $\eval_D(u,\star,\star)=\operatorname{some}(\star)$, contradicting the definition
 $\eval_D\equiv\operatorname{none}$.  Its one-state code, undefined operation,
@@ -783,7 +789,7 @@ For embedded points,
 \end{proposition}
 
 The completed carrier and operations form a compatible total extension of $D$
-with injective old embedding.
+with injective base embedding.
 Its completeness is exposed by
 \leanname{ResolutionSemantics.completionComplete}; the compatible algebra is
 \leanname{ResolutionSemantics.completedAlgebra}.
@@ -792,7 +798,7 @@ Its completeness is exposed by
 
 The formalization defines a category-like class of targets consisting of:
 \begin{itemize}
-  \item a compatible total extension of $D$ with injective old embedding;
+  \item a compatible total extension of $D$ with injective base embedding;
   \item a separated descending filtration;
   \item nonexpansive generated interpretation;
   \item jointly nonexpansive primitive operations;
@@ -805,12 +811,62 @@ to this specified target class.  The exact Lean package is
 \leanname{Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra\_initial}.
 
 The adjectives “initial,” “reflective,” and “idempotent” are mathematically
-correct only with these hypotheses.  They are consequences of standard
-completion arguments and are not presented here as separate novelty claims.
+correct only with these hypotheses; without them they would express a
+different categorical statement.
+
+\subsection{Contrast with prefix-depth completion}
+
+Ultrametric and algebraic treatments of infinite trees use observations by
+prefix depth \cite{ArnoldNivat1980,Courcelle1983}.  Write
+$x\equiv^{d}_{n}y$ when two Answers agree at every level of depth strictly less
+than $n$.  This is the filtration whose completion gives the classical
+infinite-tree space.  It differs genuinely from finite-tag observation.
+
+\begin{proposition}
+\label{prop:depth-observation-contrast}
+Let $D$ be a binary partial algebra with
+$\eval_D(f,a,z)=\operatorname{none}$ for some $f$, $a$, $z$.  Define the
+\emph{combs} by $c_0=a$ and $c_{k+1}=f(c_k,z)$.  Then the sequence
+$(\Res_D c_k)_{k\in\mathbb N}$ is Cauchy for the filtration
+$\equiv^{d}_{n}$ but not Cauchy for the filtration $\stageeq{n}$.
+\end{proposition}
+
+The formal statement is
+\leanname{Resolution.Probe.depthCauchy\_not\_observationalCauchy}.  Each
+comb suspends at every level, so $\Res_D c_i$ and $\Res_D c_j$ agree at every
+depth strictly less than $n$ whenever $i,j\ge n$: under the tree metric the sequence converges to
+the infinite comb.  For the finite-tag filtration one preserving model with a
+\emph{single} fresh tag suffices to break Cauchy convergence.  Send an
+undefined pair of base elements to the tag, the tag to $\overflow$, and
+$\overflow$ back to the tag; the fold along the combs then alternates between
+the tag and $\overflow$.  Thus adjacent combs are separated at stage $1$ for
+every $k$, however deep the disagreement lies
+(\leanname{Resolution.Probe.comb\_separatesAt\_one}).  A fixed observational
+budget therefore sees through unbounded depth, which prefix truncation cannot
+do.  Consequently the identity on $\RAlg{D}$ does not carry
+$\equiv^{d}_{n}$-Cauchy sequences to $\stageeq{n}$-Cauchy ones, and no
+uniformly continuous isomorphism of the two completions commutes with the
+canonical embeddings.  The statement about the two filtrations is formalized;
+the consequence for the completions is the standard argument for uniformly
+continuous maps.
+
+The same comb family shows that the general construction bound need not be
+tight.  Since $|\Res_D c_k|=2k+1$, the bound in
+\cref{thm:finite-external-separation} permits $4k+4$ tags to separate $c_k$
+from $c_{k+1}$, whereas the preceding observer uses one.
+
+\begin{openquestion}[Optimal relative separation complexity]
+\label{question:relative-separation-complexity}
+For distinct Answers let their separation rank be the least $n$ for which
+$x\not\stageeq{n}y$.  What is the optimal worst-case growth of this rank in
+$|x|+|y|$, and how does it depend on finiteness of the signature and of the
+base carrier?  Theorem~\ref{thm:finite-external-separation} gives a linear
+upper bound, while the comb family shows that this bound can be far from tight.
+\end{openquestion}
 
 \section{Exact Equational Conservativity}\label{sec:equations}
 
-Let algebraic terms contain variables, named old-carrier constants, and binary
+Let algebraic terms contain variables, named base-carrier constants, and binary
 operation symbols.  They can be evaluated in $\RAlg{D}$ and in
 $\Comp{\RAlg{D}}$.  Embedding commutes with term evaluation by induction.
 Moreover, every term operation preserves each stage relation because the
@@ -884,24 +940,38 @@ Therefore
 \[
   a/0=b/0\Longrightarrow a=b,
 \]
-and no $a/0$ is an old natural number.  These properties remain true after the
+and no $a/0$ is an embedded base natural.  These properties remain true after the
 completion embedding.  They are exposed by
 \leanname{ResolutionSemantics.NatDivision.singularFamilyInjective} and
 \leanname{ResolutionSemantics.NatDivision.singularFamilyDisjoint}.
 
 The observational completion is nontrivial in a stronger sense.  By
-\cref{thm:old-fixing-proper-completion}, repeatedly adding the old right identity to
-$0/0$ produces distinct finite Answers that no fixed observation stage can
+\cref{thm:old-fixing-proper-completion}, repeatedly applying the context
+$x\mapsto x+0$, which fixes the base carrier pointwise, produces distinct
+finite Answers that no fixed observation stage can
 fully separate.  The factorially sampled family is Cauchy without a generated
 limit, so the completion contains an explicit point outside the generated
 image, and the explicit pair at budget $m$ has separation rank greater than
-$m$.  This uses the old-fixing-context criterion rather than the finite-base
+$m$.  This uses the base-fixing-context criterion rather than the finite-base
 theorem.
+
+The contrast with prefix depth is sharper in this instance.  For the iterated
+singular divisions $(\cdots((a/0)/0)\cdots/0)$, no fresh tags are needed:
+sending each singular division to the successor of its numerator gives a
+preserving model over $\mathbb N\sqcup\{\overflow\}$ that separates every pair
+of distinct combs at stage $0$
+(\leanname{Resolution.Probe.NatProbe.natComb\_pairwise\_separated\_at\_zero}).
+This does not make the full natural-arithmetic filtration discrete.  That
+observer uses new base naturals generated along the iterated-division table;
+the family $c_0=0/0$, $c_{k+1}=c_k+0$ cannot do so because preservation forces
+$a+0=a$ on every base natural.  In fact $c_1$ and $c_2$ agree in every
+stage-zero observer, and \cref{thm:old-fixing-proper-completion} supplies an
+indistinguishable distinct pair at every finite stage.
 
 \subsection{Integers}
 
 The integer instance additionally includes subtraction.  Again, every nonzero
-division agrees with the old evaluator, while
+division agrees with the evaluator of the base algebra, while
 \[
   a/0=\susp(\mathsf{div},\old(a),\old(0)).
 \]
@@ -910,8 +980,8 @@ embedded integer.  The paper-facing results are
 \leanname{ResolutionSemantics.IntDivision.singularFamilyInjective} and
 \leanname{ResolutionSemantics.IntDivision.zeroDivZeroNotOld}.
 
-Integer addition also has old right identity zero.  Hence the same
-old-fixing-context criterion proves that every finite integer-arithmetic stage
+Integer addition also has zero as a right identity on the base carrier.  Hence the same
+base-fixing-context criterion proves that every finite integer-arithmetic stage
 is strictly coarser than equality, its separation ranks are unbounded, and its
 completion embedding is not surjective.  These corollaries are
 \leanname{ResolutionSemantics.IntDivision.everyFiniteStageNotEquality},
@@ -928,7 +998,7 @@ involutive meadow one usually sets $0^{-1}=0$; in a common meadow exceptional
 terms propagate one designated error; wheels adopt a different algebraic
 extension with infinity- and error-like behavior
 \cite{BergstraHirshfeldTucker2009,BergstraPonseCommonMeadows,Carlstrom2004}.
-Resolution chooses provenance retention rather than a fixed old value or one
+Resolution chooses provenance retention rather than a fixed base value or one
 undifferentiated error.
 
 \section{A Lean-Checked Bridge to Diaconescu's Encoding}
@@ -936,9 +1006,8 @@ undifferentiated error.
 
 The preceding sections develop the binary separation--completion results.  We
 now record their exact connection to the total-algebra encoding of
-\cite{Diaconescu2009}.  The purpose is to verify the inherited foundation and
-the interface used by Resolution, not to include the underlying encoding in
-the novelty claim.  Diaconescu works with a many-sorted signature
+\cite{Diaconescu2009}.  This section verifies the inherited foundation and the
+interface used by Resolution.  Diaconescu works with a many-sorted signature
 $\Sigma=(S,TF,PF)$, where symbols in $TF$ are total and symbols in $PF$ are
 partial.  The Lean structure assigns each symbol a natural-number arity, a
 sort at every finite argument position, and a result sort.  Neither the set of
@@ -998,13 +1067,13 @@ instance in \cref{thm:diaconescu-bridge}(a).
 
 \subsection{The canonical model \texorpdfstring{$\gamma$}{gamma} and its lift}
 
-For a partial algebra $D$, raw values at each sort are either old values or
+For a partial algebra $D$, raw values at each sort are either embedded base values or
 formal applications.  The normalizer treats the two symbol families
 differently:
 \begin{itemize}
-  \item a $TF$ application whose arguments are old always reduces to the old
-        total result;
-  \item a $PF$ application whose arguments are old reduces exactly when the
+  \item a $TF$ application whose arguments are base values always reduces to
+        the embedded total result;
+  \item a $PF$ application whose arguments are base values reduces exactly when the
         source partial evaluator returns a value;
   \item every remaining application is retained as a sorted formal
         suspension with its normalized arguments.
@@ -1015,10 +1084,10 @@ the many-sorted finite-arity free-completion argument used for the data sorts
 of $\gamma(D)$.
 
 The auxiliary carrier of $\gamma(D)$ has one true element and a failure value
-for each sorted pair that is not the same diagonal old value.  Existence
-equality returns true exactly on that old diagonal.  Lean checks that this
+for each sorted pair that is not the same diagonal base value.  Existence
+equality returns true exactly on that base diagonal.  Lean checks that this
 model satisfies all clauses of $\Gamma$ in
-\leanname{Resolution.Diaconescu.ManySorted.gamma\_satisfiesGamma}.  The old
+\leanname{Resolution.Diaconescu.ManySorted.gamma\_satisfiesGamma}.  The base
 embedding is bijective onto the defined part, and it respects both the total
 and partial evaluators; this is packaged by
 \leanname{Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv}.
@@ -1045,8 +1114,8 @@ At the free-completion level, the interpreters in the two directions are
 constructed from the respective universal properties.  Uniqueness proves
 that their composites are identities, yielding
 \leanname{Resolution.Diaconescu.BinarySpecialization.generatedEquiv}.
-The equivalence preserves old elements and generated binary operations.  It
-also transports the old-diagonal predicate, failure witnesses, and the
+The equivalence preserves base elements and generated binary operations.  It
+also transports the base-diagonal predicate, failure witnesses, and the
 auxiliary truth carrier.  These components are assembled in
 \leanname{Resolution.Diaconescu.BinarySpecialization.gammaEquiv}, which
 formally identifies the original binary $\gamma(D)$ with the binary
@@ -1113,8 +1182,8 @@ $\Gamma\cup\alpha(E)$ gives the initial encoded model in
 the adjunction transfer then yields
 \leanname{Resolution.Diaconescu.InitialExistence.quasiTheory\_has\_initial\_partial\_model}.
 Thus the fixed-signature, same-universe, operations-only initial-model
-conclusion used in Corollary~4.2 is checked end to end.  This is a
-formalization of the established existence argument, not a novelty claim.
+conclusion used in Corollary~4.2 is checked end to end, providing a concrete
+formalization of the established existence argument.
 
 Because Lean represents $\beta(\gamma(D))$ as canonically equivalent to $D$
 rather than definitionally equal to it, reflection of consequence requires an
@@ -1132,7 +1201,7 @@ Theorems
 \leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedOld},
 \leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedTotal}, and
 \leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedPartial}
-show that the functorial action preserves old values and the two generated
+show that the functorial action preserves base values and the two generated
 operation constructors.  This is the explicit interface between the
 established encoding and the Resolution normal-form layer used here; the
 specialization equivalence above connects it formally to the binary
@@ -1161,21 +1230,20 @@ The closest structural prior art is the free completion of partial algebras and
 the Schmidt construction \cite{ClimentVidalCosmeLlopez2023}.  Theorem
 \ref{thm:free-completion} should be read as a Lean-checked concrete
 presentation of that general idea for the one-sorted binary setting.  Other
-completion and encoding results show that partial-to-total extension is not in
-itself a novel contribution
+completion and encoding results already establish partial-to-total extension
 \cite{Diaconescu2009,BethkeKlopDeVrijer1996,BethkeKlopDeVrijer1999,Nesin2011}.
 In particular, \cref{sec:diaconescu-bridge} follows Diaconescu's choices of
 $\Gamma$, $\alpha$, $\beta$, and $\gamma$ and checks them in the repository's
 concrete typed syntax.  Its value here is the verified interface between that
-established encoding and Resolution normal forms, not a priority claim.
+established encoding and Resolution normal forms.
 
 \subsection{Ground terms, recognizability, and operation trees}
 
 Separating operation syntax from interpretation is standard in term algebras,
-free monads, and algebraic-effects semantics \cite{PlotkinPower2003}.  We do
-not claim the first operation-tree semantics.  The specific normalization
-discipline is: reduce an old-defined node immediately and retain an
-old-undefined node with its already resolved children.
+free monads, and algebraic-effects semantics \cite{PlotkinPower2003}.  The
+specific normalization discipline used here reduces a node immediately when
+its application is defined in $D$ and retains it with already resolved children
+when the application is undefined in $D$.
 
 For finite bases and finite signatures this normalization is also a finite
 ground-equational presentation, as detailed in
@@ -1196,59 +1264,12 @@ Ultrametric and algebraic treatments of infinite trees long predate this work
 source of finite observations: agreement in all compatible finite-tag models,
 rather than prefix depth.  The Cauchy-sequence quotient and continuous
 extension arguments are standard once the separated filtration is available.
-
-The distinction is not a matter of presentation.  Write $x\equiv^{d}_{n}y$ for
-agreement of two Answers on all levels strictly above depth $n$; this is the
-filtration whose completion is the classical infinite-tree space.  The two
-uniformities differ, and a single family of witnesses shows it.
-
-\begin{proposition}
-\label{prop:depth-observation-contrast}
-Let $D$ be a binary partial algebra with
-$\eval_D(f,a,z)=\operatorname{none}$ for some $f$, $a$, $z$.  Define the
-\emph{combs} by $c_0=a$ and $c_{k+1}=f(c_k,z)$.  Then the sequence
-$(\Res_D c_k)_{k\in\mathbb N}$ is Cauchy for the filtration
-$\equiv^{d}_{n}$ but not Cauchy for the filtration $\stageeq{n}$.
-\end{proposition}
-
-The formal statement is
-\leanname{Resolution.Probe.depthCauchy\_not\_observationalCauchy}.  Each
-comb suspends at every level, so $\Res_D c_i$ and $\Res_D c_j$ agree above depth
-$n$ whenever $i,j\ge n$: under the tree metric the sequence converges to the
-infinite comb.  For the finite-tag filtration one preserving model with a
-\emph{single} fresh tag suffices to break it.  Send an undefined old pair to the
-tag, the tag to $\overflow$, and $\overflow$ back to the tag; the fold along the
-combs then alternates between the tag and $\overflow$, so adjacent combs are
-separated at stage $1$ for every $k$, however deep the disagreement lies
-(\leanname{Resolution.Probe.comb\_separatesAt\_one}).  A fixed observational
-budget therefore sees through unbounded depth, which prefix truncation cannot
-do.  Consequently the identity on $\RAlg{D}$ does not carry
-$\equiv^{d}_{n}$-Cauchy sequences to $\stageeq{n}$-Cauchy ones, and no uniformly
-continuous isomorphism of the two completions commutes with the canonical
-embeddings.  Only the statement about the two filtrations is formalized; the
-consequence for the completions is the standard argument on uniformly
-continuous maps and is not machine-checked.
-
-In the arithmetic instance of \cref{sec:arithmetic} the effect is sharper: the
-combs are the iterated singular divisions $(\cdots((a/0)/0)\cdots/0)$, and
-\emph{no fresh tags at all} are needed.  Sending each singular division to the
-successor of its numerator is a preserving model over
-$\mathbb N\sqcup\{\overflow\}$ that separates every pair of distinct combs at
-stage $0$, letting the old carrier itself do the counting
-(\leanname{Resolution.Probe.NatProbe.natComb\_pairwise\_separated\_at\_zero}).
-
-That stage-zero separator does not make the full natural-arithmetic filtration
-discrete.  It exploits fresh old naturals generated by the iterated-division
-table.  The different family $c_0=0/0$, $c_{k+1}=c_k+0$ cannot use such tags:
-preservation forces $a+0=a$ on every old natural.  In fact $c_1$ and $c_2$ agree
-in every stage-zero observer, and \cref{thm:old-fixing-proper-completion} gives an
-indistinguishable distinct pair at every finite stage.
-
-The iterated-division comb also bears on the sharpness of the bound in
-\cref{thm:finite-external-separation}.  Since $|\Res_D c_k|=2k+1$, that bound
-permits $4k+4$ tags to separate $c_k$ from $c_{k+1}$, whereas one tag suffices
-in general and none in arithmetic.  The linear budget is therefore far from
-tight on deep pairs; we do not know its exact order of growth.
+The distinction itself is a result of the construction, not merely a
+bibliographic comparison: \cref{prop:depth-observation-contrast} exhibits a
+comb sequence that is prefix-depth Cauchy but fails the finite-tag Cauchy
+condition already at stage $1$.  The arithmetic strengthening appears in
+\cref{sec:arithmetic}, and the resulting state-complexity problem is isolated
+as Open Question~\ref{question:relative-separation-complexity}.
 
 \subsection{Finite complements and profinite comparison}
 
@@ -1266,7 +1287,7 @@ identifies the observer class used here.  Our base is a pointwise-fixed partial
 subalgebra, while a separator is a compatible total extension whose complement
 over that base is finite; the separating codomain need not itself be finite
 when the base is infinite.  Moreover, ordinary Rees index starts with a closed
-subsemigroup.  By \cref{prop:old-image-closed}, the old image in the generated
+subsemigroup.  By \cref{prop:old-image-closed}, the base image in the generated
 Answer algebra is closed under the total operations exactly in the already
 total case.  Hence finite Rees index is not literally the inclusion used by a
 genuinely partial Resolution algebra.  The remaining specialist question is
@@ -1283,8 +1304,8 @@ organized by finite quotients or finite recognizing algebras.  Our stages
 instead allow a possibly infinite preserved base and bound only the genuinely
 new complement.  The finite-base properness theorem above is therefore not
 presented as a theorem about ordinary profinite completion.  The documented
-search has found these analogues, but no exact equivalence or prior statement
-of the criterion; specialist review is still required.
+comparison identifies close analogues, but no exact equivalence or prior
+statement of the criterion in the cited sources.
 
 \subsection{Totalized division}
 
@@ -1294,15 +1315,15 @@ initial-algebra results
 \cite{BergstraTucker2007,BergstraHirshfeldTucker2009,
 BergstraMiddelburg2015,BergstraPonseCommonMeadows,Carlstrom2004,
 BergstraPonse2016}.  Resolution is not proposed as uniformly superior.  Its
-design goal is different: preserve old-defined calculations while retaining
-the provenance of old-undefined applications.
+design goal is different: preserve calculations defined in $D$ while retaining
+the provenance of applications undefined in $D$.
 
-\subsection{Evidence-qualified contribution}
+\subsection{Contribution and scope}
 
 The established ingredients include free completion, operation-tree syntax,
 finite-signature ground-term recognizability, and standard Cauchy-completion
-machinery.  Against that background, the candidate contribution submitted for
-specialist assessment is concentrated in two connected parts:
+machinery.  Against that background, the specific contribution of this paper
+is concentrated in two connected parts:
 \begin{enumerate}
   \item an intrinsic relative observer class that fixes an arbitrary, possibly
         infinite partial base pointwise and budgets only its complement,
@@ -1310,7 +1331,7 @@ specialist assessment is concentrated in two connected parts:
         and an explicit base-faithful construction bound; the central result is
         \cref{thm:finite-external-separation};
   \item the induced observational completion, including an exact finite-base
-        properness criterion, an independent arbitrary-base old-fixing-context
+        properness criterion, an independent arbitrary-base base-fixing-context
         criterion, their formal incomparability, the contrast with prefix-depth
         completion, and exact universal equational conservativity; in
         particular, \cref{thm:old-fixing-proper-completion} extends the
@@ -1321,10 +1342,10 @@ integer-arithmetic instances, and the explicit unbounded-rank witnesses.  The
 many-sorted development of \cref{sec:diaconescu-bridge} has a different role:
 it verifies the inherited encoding theory and proves that the binary
 implementation used by the two items above is its exact specialization.  That
-bridge is supporting formal provenance, not a third novelty claim.
-Our search has not found this exact relative separation--completion package.
-That reports the present search result, not proof of historical priority or a
-claim that each constituent is new.
+bridge supplies supporting formal provenance rather than a third item in this
+list.  Our literature search has not identified the exact relative
+separation--completion package in the cited sources; the claim here is about
+the verified package, not historical priority for each constituent.
 
 \section{Formalization and Trust Boundary}\label{sec:formalization}
 
@@ -1417,12 +1438,12 @@ completion lemmas are summarized and linked to exact declarations in
         already explained by classical ground-term recognizability.  The
         precise relation of the arbitrary-base, pointwise-preserving
         finite-complement observer class to known relative residual-finiteness
-        constructions remains under review.
+        constructions is not resolved by the cited literature.
   \item The linear tag bound in \cref{thm:finite-external-separation} is a
-        baseline upper bound, not an optimality
-        theorem; its relative state complexity is open.
-  \item Properness is classified exactly for finitely coded old carriers.  The
-        old-fixing-context hypothesis is sufficient but not necessary, and
+        baseline upper bound, not an optimality theorem; its relative state
+        complexity is Open Question~\ref{question:relative-separation-complexity}.
+  \item Properness is classified exactly for finitely coded base carriers.  The
+        base-fixing-context hypothesis is sufficient but not necessary, and
         neither of the two stated hypotheses subsumes the other; a full
         arbitrary-carrier classification remains open.
   \item The $\Gamma$--$\alpha$--$\beta$--$\gamma$ bridge is many-sorted and
@@ -1445,8 +1466,6 @@ completion lemmas are summarized and linked to exact declarations in
         it is separately proved in the generated algebra.
   \item Constant-bearing universal equations transfer exactly; conditional
         equations require additional hypotheses.
-  \item Historical priority for the combined package remains unresolved until
-        specialist review is complete.
 \end{enumerate}
 
 \section{Conclusion}
@@ -1455,7 +1474,7 @@ Resolution semantics gives a normalized structured presentation of a free
 compatible completion of a partial algebra.  Its free-completion character and
 basic conservativity follow from established ideas and the reduction rule.
 The central additional construction studied here is intrinsic
-finite-complement separation over the pointwise-preserved old fragment.  It
+finite-complement separation over the pointwise-preserved base fragment.  It
 separates every generated pair while
 adding only finitely many states beyond the base; a derived finite-tag normal
 form supplies the explicit witnesses and induces a separated observational
@@ -1463,23 +1482,23 @@ filtration.  For finitely coded bases this implies ordinary residual finiteness
 with
 an explicit whole-target bound; the qualitative finite-signature consequence
 also follows from classical ground-term recognizability.  For genuinely partial
-algebras the old image
+algebras the base image
 is not a total subalgebra, so the finite-complement condition is not literally
 ordinary Rees index.  The
 general linear estimate is a baseline; its sharper relative complexity is
-open.  Over every finitely coded old carrier, the completion is proper exactly
-when an old application is undefined.  This finite-base hypothesis and the
-old-fixing-context hypothesis are incomparable, as witnessed by the one-point
+open.  Over every finitely coded base carrier, the completion is proper exactly
+when an application in the base algebra is undefined.  This finite-base hypothesis and the
+base-fixing-context hypothesis are incomparable, as witnessed by the one-point
 algebra and natural arithmetic respectively.  Standard completion methods then
 produce a complete total algebra with canonical operations and exactly the same
-universal equations in the language with named old-carrier constants.
+universal equations in the language with named base-carrier constants.
 
-The old-fixing-context theorem explains the arithmetic examples uniformly:
+The base-fixing-context theorem explains the arithmetic examples uniformly:
 for both natural and integer arithmetic every finite stage is strictly coarser
 than equality, the separation ranks are unbounded, and the factorial
 repeated-$+0$ family supplies an explicit completion point outside the
 generated image.  At the same time, $0/0$ remains a structured element outside
-the old numerical image; the construction does not replace ordinary
+the canonical numerical image; the construction does not replace ordinary
 arithmetic with a new numerical convention.
 
 The many-sorted Lean development locates this binary framework precisely
@@ -1490,11 +1509,8 @@ and the operations-only existence step for the formalized quasi-existence
 theories.  Its singleton-sort, no-$TF$, binary-$PF$ instance is canonically
 equivalent to the original binary implementation, including the generated and
 truth carriers and all encoded operations.  These results establish formal
-provenance and compatibility; their mathematical priority remains with the
-established source and they are not part of the separation--completion novelty
-claim.  The complete development is reproducible in Lean, while the exact
-historical status of the specific verified combination remains open to
-specialist assessment.
+provenance and compatibility while keeping the established encoding results
+credited to their source.  The complete development is reproducible in Lean.
 
 \begingroup
 \small
