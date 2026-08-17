@@ -3,6 +3,7 @@ import ResolutionFiniteBasePropernessPublic
 import ResolutionOldFixingContextPropernessPublic
 import ResolutionOldFixingContextSharperOrbitPublic
 import ResolutionFinitePatternRealizationPublic
+import ResolutionOrbitCompressionMaster
 
 /-!
 # Master theorem facade for relative separation and orbit compression
@@ -11,12 +12,18 @@ This module reorganizes the checked public results around two structural
 principles isolated by the post-audit reduction:
 
 1. finite-pattern realization over the pointwise-fixed partial base;
-2. finite orbit compression, whose old-fixing instance yields a Cauchy orbit
-   with no generated limit and hence a proper completion.
+2. trajectory-level finite orbit compression plus a Resolution-specific
+   no-generated-limit witness, yielding a proper completion.
 
 Finite-pattern realization strengthens pairwise separation: one compatible
 finite-tag observer is simultaneously injective on any chosen finite list of
 generated Answers. Pairwise separation is the two-point instance.
+
+Master II is deliberately split. The factorial-periodicity/Cauchy half is the
+standard finite-dynamics mechanism and only requires a finite code of the
+relevant observer trajectory, not a finite observer carrier. The no-limit half
+remains Resolution-specific and is supplied by selected finite patterns plus
+absorbing overflow.
 
 The old-fixing branch also uses the sharper observation that a stage-`n`
 orbit either enters the fixed base and stabilizes or remains in only `n+1`
@@ -62,6 +69,59 @@ theorem finiteBasePropernessCriterion
         D.eval f a b = none :=
   FiniteBaseCompletion.embeddingNotSurjectiveIffExistsUndefined D C
 
+/-- Abstract Master-II witness: a generated unary family whose interpretation
+in every stage observer is one deterministic trajectory admitting a uniformly
+bounded finite trajectory code. The ambient observer carrier may be infinite. -/
+abbrev OrbitCompressionWitness
+    (D : Resolution.PartialAlg.{u,v} Sigma) :=
+  Resolution.OrbitCompression.ObserverOrbitCompression D
+
+/-- The factorial sample associated with an abstract compressed orbit. -/
+abbrev orbitCompressionFactorialSample
+    {D : Resolution.PartialAlg.{u,v} Sigma}
+    (W : OrbitCompressionWitness D) :=
+  Resolution.OrbitCompression.factorialSample W
+
+/-- Standard dynamic half of Master II: finite trajectory compression at every
+stage forces the factorial sample to be Cauchy. -/
+theorem orbitCompressionCauchy
+    (D : Resolution.PartialAlg.{u,v} Sigma)
+    (W : OrbitCompressionWitness D) :
+    Resolution.Filtered.Cauchy
+      (Resolution.External.generatedFilteredSpace D)
+      (orbitCompressionFactorialSample W) :=
+  Resolution.OrbitCompression.factorialSample_cauchy W
+
+/-- Master II in abstract form. If the compressed factorial orbit additionally
+has no generated limit, then the generated filtered space is incomplete. -/
+theorem orbitCompressionNotComplete
+    (D : Resolution.PartialAlg.{u,v} Sigma)
+    (W : OrbitCompressionWitness D)
+    (hNo : Resolution.OrbitCompression.NoGeneratedLimit W) :
+    ¬ Resolution.Filtered.Complete
+      (Resolution.External.generatedFilteredSpace D) :=
+  Resolution.OrbitCompression.notComplete_of_compression W hNo
+
+/-- Equivalent proper-completion conclusion of abstract Master II. -/
+theorem orbitCompressionEmbeddingNotSurjective
+    (D : Resolution.PartialAlg.{u,v} Sigma)
+    (W : OrbitCompressionWitness D)
+    (hNo : Resolution.OrbitCompression.NoGeneratedLimit W) :
+    ¬ Function.Surjective
+      (Resolution.Filtered.embed
+        (Resolution.External.generatedFilteredSpace D)) :=
+  Resolution.OrbitCompression.embeddingNotSurjective_of_compression W hNo
+
+/-- Both the finite-base undefined-comb theorem and the infinite-base
+old-fixing theorem instantiate the same abstract trajectory-compression
+principle. -/
+theorem oldFixingPropernessViaAbstractCompression
+    (D : Resolution.PartialAlg.{u,v} Sigma)
+    (W : Resolution.OldFixingContextWitness D) :
+    ¬ Resolution.Filtered.Complete
+      (Resolution.External.generatedFilteredSpace D) :=
+  Resolution.OrbitCompression.oldFixing_notComplete_via_compression D W
+
 /-- Consequences supplied by finite orbit compression in the presence of an
 old/base-fixing unary context. Keeping this as one record makes explicit that
 the Cauchy witness, failure of generated convergence, incompleteness, and
@@ -86,8 +146,8 @@ structure OrbitCompressionConsequences
       (Resolution.Filtered.embed
         (Resolution.External.generatedFilteredSpace D))
 
-/-- Master II, old-fixing instance: one witness yields the full
-proper-completion package. -/
+/-- Old-fixing concrete package, retained as the manuscript-facing instance of
+abstract Master II. -/
 theorem oldFixingOrbitCompression
     (D : Resolution.PartialAlg.{u,v} Sigma)
     (W : OldFixingContextCompletion.Witness D) :
