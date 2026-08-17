@@ -44,5 +44,6 @@ roots = [
   "ResolutionOldFixingContextSharperOrbitPublic",
   "ResolutionFinitePatternRealization",
   "ResolutionFinitePatternRealizationPublic",
+  "ResolutionFinitaryPatternRealization",
   "ResolutionMasterTheorems",
 ]
