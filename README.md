@@ -30,6 +30,12 @@ historical-priority claim is made.
   partial-algebra equivalence, and the unique encoded lift (persistent
   liberality); these are positioned as a continuation of established work,
   not as new encoding theorems;
+- explicit identity and composition laws for `beta` and the induced `gamma`,
+  a checked hom-set equivalence, and preservation/reflection of semantic
+  consequence for theories of closed formulas;
+- an explicit interface identifying the data of `gamma` with the many-sorted
+  Resolution normal forms and showing how induced maps act on their old,
+  total-operation, and partial-operation constructors;
 - normalized free compatible completion of a binary partial algebra;
 - quotient presentation by equality after resolution;
 - intrinsic finite-complement separation over a pointwise-preserved base;

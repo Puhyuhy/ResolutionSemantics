@@ -8,6 +8,7 @@ import ResolutionArithmeticPropernessPublic
 import ResolutionCompletionProbe
 import ResolutionDiaconescuEncoding
 import ResolutionDiaconescuManySorted
+import ResolutionDiaconescuContinuation
 
 /-!
 # Paper-facing declaration and axiom audit
@@ -80,6 +81,16 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #check Resolution.Diaconescu.ManySorted.gamma_satisfiesGamma
 #check Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv
 #check Resolution.Diaconescu.ManySorted.gamma_persistent_liberality
+#check Resolution.Diaconescu.ManySorted.betaHom_identity
+#check Resolution.Diaconescu.ManySorted.betaHom_comp
+#check Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv
+#check Resolution.Diaconescu.ManySorted.gammaHom_identity
+#check Resolution.Diaconescu.ManySorted.gammaHom_comp
+#check Resolution.Diaconescu.ManySorted.gammaHom_generatedOld
+#check Resolution.Diaconescu.ManySorted.gammaHom_generatedTotal
+#check Resolution.Diaconescu.ManySorted.gammaHom_generatedPartial
+#check Resolution.Diaconescu.ManySorted.Formula.sat_iff_of_equiv
+#check Resolution.Diaconescu.ManySorted.semantic_consequence_equivalence
 
 #print axioms ResolutionSemantics.freeCompletionUniversal
 #print axioms ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem
@@ -106,3 +117,8 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #print axioms Resolution.Diaconescu.ManySorted.gamma_satisfiesGamma
 #print axioms Resolution.Diaconescu.ManySorted.betaGamma_evalPartial
 #print axioms Resolution.Diaconescu.ManySorted.gamma_persistent_liberality
+#print axioms Resolution.Diaconescu.ManySorted.betaHom_comp
+#print axioms Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv
+#print axioms Resolution.Diaconescu.ManySorted.gammaHom_comp
+#print axioms Resolution.Diaconescu.ManySorted.Formula.sat_iff_of_equiv
+#print axioms Resolution.Diaconescu.ManySorted.semantic_consequence_equivalence

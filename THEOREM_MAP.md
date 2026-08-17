@@ -25,6 +25,16 @@ as the main public interface.
 - `Resolution.Diaconescu.ManySorted.gamma_satisfiesGamma`
 - `Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv`
 - `Resolution.Diaconescu.ManySorted.gamma_persistent_liberality`
+- `Resolution.Diaconescu.ManySorted.betaHom_identity`
+- `Resolution.Diaconescu.ManySorted.betaHom_comp`
+- `Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv`
+- `Resolution.Diaconescu.ManySorted.gammaHom_identity`
+- `Resolution.Diaconescu.ManySorted.gammaHom_comp`
+- `Resolution.Diaconescu.ManySorted.gammaHom_generatedOld`
+- `Resolution.Diaconescu.ManySorted.gammaHom_generatedTotal`
+- `Resolution.Diaconescu.ManySorted.gammaHom_generatedPartial`
+- `Resolution.Diaconescu.ManySorted.Formula.sat_iff_of_equiv`
+- `Resolution.Diaconescu.ManySorted.semantic_consequence_equivalence`
 
 `ResolutionDiaconescuEncoding.lean` formalizes the one-sorted binary core of
 Diaconescu's `gamma` construction.  All operation symbols are treated as
@@ -44,6 +54,20 @@ persistent-liberality universal property.  These declarations are presented
 as a continuation and machine-checked specialization of the paper's
 framework, not as a claim to replace its broader institution-theoretic
 development.
+
+`ResolutionDiaconescuContinuation.lean` packages the bridge functorially. It
+checks the identity and composition laws for `beta`, upgrades persistent
+liberality to the explicit hom-set equivalence
+`Hom(gamma D, M) ~= Hom(D, beta M)`, and derives the action of `gamma` on
+homomorphisms with its identity and composition laws. It also proves that
+closed-formula satisfaction is invariant under the canonical Lean
+partial-algebra equivalence and uses that transport theorem to formalize the
+semantic consequence equivalence corresponding to Corollary 4.3. Finally,
+the generated-old, generated-total, and generated-partial theorems expose the
+data carrier of `gamma` as the functorial many-sorted Resolution normal-form
+construction. These remain formalized continuations of established results;
+the Resolution-specific contribution is the explicit normal-form interface
+used by the rest of this repository.
 
 ## Free compatible completion
 

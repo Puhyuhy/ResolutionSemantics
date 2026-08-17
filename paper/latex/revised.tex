@@ -17,7 +17,9 @@ implements the Horn theory $\Gamma$, the model reduct $\beta$, the sentence
 translation $\alpha$, and a canonical free model $\gamma$.  It checks the two
 term-evaluation lemmas, the $\alpha$--$\beta$ satisfaction condition, recovery
 of the source partial algebra up to canonical equivalence, and the unique-lift
-property of $\gamma$.  This part is positioned as a machine-checked
+property of $\gamma$.  We also check the functor laws, package the lift as a
+hom-set equivalence, and derive preservation and reflection of semantic
+consequence for arbitrary theories of closed formulas.  This part is positioned as a machine-checked
 continuation in a concrete Lean representation, not as a novelty claim for
 the underlying encoding.
 
@@ -136,6 +138,14 @@ Lean presentation developed here:
         equivalent to $D$ as a partial algebra;
   \item every partial homomorphism $D\to\beta(M)$ has a unique encoded lift
         $\gamma(D)\to M$ agreeing with it under that equivalence.
+  \item the induced maps on homomorphisms respect identities and composition,
+        the lift is an explicit hom-set equivalence, and for arbitrary sets
+        $E,E'$ of closed formulas,
+        \[
+          E\models_{PA}E'
+          \quad\Longleftrightarrow\quad
+          \alpha(E)\cup\Gamma\models_{ALG}\alpha(E').
+        \]
 \end{enumerate}
 \end{theorem}
 
@@ -297,12 +307,48 @@ Finally,
 constructs the lift of every $D\to\beta(M)$ and proves uniqueness from the
 free interpreter on data and the homomorphism laws on the truth carrier.
 
+\subsection{Functor laws and semantic consequence}
+
+The continuation module makes the categorical content explicit while keeping
+the formal dependency surface small.  It proves the identity and composition
+laws for $\beta$, packages persistent liberality as the checked bijection
+\[
+  \operatorname{Hom}_{ALG_\Gamma}(\gamma(D),M)
+  \cong
+  \operatorname{Hom}_{PA}(D,\beta(M)),
+\]
+and defines the induced action of $\gamma$ on homomorphisms.  The latter
+respects identities and composition.  These statements are exposed by
+\leanname{Resolution.Diaconescu.ManySorted.betaHom\_comp},
+\leanname{Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv}, and
+\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_comp}.
+
+Because Lean represents $\beta(\gamma(D))$ as canonically equivalent to $D$
+rather than definitionally equal to it, reflection of consequence requires an
+explicit transport result.  The theorem
+\leanname{Resolution.Diaconescu.ManySorted.Formula.sat\_iff\_of\_equiv}
+proves invariance of satisfaction under partial-algebra equivalence, including
+the negation and sorted-quantifier cases.  Combining this with the
+$\alpha$--$\beta$ satisfaction condition and the canonical $\gamma$ model
+gives
+\leanname{Resolution.Diaconescu.ManySorted.semantic\_consequence\_equivalence},
+the concrete Lean form of Corollary~4.3 of \cite{Diaconescu2009}.
+
+The data carrier is exposed as the many-sorted Resolution normal-form type.
+Theorems
+\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedOld},
+\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedTotal}, and
+\leanname{Resolution.Diaconescu.ManySorted.gammaHom\_generatedPartial}
+show that the functorial action preserves old values and the two generated
+operation constructors.  This is the explicit interface between the
+established encoding and the Resolution normal-form layer used here.
+
 There are two deliberate scope boundaries.  The Lean theorem uses canonical
 partial-algebra equivalence rather than identifying
 $\beta(\gamma(D))$ and $D$ by definitional equality.  It does not mechanize
 the surrounding institution/comorphism infrastructure, arbitrary signature
-morphisms, or the initial-specification corollaries following persistent
-liberality.  These boundaries are why the result is described here as a
+signature morphisms, the initial-model construction of Corollary~4.2, or the
+proof-theoretic Birkhoff completeness result of Section~5.  These boundaries are why the result is described here as a
 many-sorted encoding bridge and not as a replacement for the broader theory
 of \cite{Diaconescu2009}.
 
@@ -1190,6 +1236,7 @@ import ResolutionOldFixingContextPropernessPublic
 import ResolutionPropernessCriteriaComparison
 import ResolutionArithmeticPropernessPublic
 import ResolutionDiaconescuManySorted
+import ResolutionDiaconescuContinuation
 
 #check ResolutionSemantics.freeCompletionUniversal
 #check ResolutionSemantics.OutsideOld
@@ -1217,6 +1264,14 @@ import ResolutionDiaconescuManySorted
 #check Resolution.Diaconescu.ManySorted.gamma_satisfiesGamma
 #check Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv
 #check Resolution.Diaconescu.ManySorted.gamma_persistent_liberality
+#check Resolution.Diaconescu.ManySorted.betaHom_comp
+#check Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv
+#check Resolution.Diaconescu.ManySorted.gammaHom_comp
+#check Resolution.Diaconescu.ManySorted.Formula.sat_iff_of_equiv
+#check Resolution.Diaconescu.ManySorted.semantic_consequence_equivalence
+#check Resolution.Diaconescu.ManySorted.gammaHom_generatedOld
+#check Resolution.Diaconescu.ManySorted.gammaHom_generatedTotal
+#check Resolution.Diaconescu.ManySorted.gammaHom_generatedPartial
 \end{lstlisting}
 The repository pins Lean~4.33.0.  The command
 \begin{lstlisting}[style=lean]
