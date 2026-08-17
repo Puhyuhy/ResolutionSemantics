@@ -1,6 +1,10 @@
 \documentclass[11pt]{article}
 \usepackage{resolution-paper}
 
+\newenvironment{leandisplay}
+  {\begin{center}\begin{minipage}{0.96\textwidth}\centering}
+  {\end{minipage}\end{center}}
+
 \title{\textbf{Resolution Semantics for Partial Algebras}\\
 Intrinsic Finite-Complement Separation and Observational Completion,\\
 with a Lean-Checked Many-Sorted Encoding Bridge}
