@@ -50,9 +50,8 @@ docs = "\n".join(
 )
 
 expected_title = (
-    "Resolution Semantics for Binary Partial Algebras: A Formalized Free "
-    "Completion, Intrinsic Finite-Complement Separation, and Observational "
-    "Completion"
+    "Resolution Semantics for Partial Algebras: A Lean-Checked Many-Sorted "
+    "Encoding Bridge and a Binary Observational Completion"
 )
 if "\\author{Adrian Puha}" not in tex:
     fail("the LaTeX author is not Adrian Puha")

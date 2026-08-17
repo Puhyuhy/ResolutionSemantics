@@ -14,6 +14,37 @@ and the original natural-arithmetic facade lives in
 Implementation declarations remain available for audit but are not presented
 as the main public interface.
 
+## Diaconescu encoding bridge
+
+- `Resolution.Diaconescu.gamma_satisfiesGamma`
+- `Resolution.Diaconescu.betaGammaPartialAlgEquiv`
+- `Resolution.Diaconescu.gamma_persistent_liberality`
+- `Resolution.Diaconescu.ManySorted.term_evalPartial_sound`
+- `Resolution.Diaconescu.ManySorted.term_evalPartial_complete`
+- `Resolution.Diaconescu.ManySorted.alpha_satisfaction_condition`
+- `Resolution.Diaconescu.ManySorted.gamma_satisfiesGamma`
+- `Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv`
+- `Resolution.Diaconescu.ManySorted.gamma_persistent_liberality`
+
+`ResolutionDiaconescuEncoding.lean` formalizes the one-sorted binary core of
+Diaconescu's `gamma` construction.  All operation symbols are treated as
+partial.  The canonical encoded algebra satisfies the relevant existence-
+equality Horn clauses, its `beta` reduct is canonically equivalent to the
+original partial algebra, and every partial homomorphism into a `beta` reduct
+has a unique encoded lift.  This module remains the compact **binary
+one-sorted core**.
+
+`ResolutionDiaconescuManySorted.lean` extends that bridge to a sort-indexed
+signature with arbitrary finite arities and separate designated-total (`TF`)
+and partial (`PF`) operation families.  It defines the sentence translation
+`alpha`, proves the term-evaluation lemmas and the `alpha`/`beta` satisfaction
+condition, constructs the canonical `gamma` model, proves recovery of the
+source partial algebra by `beta (gamma D)`, and proves the corresponding
+persistent-liberality universal property.  These declarations are presented
+as a continuation and machine-checked specialization of the paper's
+framework, not as a claim to replace its broader institution-theoretic
+development.
+
 ## Free compatible completion
 
 - `ResolutionSemantics.freeCompletionUniversal`

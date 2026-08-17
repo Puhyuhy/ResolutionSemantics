@@ -6,6 +6,8 @@ import ResolutionOldFixingContextPropernessPublic
 import ResolutionPropernessCriteriaComparison
 import ResolutionArithmeticPropernessPublic
 import ResolutionCompletionProbe
+import ResolutionDiaconescuEncoding
+import ResolutionDiaconescuManySorted
 
 /-!
 # Paper-facing declaration and axiom audit
@@ -68,6 +70,17 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #check Resolution.Probe.comb_separatesAt_one
 #check Resolution.Probe.NatProbe.natComb_pairwise_separated_at_zero
 
+#check Resolution.Diaconescu.gamma_satisfiesGamma
+#check Resolution.Diaconescu.betaGammaPartialAlgEquiv
+#check Resolution.Diaconescu.gamma_persistent_liberality
+
+#check Resolution.Diaconescu.ManySorted.term_evalPartial_sound
+#check Resolution.Diaconescu.ManySorted.term_evalPartial_complete
+#check Resolution.Diaconescu.ManySorted.alpha_satisfaction_condition
+#check Resolution.Diaconescu.ManySorted.gamma_satisfiesGamma
+#check Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv
+#check Resolution.Diaconescu.ManySorted.gamma_persistent_liberality
+
 #print axioms ResolutionSemantics.freeCompletionUniversal
 #print axioms ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem
 #print axioms ResolutionSemantics.intrinsicExtensionHasCanonicalPresentation
@@ -84,3 +97,12 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #print axioms ResolutionSemantics.NatDivision.completionEmbeddingNotSurjective
 #print axioms ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective
 #print axioms Resolution.Probe.depthCauchy_not_observationalCauchy
+#print axioms Resolution.Diaconescu.gamma_satisfiesGamma
+#print axioms Resolution.Diaconescu.betaGamma_eval
+#print axioms Resolution.Diaconescu.gamma_persistent_liberality
+#print axioms Resolution.Diaconescu.ManySorted.term_evalPartial_sound
+#print axioms Resolution.Diaconescu.ManySorted.term_evalPartial_complete
+#print axioms Resolution.Diaconescu.ManySorted.alpha_satisfaction_condition
+#print axioms Resolution.Diaconescu.ManySorted.gamma_satisfiesGamma
+#print axioms Resolution.Diaconescu.ManySorted.betaGamma_evalPartial
+#print axioms Resolution.Diaconescu.ManySorted.gamma_persistent_liberality

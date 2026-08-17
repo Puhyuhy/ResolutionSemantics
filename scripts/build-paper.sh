@@ -20,7 +20,7 @@ if [[ $# -eq 1 ]]; then
 fi
 
 # Keep the review PDF byte-reproducible across local and CI builds.
-export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1786838400}"
+export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1786924800}"
 export FORCE_SOURCE_DATE=1
 export TZ=UTC
 
@@ -53,7 +53,7 @@ if ! grep -Eq '^Author:[[:space:]]+Adrian Puha[[:space:]]*$' <<<"$PDF_INFO"; the
   echo "built PDF has incorrect author metadata" >&2
   exit 1
 fi
-if ! grep -Fq 'Resolution Semantics for Binary Partial Algebras' <<<"$PDF_INFO"; then
+if ! grep -Fq 'Resolution Semantics for Partial Algebras' <<<"$PDF_INFO"; then
   echo "built PDF has incorrect title metadata" >&2
   exit 1
 fi

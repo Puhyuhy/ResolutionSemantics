@@ -6,43 +6,52 @@ This package is intended for critical mathematical review, not endorsement.
 Lean checks the formal derivations; it does not establish novelty, importance,
 or the adequacy of the literature comparison.
 
-The review package is version 1.1.0, dated 16 August 2026. Please identify the
+The review package is version 1.2.0, dated 17 August 2026. Please identify the
 reviewed commit when reporting results so comments remain reproducible.
 
 ## Central claims to inspect
 
-1. Generated Answers form a normalized free compatible total extension of a
+1. The Diaconescu bridge correctly implements many-sorted finite-arity
+   signatures with separate total and partial symbols, the Horn theory
+   `Gamma`, `alpha`, `beta`, the satisfaction condition, `gamma`, recovery up
+   to canonical equivalence, and the persistent-liberality lift. This is a
+   verification/continuation claim, not a novelty claim for those results.
+2. Generated Answers form a normalized free compatible total extension of a
    binary partial algebra and admit the stated quotient presentation.
-2. Distinct generated Answers can be separated by compatible total extensions
+3. Distinct generated Answers can be separated by compatible total extensions
    whose genuine complement over the pointwise-preserved old carrier is
    finite. The canonical finite-tag presentation is derived rather than built
    into the primitive definition.
-3. The finite observers induce a separated filtration and a complete
+4. The finite observers induce a separated filtration and a complete
    observational completion with the stated constant-bearing equational
    conservativity. Its relative universal property ranges over complete,
    separated filtered compatible total extensions with injective old
    embedding.
-4. For finitely coded old carriers, generated Answers are residually finite
+5. For finitely coded old carriers, generated Answers are residually finite
    with the stated whole-target bound. In the additional finite-signature
    subcase, the manuscript now identifies the qualitative conclusion as a
    consequence of classical ground-term recognizability; the explicit
    base-faithful bound and arbitrary-signature statement remain to be compared.
-5. The embedded old image is closed under the generated total operations if
+6. The embedded old image is closed under the generated total operations if
    and only if the old evaluator is total. Thus the genuinely partial case is
    not literally an inclusion of a closed finite-Rees-index subalgebra.
-6. For finitely coded old carriers, the completion embedding is surjective
+7. For finitely coded old carriers, the completion embedding is surjective
    exactly when the old evaluator is total.
-7. Over an arbitrary carrier, an undefined old seed together with an
+8. Over an arbitrary carrier, an undefined old seed together with an
    old-fixing context is sufficient for proper completion, strict failure of
    equality at every finite stage, and unbounded separation rank.
-8. The finite-base and old-fixing-context hypotheses are incomparable: the
+9. The finite-base and old-fixing-context hypotheses are incomparable: the
    one-point algebra satisfies the former but not the latter, while natural
    arithmetic satisfies the latter but has no finite code for its carrier.
-9. Natural and integer arithmetic instantiate the old-fixing criterion using
+10. Natural and integer arithmetic instantiate the old-fixing criterion using
    0/0 and the context x maps to x + 0.
 
 ## Priority questions
 
+- Does the concrete Lean statement of the Diaconescu bridge omit or alter any
+  mathematically significant hypothesis? In particular, is canonical
+  equivalence the right conservative replacement for definitional equality in
+  the recovery statement?
 - Is intrinsic finite-complement separation already known under another name?
 - Has separation by homomorphisms into extensions with finite complement over
   a pointwise-fixed partial base been studied under a generalized Rees-index,

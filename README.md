@@ -1,8 +1,7 @@
 # Resolution Semantics
 
-**Resolution Semantics for Binary Partial Algebras: A Formalized Free
-Completion, Intrinsic Finite-Complement Separation, and Observational
-Completion**
+**Resolution Semantics for Partial Algebras: A Lean-Checked Many-Sorted
+Encoding Bridge and a Binary Observational Completion**
 
 Author: **Adrian Puha**
 
@@ -17,13 +16,20 @@ work.
 
 ## Status
 
-Version 1.1.0 (16 August 2026) is the specialist-review release. The Lean
+Version 1.2.0 (17 August 2026) is the specialist-review release. The Lean
 development checks the stated formal results. The exact novelty and priority
 of the combined mathematical package remain open specialist questions; no
 historical-priority claim is made.
 
 ## Main formal results
 
+- a many-sorted, arbitrary-finite-arity bridge to Diaconescu's total-algebra
+  encoding, with separate `TF`/`PF` symbols, the Horn theory `Gamma`, the
+  translations `alpha` and `beta`, and the satisfaction condition;
+- a canonical many-sorted `gamma` construction, recovery by `beta` up to
+  partial-algebra equivalence, and the unique encoded lift (persistent
+  liberality); these are positioned as a continuation of established work,
+  not as new encoding theorems;
 - normalized free compatible completion of a binary partial algebra;
 - quotient presentation by equality after resolution;
 - intrinsic finite-complement separation over a pointwise-preserved base;

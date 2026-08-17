@@ -1,16 +1,27 @@
 \documentclass[11pt]{article}
 \usepackage{resolution-paper}
 
-\title{\textbf{Resolution Semantics for Binary Partial Algebras}\\
-A Formalized Free Completion, Intrinsic Finite-Complement Separation, and Observational Completion}
+\title{\textbf{Resolution Semantics for Partial Algebras}\\
+A Lean-Checked Many-Sorted Encoding Bridge and a Binary Observational Completion}
 \author{Adrian Puha}
-\date{16 August 2026}
+\date{17 August 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We formalize a normalized free compatible completion of binary partial
+Starting from Diaconescu's total-algebra encoding of partial algebras, we give
+a concrete Lean-checked bridge for many-sorted signatures with arbitrary
+finite arities and disjoint total and partial operation families.  The bridge
+implements the Horn theory $\Gamma$, the model reduct $\beta$, the sentence
+translation $\alpha$, and a canonical free model $\gamma$.  It checks the two
+term-evaluation lemmas, the $\alpha$--$\beta$ satisfaction condition, recovery
+of the source partial algebra up to canonical equivalence, and the unique-lift
+property of $\gamma$.  This part is positioned as a machine-checked
+continuation in a concrete Lean representation, not as a novelty claim for
+the underlying encoding.
+
+In the binary Resolution layer, we formalize a normalized free compatible completion of binary partial
 algebras.  Old-defined applications reduce to old values; old-undefined
 applications become structured finite-tree Answers.  The Answer algebra has
 the expected universal property and is the expression algebra modulo equality
@@ -52,6 +63,15 @@ specialist review.
 
 \section{Introduction}\label{sec:introduction}
 
+The paper has two deliberately separated scopes.  First, it connects the
+Resolution normal-form construction directly to Diaconescu's many-sorted
+encoding of partial algebras as total algebras \cite{Diaconescu2009}.  This
+bridge allows arbitrary finite operation arities and distinguishes designated
+total symbols from partial symbols.  Second, the separation, filtration,
+completion, properness, and arithmetic developments specialize to the
+one-sorted binary setting used by the original Resolution project.  Claims
+below state explicitly which of these two scopes is in force.
+
 Let $D$ be a one-sorted binary partial algebra with carrier $A$, operation
 symbols $\Sigma$, and evaluator
 \[
@@ -68,8 +88,9 @@ There is extensive prior work on completing or encoding partial algebras.
 Climent Vidal and Cosme Ll\'opez prove that the inclusion of total algebras into
 partial algebras has a left adjoint, the absolutely free completion functor,
 and develop the functorial Schmidt construction
-\cite{ClimentVidalCosmeLlopez2023}.  Diaconescu gives a Horn-style encoding of
-partial algebras as total algebras \cite{Diaconescu2009}.  Completion questions
+\cite{ClimentVidalCosmeLlopez2023}.  Diaconescu gives the Horn-style encoding
+of partial algebras as total algebras on which our first bridge is based
+\cite{Diaconescu2009}.  Completion questions
 also occur in partial combinatory algebra and term-rewriting models
 \cite{BethkeKlopDeVrijer1996,BethkeKlopDeVrijer1999,Nesin2011}.  Accordingly,
 this paper does not claim that the existence of a free or total extension is
@@ -85,7 +106,8 @@ operation symbol, and its resolved children.  The resulting finite trees are
 called \emph{Answers}.  This gives a normalized representative for a free
 compatible total extension.
 
-The paper asks two narrower questions.
+After checking that encoding bridge, the binary Resolution layer asks two
+narrower questions.
 
 \begin{enumerate}[label=(Q\arabic*)]
   \item Can equality of generated Answers be characterized by total models
@@ -96,7 +118,26 @@ The paper asks two narrower questions.
         equations are unchanged?
 \end{enumerate}
 
-The answer to both is yes.  The paper has two principal results.
+The answer to both is yes.  The paper therefore separates one bridge result
+from two principal binary Resolution results.
+
+\begin{theorem}[Many-sorted encoding bridge]
+\label{thm:diaconescu-bridge}
+Let $\Sigma=(S,TF,PF)$ be a many-sorted partial-algebra signature whose
+operations have arbitrary finite arities.  In the concrete operations-only
+Lean presentation developed here:
+\begin{enumerate}[label=\textup{(\alph*)}]
+  \item the Horn clauses $\Gamma$ define a reduct $\beta$ and the translation
+        $\alpha$ satisfies
+        $M\models\alpha(\rho)$ if and only if
+        $\beta(M)\models\rho$;
+  \item every partial $\Sigma$-algebra $D$ has a canonical encoded model
+        $\gamma(D)$ satisfying $\Gamma$, and $\beta(\gamma(D))$ is canonically
+        equivalent to $D$ as a partial algebra;
+  \item every partial homomorphism $D\to\beta(M)$ has a unique encoded lift
+        $\gamma(D)\to M$ agreeing with it under that equivalence.
+\end{enumerate}
+\end{theorem}
 
 \begin{theorem}[Structured free completion and finite separation]
 \label{thm:free-and-separation}
@@ -157,8 +198,113 @@ hypotheses are incomparable: the one-point algebra is finitely coded and
 partial but has no old-fixing context, whereas natural arithmetic has an
 old-fixing context but no finite code for its carrier.  Natural and integer arithmetic
 are concrete corollaries.
-We have not found the exact combined package in the literature reviewed so
+Theorem~\ref{thm:diaconescu-bridge} is a checked continuation of
+Diaconescu's construction and is not included in the novelty claim.  We have
+not found the exact separation--completion package in the literature reviewed so
 far, but this is not a claim of historical priority.
+
+\section{A Lean-Checked Bridge to Diaconescu's Encoding}
+\label{sec:diaconescu-bridge}
+
+This section records the exact connection to
+\cite{Diaconescu2009}.  It is intentionally phrased as a bridge and
+specialization; the underlying encoding results and their priority remain
+with the cited work.  Diaconescu works with a many-sorted signature
+$\Sigma=(S,TF,PF)$, where symbols in $TF$ are total and symbols in $PF$ are
+partial.  The Lean structure assigns each symbol a natural-number arity, a
+sort at every finite argument position, and a result sort.  Neither the set of
+sorts nor either symbol family is required to be finite.
+
+\subsection{The encoded models, $\beta$, and $\alpha$}
+
+An encoded total model $M$ consists of a data carrier $M_s$ for each
+$s\in S$, an auxiliary truth carrier $M_b$, total interpretations of all
+$TF$ and $PF$ symbols on the data carriers, operations
+\[
+  {\mathrel{e_s}}:M_s\times M_s\longrightarrow M_b,
+  \qquad \mathsf{true}\in M_b,
+\]
+and the Horn conditions $\Gamma$.  The implemented clauses say that total
+symbols preserve and reflect definedness, partial symbols reflect
+definedness, and
+\[
+  x\mathrel{e_s}y=\mathsf{true}
+  \quad\Longrightarrow\quad
+  x\mathrel{e_s}x=\mathsf{true}
+  \quad\text{and}\quad x=y.
+\]
+Thus the carrier of the reduct is
+\[
+  \beta(M)_s=\{x\in M_s\mid
+    x\mathrel{e_s}x=\mathsf{true}\}.
+\]
+Designated-total operations restrict to total operations on these subtypes;
+a $PF$ symbol is defined precisely when its totalized result is marked as
+defined.  Encoded homomorphisms induce partial-algebra homomorphisms between
+the corresponding reducts.
+
+The formula syntax is indexed by a list of bound-variable sorts.  Typed de
+Bruijn variables make quantifier extension explicit.  It is generated by
+existence-equality atoms, conjunction, negation, and one-variable universal
+quantification; iterating the last constructor represents a finite sorted
+variable block.  The translation sends
+\[
+  t\mathrel{\stackrel{e}{=}}t'
+  \quad\longmapsto\quad
+  (t\mathrel{e_s}t'=\mathsf{true}),
+\]
+commutes with the Boolean constructors, and guards a total universal
+quantifier by definedness of the newly bound variable.
+
+The two term lemmas corresponding to Lemmas~3.3 and~3.4 of
+\cite{Diaconescu2009} are
+\leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_sound} and
+\leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_complete}.
+Structural induction on formulas, with the guard handling the quantifier
+case, then gives
+\leanname{Resolution.Diaconescu.ManySorted.alpha\_satisfaction\_condition}.
+The theorem is stated for assignments and hence also yields the closed-sentence
+instance in \cref{thm:diaconescu-bridge}(a).
+
+\subsection{The canonical model $\gamma$ and its lift}
+
+For a partial algebra $D$, raw values at each sort are either old values or
+formal applications.  The normalizer treats the two symbol families
+differently:
+\begin{itemize}
+  \item a $TF$ application whose arguments are old always reduces to the old
+        total result;
+  \item a $PF$ application whose arguments are old reduces exactly when the
+        source partial evaluator returns a value;
+  \item every remaining application is retained as a sorted formal
+        suspension with its normalized arguments.
+\end{itemize}
+The generated subtype consists of raw values having a term witness.  Its
+interpreter into any compatible total target exists and is unique.  This is
+the many-sorted finite-arity free-completion argument used for the data sorts
+of $\gamma(D)$.
+
+The auxiliary carrier of $\gamma(D)$ has one true element and a failure value
+for each sorted pair that is not the same diagonal old value.  Existence
+equality returns true exactly on that old diagonal.  Lean checks that this
+model satisfies all clauses of $\Gamma$ in
+\leanname{Resolution.Diaconescu.ManySorted.gamma\_satisfiesGamma}.  The old
+embedding is bijective onto the defined part, and it respects both the total
+and partial evaluators; this is packaged by
+\leanname{Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv}.
+Finally,
+\leanname{Resolution.Diaconescu.ManySorted.gamma\_persistent\_liberality}
+constructs the lift of every $D\to\beta(M)$ and proves uniqueness from the
+free interpreter on data and the homomorphism laws on the truth carrier.
+
+There are two deliberate scope boundaries.  The Lean theorem uses canonical
+partial-algebra equivalence rather than identifying
+$\beta(\gamma(D))$ and $D$ by definitional equality.  It does not mechanize
+the surrounding institution/comorphism infrastructure, arbitrary signature
+morphisms, or the initial-specification corollaries following persistent
+liberality.  These boundaries are why the result is described here as a
+many-sorted encoding bridge and not as a replacement for the broader theory
+of \cite{Diaconescu2009}.
 
 \section{Generated Answers as a Free Compatible Completion}
 \label{sec:free-completion}
@@ -876,6 +1022,10 @@ presentation of that general idea for the one-sorted binary setting.  Other
 completion and encoding results show that partial-to-total extension is not in
 itself a novel contribution
 \cite{Diaconescu2009,BethkeKlopDeVrijer1996,BethkeKlopDeVrijer1999,Nesin2011}.
+In particular, \cref{sec:diaconescu-bridge} follows Diaconescu's choices of
+$\Gamma$, $\alpha$, $\beta$, and $\gamma$ and checks them in the repository's
+concrete typed syntax.  Its value here is the verified interface between that
+established encoding and Resolution normal forms, not a priority claim.
 
 \subsection{Ground terms, recognizability, and operation trees}
 
@@ -1020,8 +1170,10 @@ assessment has three parts:
         properness criterion, an independent arbitrary-base old-fixing-context
         criterion, their formal incomparability, the contrast with prefix-depth
         completion, and exact universal equational conservativity;
-  \item a complete Lean formalization with natural- and integer-arithmetic
-        instances and explicit unbounded-rank witnesses.
+  \item an audited Lean development comprising the many-sorted encoding
+        bridge and the binary separation--completion results, with natural-
+        and integer-arithmetic instances and explicit unbounded-rank
+        witnesses.
 \end{enumerate}
 Our search has not found this exact relative separation--completion package.
 That reports the present search result, not proof of historical priority or a
@@ -1037,6 +1189,7 @@ import ResolutionFiniteBasePropernessPublic
 import ResolutionOldFixingContextPropernessPublic
 import ResolutionPropernessCriteriaComparison
 import ResolutionArithmeticPropernessPublic
+import ResolutionDiaconescuManySorted
 
 #check ResolutionSemantics.freeCompletionUniversal
 #check ResolutionSemantics.OutsideOld
@@ -1058,6 +1211,12 @@ import ResolutionArithmeticPropernessPublic
 #check ResolutionSemantics.NatDivision.separationRanksUnbounded
 #check ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective
 #check ResolutionSemantics.IntDivision.separationRanksUnbounded
+#check Resolution.Diaconescu.ManySorted.term_evalPartial_sound
+#check Resolution.Diaconescu.ManySorted.term_evalPartial_complete
+#check Resolution.Diaconescu.ManySorted.alpha_satisfaction_condition
+#check Resolution.Diaconescu.ManySorted.gamma_satisfiesGamma
+#check Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv
+#check Resolution.Diaconescu.ManySorted.gamma_persistent_liberality
 \end{lstlisting}
 The repository pins Lean~4.33.0.  The command
 \begin{lstlisting}[style=lean]
@@ -1081,9 +1240,15 @@ completion lemmas are summarized and linked to exact declarations in
 \section{Limitations and Open Questions}\label{sec:limitations}
 
 \begin{enumerate}
-  \item The formalization is currently one-sorted and binary.  General
-        many-sorted and arbitrary-arity versions should be compared directly
-        with the established Schmidt construction.
+  \item The $\Gamma$--$\alpha$--$\beta$--$\gamma$ bridge is many-sorted and
+        supports arbitrary finite arities and separate $TF/PF$ families.  The
+        finite-complement separation and observational-completion layer remains
+        one-sorted and binary.  Extending that second layer, and comparing it
+        directly with the full Schmidt construction, remains open.
+  \item The bridge checks the concrete operations-only sentence and model
+        constructions used here; it does not formalize institution morphisms,
+        arbitrary signature morphisms, or the initial-specification corollaries
+        of persistent liberality.
   \item For finite bases and finite signatures, ordinary residual finiteness is
         already explained by classical ground-term recognizability.  The
         precise relation of the arbitrary-base, pointwise-preserving
@@ -1107,7 +1272,11 @@ completion lemmas are summarized and linked to exact declarations in
 
 \section{Conclusion}
 
-Resolution semantics is best understood as a normalized structured
+The many-sorted bridge places the project explicitly downstream of
+Diaconescu's total-algebra encoding: the concrete $TF/PF$ Horn theory, the
+$\alpha$--$\beta$ satisfaction condition, and the canonical $\gamma$ lift are
+all checked in Lean, while their mathematical priority remains with the
+established source.  Resolution semantics is then best understood as a normalized structured
 presentation of a free compatible completion of a partial algebra.  Its basic
 conservativity follows from the reduction rule.  The substantive additional
 construction is intrinsic finite-complement separation over the
