@@ -6,6 +6,7 @@ import ResolutionOldFixingContextPropernessPublic
 import ResolutionPropernessCriteriaComparison
 import ResolutionArithmeticPropernessPublic
 import ResolutionCompletionProbe
+import ResolutionMasterTheorems
 import ResolutionDiaconescuEncoding
 import ResolutionDiaconescuManySorted
 import ResolutionDiaconescuContinuation
@@ -25,6 +26,16 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #check ResolutionSemantics.freeCompletionUniversal
 #check ResolutionSemantics.expressionKernelQuotientInjective
 #check ResolutionSemantics.expressionKernelQuotientSurjective
+
+#check ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization
+#check ResolutionSemantics.MasterTheorems.relativeFiniteComplementSeparation
+#check ResolutionSemantics.MasterTheorems.orbitCompressionCauchy
+#check ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit
+#check ResolutionSemantics.MasterTheorems.compressedEscapingOrbitNotComplete
+#check ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective
+#check ResolutionSemantics.MasterTheorems.finiteBasePropernessCriterion
+#check ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster
+#check ResolutionSemantics.MasterTheorems.oldFixingRanksUnbounded
 
 #check ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem
 #check ResolutionSemantics.OutsideOld
@@ -126,6 +137,10 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #check Resolution.Diaconescu.InitialExistence.quasiTheory_has_initial_partial_model
 
 #print axioms ResolutionSemantics.freeCompletionUniversal
+#print axioms ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization
+#print axioms ResolutionSemantics.MasterTheorems.orbitCompressionCauchy
+#print axioms ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit
+#print axioms ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective
 #print axioms ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem
 #print axioms ResolutionSemantics.intrinsicExtensionHasCanonicalPresentation
 #print axioms ResolutionSemantics.ResidualComparison.finiteBaseGeneratedResiduallyFinite
