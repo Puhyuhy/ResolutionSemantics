@@ -17,7 +17,9 @@ reviewed commit when reporting results so comments remain reproducible.
    to canonical equivalence, the persistent-liberality lift, the functor laws,
    the hom-set equivalence and its two-variable naturality, the unit/counit
    triangle identities, both fixed-signature initiality transfers (including
-   the `beta`-reduct step used in Corollary 4.2), and the semantic consequence
+   the `beta`-reduct step used in Corollary 4.2), the conditional term-model
+   construction and initial-partial-model existence theorem for the explicit
+   class of quasi-existence equations, and the semantic consequence
    equivalence. The generated-normal-form interface
    should also agree with the stated Resolution presentation. This is a
    verification/continuation claim, not a novelty claim for those results.
@@ -58,9 +60,10 @@ reviewed commit when reporting results so comments remain reproducible.
   equivalence the right conservative replacement for definitional equality in
   the recovery statement? Does the explicit satisfaction-transport theorem
   correctly bridge that equivalence in the proof of semantic consequence?
-- Does `beta_of_initial_encoded_is_initial` correctly isolate the categorical
-  transfer in Corollary 4.2, while leaving the classical existence theorem for
-  initial conditional-equational total models outside its stated scope?
+- Do `termModel_initial`, `translateQuasiEquation_sat_iff_partial`, and
+  `quasiTheory_has_initial_partial_model` correctly supply the classical
+  existence step and the fixed-signature, operations-only conclusion of
+  Corollary 4.2, with the stated quasi-existence syntax and universe bound?
 - Is intrinsic finite-complement separation already known under another name?
 - Has separation by homomorphisms into extensions with finite complement over
   a pointwise-fixed partial base been studied under a generalized Rees-index,
@@ -81,8 +84,8 @@ The paper does not:
 - establish optimal separator complexity;
 - prove Strong Totality;
 - formalize the institution/comorphism layer, arbitrary signature morphisms,
-  the unconditional existence part of Corollary 4.2 from a syntactic class of
-  quasi-existence equations, or Birkhoff completeness;
+  the full institution-level formulation of Corollary 4.2, or Birkhoff
+  proof-theoretic completeness;
 - claim historical priority.
 
 ## Verification

@@ -10,6 +10,7 @@ import ResolutionDiaconescuEncoding
 import ResolutionDiaconescuManySorted
 import ResolutionDiaconescuContinuation
 import ResolutionDiaconescuAdjunction
+import ResolutionDiaconescuInitialExistence
 
 /-!
 # Paper-facing declaration and axiom audit
@@ -104,6 +105,14 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #check Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial
 #check Resolution.Diaconescu.ManySorted.initial_partial_exists_of_encoded_initial_exists
 
+#check Resolution.Conditional.termModel_initial
+#check Resolution.Conditional.initial_model_exists
+#check Resolution.Diaconescu.InitialExistence.modelsGamma_iff_satisfiesGamma
+#check Resolution.Diaconescu.InitialExistence.translateQuasiEquation_sat_iff_partial
+#check Resolution.Diaconescu.InitialExistence.clause_sat_roundtrip
+#check Resolution.Diaconescu.InitialExistence.initialEncodedModel_is_initial
+#check Resolution.Diaconescu.InitialExistence.quasiTheory_has_initial_partial_model
+
 #print axioms ResolutionSemantics.freeCompletionUniversal
 #print axioms ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem
 #print axioms ResolutionSemantics.intrinsicExtensionHasCanonicalPresentation
@@ -138,3 +147,7 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #print axioms Resolution.Diaconescu.ManySorted.gammaBeta_triangle_gamma
 #print axioms Resolution.Diaconescu.ManySorted.gamma_preserves_initiality
 #print axioms Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial
+#print axioms Resolution.Conditional.termModel_initial
+#print axioms Resolution.Diaconescu.InitialExistence.translateQuasiEquation_sat_iff_partial
+#print axioms Resolution.Diaconescu.InitialExistence.initialEncodedModel_is_initial
+#print axioms Resolution.Diaconescu.InitialExistence.quasiTheory_has_initial_partial_model

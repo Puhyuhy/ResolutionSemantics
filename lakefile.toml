@@ -16,6 +16,8 @@ roots = [
   "ResolutionDiaconescuManySorted",
   "ResolutionDiaconescuContinuation",
   "ResolutionDiaconescuAdjunction",
+  "ResolutionConditionalInitial",
+  "ResolutionDiaconescuInitialExistence",
   "ResolutionIntegerArithmetic",
   "ResolutionSemantics",
   "ResolutionPigeonhole",

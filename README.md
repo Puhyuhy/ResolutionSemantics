@@ -37,6 +37,11 @@ historical-priority claim is made.
   counit maps with both triangle identities, and both fixed-signature
   initiality transfers; in particular, the `beta` reduct of an initial encoded
   model is an initial partial model;
+- an explicit syntax for quasi-existence equations, their guarded conditional
+  translation, a semantic term-model construction for many-sorted conditional
+  theories, and the resulting fixed-signature, operations-only initial-model
+  conclusion of Diaconescu's Corollary 4.2; this is a formalization of an
+  established result, not a novelty claim;
 - an explicit interface identifying the data of `gamma` with the many-sorted
   Resolution normal forms and showing how induced maps act on their old,
   total-operation, and partial-operation constructors;

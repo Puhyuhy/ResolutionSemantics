@@ -43,6 +43,13 @@ as the main public interface.
 - `Resolution.Diaconescu.ManySorted.gamma_preserves_initiality`
 - `Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial`
 - `Resolution.Diaconescu.ManySorted.initial_partial_exists_of_encoded_initial_exists`
+- `Resolution.Conditional.termModel_initial`
+- `Resolution.Conditional.initial_model_exists`
+- `Resolution.Diaconescu.InitialExistence.modelsGamma_iff_satisfiesGamma`
+- `Resolution.Diaconescu.InitialExistence.translateQuasiEquation_sat_iff_partial`
+- `Resolution.Diaconescu.InitialExistence.clause_sat_roundtrip`
+- `Resolution.Diaconescu.InitialExistence.initialEncodedModel_is_initial`
+- `Resolution.Diaconescu.InitialExistence.quasiTheory_has_initial_partial_model`
 
 `ResolutionDiaconescuEncoding.lean` formalizes the one-sorted binary core of
 Diaconescu's `gamma` construction.  All operation symbols are treated as
@@ -86,11 +93,27 @@ universe-bounded initial models of a fixed theory and proves both relevant
 transfers: `gamma` sends an initial partial model to an initial encoded model,
 while the `beta` reduct of an initial encoded model is initial among partial
 models. The latter is the categorical transfer used in Corollary 4.2. The
-formalization does not itself construct the classical initial total algebra
-for a conditional-equational presentation, so it does not claim the full
-existence theorem for quasi-existence-equational specifications. Arbitrary
-signature morphisms and the surrounding institution layer also remain outside
-the claim.
+formalization remains fixed-signature and operations-only.
+
+`ResolutionConditionalInitial.lean` supplies the classical existence input in
+a self-contained many-sorted total-algebra language. For an arbitrary theory
+of conditional equations, it quotients sorted ground terms by equality in all
+models, proves that the quotient term algebra is itself a model, and proves
+its unique-map property.
+
+`ResolutionDiaconescuInitialExistence.lean` identifies the five families of
+`Gamma` axioms with conditional clauses, represents a quasi-existence equation
+as a finite sorted context, a finite conjunction of existence-equality atoms,
+and one existence-equality conclusion, and proves that its guarded conditional
+translation is satisfied exactly when the original equation holds in the
+`beta` reduct. It applies the conditional term-model theorem to
+`Gamma + alpha(E)`, converts the result to an encoded algebra, and uses the
+adjunction theorem to obtain an initial partial model of `E`. This checks the
+fixed-signature, same-universe, operations-only initial-model conclusion used
+in Corollary 4.2. It is presented as a formalization of the cited classical
+result, not as new mathematics. Arbitrary signature morphisms, the surrounding
+institution/comorphism layer, and Birkhoff proof-theoretic completeness remain
+outside the claim.
 
 ## Free compatible completion
 
