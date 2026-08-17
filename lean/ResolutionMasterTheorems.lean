@@ -2,6 +2,7 @@ import ResolutionIntrinsicFiniteComplementAPI
 import ResolutionFiniteBasePropernessPublic
 import ResolutionOldFixingContextPropernessPublic
 import ResolutionOldFixingContextSharperOrbitPublic
+import ResolutionFinitePatternRealizationPublic
 
 /-!
 # Master theorem facade for relative separation and orbit compression
@@ -9,11 +10,15 @@ import ResolutionOldFixingContextSharperOrbitPublic
 This module reorganizes the checked public results around two structural
 principles isolated by the post-audit reduction:
 
-1. relative finite-complement separation over the pointwise-fixed partial base;
+1. finite-pattern realization over the pointwise-fixed partial base;
 2. finite orbit compression, whose old-fixing instance yields a Cauchy orbit
    with no generated limit and hence a proper completion.
 
-The old-fixing branch now also uses the sharper observation that a stage-`n`
+Finite-pattern realization strengthens pairwise separation: one compatible
+finite-tag observer is simultaneously injective on any chosen finite list of
+generated Answers. Pairwise separation is the two-point instance.
+
+The old-fixing branch also uses the sharper observation that a stage-`n`
 orbit either enters the fixed base and stabilizes or remains in only `n+1`
 outside states. Consequently the consecutive factorial pair `(n+1)!`,
 `(n+2)!` already agrees at stage `n`.
@@ -26,9 +31,19 @@ namespace MasterTheorems
 
 variable {Sigma : Resolution.Signature.{u}}
 
-/-- Master separation principle, currently at the pairwise strength proved in
-Theorem 3.3: every unequal generated pair is separated by a compatible total
-extension that fixes the base pointwise and has finite complement over it. -/
+/-- Master I: one compatible finite-complement observer is injective on every
+chosen finite pattern of generated Answers. -/
+theorem relativeFinitePatternRealization
+    (D : Resolution.PartialAlg.{u,v} Sigma)
+    (xs : List (Resolution.Free.GeneratedAns D)) :
+    ∃ n : Nat, ∃ T : Resolution.External.FiniteTagAlg D n,
+      ∀ {x y : Resolution.Free.GeneratedAns D}, x ∈ xs -> y ∈ xs ->
+        Resolution.Free.TotalAlg.interp D (T.toTotalAlg D) x =
+          Resolution.Free.TotalAlg.interp D (T.toTotalAlg D) y -> x = y :=
+  FinitePattern.realization D xs
+
+/-- The intrinsic pairwise separation theorem is retained as the observer-class
+form of the two-point consequence. -/
 theorem relativeFiniteComplementSeparation
     (D : Resolution.PartialAlg.{u,v} Sigma) :
     Resolution.External.IntrinsicFiniteComplementSeparating D :=
@@ -71,7 +86,7 @@ structure OrbitCompressionConsequences
       (Resolution.Filtered.embed
         (Resolution.External.generatedFilteredSpace D))
 
-/-- Master old-fixing orbit-compression theorem: one witness yields the full
+/-- Master II, old-fixing instance: one witness yields the full
 proper-completion package. -/
 theorem oldFixingOrbitCompression
     (D : Resolution.PartialAlg.{u,v} Sigma)
