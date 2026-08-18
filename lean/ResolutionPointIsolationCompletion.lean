@@ -86,10 +86,10 @@ theorem generatedComplete_iff_allCauchyEventuallyConstant :
 /-- The generated observational space is incomplete exactly when there exists
     a Cauchy sequence that is not eventually constant. -/
 theorem generatedNotComplete_iff_exists_cauchy_not_eventuallyConstant :
-    (not Filtered.Complete (generatedFilteredSpace D)) <->
+    (¬ Filtered.Complete (generatedFilteredSpace D)) <->
       Exists fun s : Nat -> Free.GeneratedAns D =>
-        Filtered.Cauchy (generatedFilteredSpace D) s /\
-          not EventuallyConstant D s := by
+        Filtered.Cauchy (generatedFilteredSpace D) s ∧
+          ¬ EventuallyConstant D s := by
   classical
   constructor
   · intro hnot
@@ -107,11 +107,11 @@ theorem generatedNotComplete_iff_exists_cauchy_not_eventuallyConstant :
 /-- Properness of the generic filtered completion has the same exact criterion:
     a non-eventually-constant Cauchy sequence exists in generated Answers. -/
 theorem completionEmbed_not_surjective_iff_exists_cauchy_not_eventuallyConstant :
-    (not Function.Surjective
+    (¬ Function.Surjective
       (Filtered.embed (generatedFilteredSpace D))) <->
       Exists fun s : Nat -> Free.GeneratedAns D =>
-        Filtered.Cauchy (generatedFilteredSpace D) s /\
-          not EventuallyConstant D s := by
+        Filtered.Cauchy (generatedFilteredSpace D) s ∧
+          ¬ EventuallyConstant D s := by
   constructor
   · intro hnotSurj
     apply (generatedNotComplete_iff_exists_cauchy_not_eventuallyConstant D).1
@@ -131,8 +131,8 @@ theorem completionEmbed_not_surjective_iff_exists_cauchy_not_eventuallyConstant 
 theorem cauchy_not_eventuallyConstant_implies_completionEmbed_not_surjective
     (s : Nat -> Free.GeneratedAns D)
     (hs : Filtered.Cauchy (generatedFilteredSpace D) s)
-    (hne : not EventuallyConstant D s) :
-    not Function.Surjective
+    (hne : ¬ EventuallyConstant D s) :
+    ¬ Function.Surjective
       (Filtered.embed (generatedFilteredSpace D)) :=
   (completionEmbed_not_surjective_iff_exists_cauchy_not_eventuallyConstant D).2
     ⟨s, hs, hne⟩
