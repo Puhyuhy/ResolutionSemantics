@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that the public package and manuscript-facing Lean API agree."""
+"""Check that the public package and promoted manuscript-facing Lean API agree."""
 
 from __future__ import annotations
 
@@ -10,8 +10,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 LEAN_DIR = ROOT / "lean"
-MANUSCRIPT = ROOT / "paper" / "latex" / "revised.tex"
-STYLE = ROOT / "paper" / "latex" / "resolution-paper.sty"
+LATEX_DIR = ROOT / "paper" / "latex"
+MANUSCRIPT = LATEX_DIR / "revised.tex"
+STYLE = LATEX_DIR / "resolution-paper.sty"
 AUDIT = LEAN_DIR / "AxiomAudit.lean"
 CITATION = ROOT / "CITATION.cff"
 LAKEFILE = ROOT / "lakefile.toml"
@@ -39,7 +40,14 @@ for path in required_files:
     if not path.is_file() or path.stat().st_size == 0:
         fail(f"missing or empty required file: {path.relative_to(ROOT)}")
 
-tex = MANUSCRIPT.read_text(encoding="utf-8")
+main_tex = MANUSCRIPT.read_text(encoding="utf-8")
+input_names = re.findall(r"\\input\{([^}]+)\}", main_tex)
+input_files = [LATEX_DIR / f"{name}.tex" for name in input_names]
+for path in input_files:
+    if not path.is_file() or path.stat().st_size == 0:
+        fail(f"missing or empty manuscript input: {path.relative_to(ROOT)}")
+
+tex = "\n".join([main_tex] + [p.read_text(encoding="utf-8") for p in input_files])
 style = STYLE.read_text(encoding="utf-8")
 audit = AUDIT.read_text(encoding="utf-8")
 citation = CITATION.read_text(encoding="utf-8")
@@ -50,11 +58,11 @@ docs = "\n".join(
 )
 
 expected_title = (
-    "Resolution Semantics for Binary Partial Algebras: A Formalized Free "
-    "Completion, Intrinsic Finite-Complement Separation, and Observational "
-    "Completion"
+    "Resolution Semantics for Partial Algebras: Intrinsic Finite-Complement "
+    "Separation and Observational Completion, with a Lean-Checked Many-Sorted "
+    "Encoding Bridge"
 )
-if "\\author{Adrian Puha}" not in tex:
+if "\\author{Adrian Puha}" not in main_tex:
     fail("the LaTeX author is not Adrian Puha")
 if "pdfauthor={Adrian Puha}" not in style:
     fail("the PDF metadata author is not Adrian Puha")
@@ -84,6 +92,22 @@ for stale in (
     if stale in tex or stale in style or stale in docs:
         fail(f"stale project language remains: {stale}")
 
+for stale_bound in (
+    "(n+2)!/(n+3)!",
+    r"c_{(n+2)!}\stageeq{n}c_{(n+3)!}",
+):
+    if stale_bound in tex:
+        fail(f"superseded old-fixing bound remains in promoted manuscript: {stale_bound}")
+
+for required_phrase in (
+    "finite-pattern realization",
+    "trajectory compression",
+    "finite-pattern escape",
+    "Compression--escape properness",
+):
+    if required_phrase.lower() not in tex.lower():
+        fail(f"promoted manuscript does not foreground: {required_phrase}")
+
 lean_sources = list(LEAN_DIR.glob("*.lean"))
 if not lean_sources:
     fail("no Lean sources found")
@@ -107,13 +131,15 @@ for name in sorted(lean_names):
         fail(f"manuscript declaration is absent from AxiomAudit.lean: {name}")
 
 required_headlines = {
-    "ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem",
-    "ResolutionSemantics.ResidualComparison.finiteBaseGeneratedResiduallyFinite",
-    "ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal",
-    "ResolutionSemantics.FiniteBaseCompletion.completeIffTotal",
-    "ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective",
-    "ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing",
-    "ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding",
+    "ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization",
+    "ResolutionSemantics.MasterTheorems.relativeFiniteComplementSeparation",
+    "ResolutionSemantics.MasterTheorems.orbitCompressionCauchy",
+    "ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit",
+    "ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective",
+    "ResolutionSemantics.MasterTheorems.finiteBasePropernessCriterion",
+    "ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster",
+    "ResolutionSemantics.MasterTheorems.oldFixingRanksUnbounded",
+    "ResolutionSemantics.equationConservative",
     "ResolutionSemantics.NatDivision.oldFixingCriterion",
     "ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective",
 }
@@ -123,5 +149,5 @@ if missing:
 
 print(
     f"manuscript/API check passed: {len(lean_names)} cited Lean declarations, "
-    f"{len(lean_sources)} proof files"
+    f"{len(lean_sources)} proof files, {len(input_files)} section inputs"
 )

@@ -1,0 +1,122 @@
+\section{Relative Finite-Pattern Realization}
+\label{sec:finite-separation}
+
+The free-completion theorem gives canonical maps into compatible total
+extensions, but it does not say which distinctions between suspended Answers
+are visible in independently specified models.  We now restrict attention to
+observers that preserve the base pointwise and have only finitely many states
+outside it.
+
+Let $T$ be a compatible total extension with injective base embedding
+$i:A\hookrightarrow T$.  Its genuine outside part is
+\[
+ \operatorname{Out}_D(T)=\{z\in T\mid \forall a\in A,\ z\ne i(a)\}.
+\]
+An intrinsic observer has budget $n$ when
+$\operatorname{Out}_D(T)$ injects into $\Fin(n+1)$.  The base $A$ may be
+infinite.  The budget counts only states beyond the fixed copy of $A$.
+
+A canonical stage-$n$ representative has carrier
+\[
+ A\sqcup\Fin(n)\sqcup\{\overflow\},
+\]
+with total operations that preserve every application defined in $D$.  The
+formal representation theorem identifies separation by arbitrary intrinsic
+budget-$n$ observers with separation by these finite-tag models.  Write
+$x\stageeq{n}y$ when every stage-$n$ finite-tag model interprets $x$ and $y$
+equally.
+
+The original pairwise separator can be strengthened.  Instead of selecting the
+subterms of two roots, select the union of the finite subterm closures of an
+arbitrary finite family.  Old leaves keep their base values.  Every selected
+suspended node receives the tag of its first occurrence in the selected list,
+and all other behavior is sent to overflow.  A finite lookup table reproduces
+each selected normal suspension exactly.  Induction over the selected closure
+then shows that every selected generated Answer evaluates to its injective
+encoding.
+
+\begin{theorem}[Relative finite-pattern realization]
+\label{thm:finite-pattern-realization}
+Let $x_1,\ldots,x_k\in\RAlg{D}$ be any finite family.  There exist $n$ and one
+compatible stage-$n$ finite-tag observer $T$ such that the canonical
+interpretation
+\[
+ \Phi_T:\RAlg{D}\to T
+\]
+is injective on $\{x_1,\ldots,x_k\}$.
+\end{theorem}
+
+Lean checks the theorem as
+\leanname{ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization}.
+The construction fixes the entire base carrier pointwise; only the selected
+suspended pattern consumes finite tags.
+
+\begin{corollary}[Intrinsic finite-complement separation]
+\label{thm:finite-external-separation}
+For every distinct $x,y\in\RAlg{D}$ there is a compatible total extension
+whose outside part has at most $|x|+|y|+1$ states and in which $x$ and $y$ have
+different interpretations.  Equivalently,
+\[
+ \bigl(\forall n,\ x\stageeq{n}y\bigr)\Longleftrightarrow x=y.
+\]
+\end{corollary}
+
+The quantitative pair bound remains exposed by
+\leanname{ResolutionSemantics.finiteSeparationBound}; the intrinsic
+observer-class statement is
+\leanname{ResolutionSemantics.MasterTheorems.relativeFiniteComplementSeparation}.
+The finite-pattern theorem is structurally stronger than the pairwise bound,
+while the pairwise implementation retains the sharper explicit estimate
+$n=|x|+|y|$.
+
+\begin{proposition}[Product obstruction over an infinite fixed base]
+\label{prop:relative-product-obstruction}
+The carrier-side condition ``pointwise-fixed base with finite outside
+complement'' is not closed under ordinary binary products.  Concretely, each
+embedding
+\[
+ \mathbb N\hookrightarrow \mathbb N\sqcup\{\star\}
+\]
+has a one-point outside complement, whereas the diagonal embedding of
+$\mathbb N$ into
+$(\mathbb N\sqcup\{\star\})^2$ has infinite outside complement.  Indeed, the
+mixed points $(a,\star)$, for $a\in\mathbb N$, form an injective copy of
+$\mathbb N$ outside the diagonal old image.
+\end{proposition}
+
+Lean checks the explicit carrier-level counterexample as
+\leanname{ResolutionSemantics.RelativeObservers.finiteRelativeComplement_not_closed_under_binary_products}.
+Thus the usual residual argument that combines finitely many pairwise
+separators by taking their Cartesian product does not stay inside the present
+observer class when the preserved base is infinite.  The direct finite-pattern
+construction in \cref{thm:finite-pattern-realization} is therefore not replaced
+by that standard product trick.
+
+\begin{remark}[What is and is not being claimed]
+The selected-subterm plus sink construction has standard automata-theoretic
+antecedents \cite{ComonEtAl2008}.  The contribution claimed here is not the
+existence of a sink automaton in isolation.  It is the relative realization
+statement for observers that must preserve a possibly infinite partial base
+pointwise while budgeting only the complement.  In particular, the codomain
+need not be finite when $A$ is infinite.
+\end{remark}
+
+If the base admits an injection into $\Fin(m)$, then the same observer becomes
+an ordinary finite algebra with total-state bound
+\[
+ m+|x|+|y|+1.
+\]
+Hence $\RAlg{D}$ is residually finite in the ordinary sense for finitely coded
+bases.  This qualitative finite-base consequence is classical in the
+finite-signature ground-equational setting; the relative construction is used
+because it remains meaningful when the base itself is infinite.
+
+\begin{proposition}[Closure of the base image]
+\label{prop:old-image-closed}
+The image of $A$ in $\RAlg{D}$ is closed under every generated total operation
+if and only if the evaluator of $D$ is total.
+\end{proposition}
+
+Thus in a genuinely partial example the preserved base is not a total
+subalgebra of $\RAlg{D}$.  This is one reason ordinary finite-Rees-index
+language does not literally describe the relative observer situation.

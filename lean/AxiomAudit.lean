@@ -4,8 +4,17 @@ import ResolutionResidualComparisonPublic
 import ResolutionFiniteBasePropernessPublic
 import ResolutionOldFixingContextPropernessPublic
 import ResolutionPropernessCriteriaComparison
+import ResolutionRelativeProductObstruction
+import ResolutionRelativeEscapeComparison
 import ResolutionArithmeticPropernessPublic
 import ResolutionCompletionProbe
+import ResolutionMasterTheorems
+import ResolutionDiaconescuEncoding
+import ResolutionDiaconescuManySorted
+import ResolutionDiaconescuContinuation
+import ResolutionDiaconescuAdjunction
+import ResolutionDiaconescuBinarySpecialization
+import ResolutionDiaconescuInitialExistence
 
 /-!
 # Paper-facing declaration and axiom audit
@@ -19,6 +28,16 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #check ResolutionSemantics.freeCompletionUniversal
 #check ResolutionSemantics.expressionKernelQuotientInjective
 #check ResolutionSemantics.expressionKernelQuotientSurjective
+
+#check ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization
+#check ResolutionSemantics.MasterTheorems.relativeFiniteComplementSeparation
+#check ResolutionSemantics.MasterTheorems.orbitCompressionCauchy
+#check ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit
+#check ResolutionSemantics.MasterTheorems.compressedEscapingOrbitNotComplete
+#check ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective
+#check ResolutionSemantics.MasterTheorems.finiteBasePropernessCriterion
+#check ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster
+#check ResolutionSemantics.MasterTheorems.oldFixingRanksUnbounded
 
 #check ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem
 #check ResolutionSemantics.OutsideOld
@@ -46,6 +65,9 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 
 #check ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing
 #check ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding
+#check ResolutionSemantics.RelativeObservers.finiteRelativeComplement_not_closed_under_binary_products
+#check Resolution.RelativeEscapeComparison.relativeEscapeBeyondOrdinaryFiniteTargets
+#check Resolution.RelativeEscapeComparison.natRelativeEscapeBeyondOrdinaryFiniteTargets
 
 #check ResolutionSemantics.NatDivision.oldFixingCriterion
 #check ResolutionSemantics.NatDivision.separationRanksUnbounded
@@ -68,7 +90,62 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #check Resolution.Probe.comb_separatesAt_one
 #check Resolution.Probe.NatProbe.natComb_pairwise_separated_at_zero
 
+#check Resolution.Diaconescu.gamma_satisfiesGamma
+#check Resolution.Diaconescu.betaGammaPartialAlgEquiv
+#check Resolution.Diaconescu.gamma_persistent_liberality
+
+#check Resolution.Diaconescu.ManySorted.term_evalPartial_sound
+#check Resolution.Diaconescu.ManySorted.term_evalPartial_complete
+#check Resolution.Diaconescu.ManySorted.alpha_satisfaction_condition
+#check Resolution.Diaconescu.ManySorted.gamma_satisfiesGamma
+#check Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv
+#check Resolution.Diaconescu.ManySorted.gamma_persistent_liberality
+#check Resolution.Diaconescu.ManySorted.betaHom_identity
+#check Resolution.Diaconescu.ManySorted.betaHom_comp
+#check Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv
+#check Resolution.Diaconescu.ManySorted.gammaHom_identity
+#check Resolution.Diaconescu.ManySorted.gammaHom_comp
+#check Resolution.Diaconescu.ManySorted.gammaHom_generatedOld
+#check Resolution.Diaconescu.ManySorted.gammaHom_generatedTotal
+#check Resolution.Diaconescu.ManySorted.gammaHom_generatedPartial
+#check Resolution.Diaconescu.ManySorted.Formula.sat_iff_of_equiv
+#check Resolution.Diaconescu.ManySorted.semantic_consequence_equivalence
+#check Resolution.Diaconescu.ManySorted.gammaRestrict_natural_target
+#check Resolution.Diaconescu.ManySorted.gammaRestrict_natural_source
+#check Resolution.Diaconescu.ManySorted.gammaBetaCounit_natural
+#check Resolution.Diaconescu.ManySorted.gammaBeta_triangle_beta
+#check Resolution.Diaconescu.ManySorted.gammaBeta_triangle_gamma
+#check Resolution.Diaconescu.ManySorted.beta_models_partial_iff_encoded_translation
+#check Resolution.Diaconescu.ManySorted.gamma_models_translation_iff_partial
+#check Resolution.Diaconescu.ManySorted.gamma_preserves_initiality
+#check Resolution.Diaconescu.ManySorted.betaHom_counit_eq_betaGammaInverseHom
+#check Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial
+#check Resolution.Diaconescu.ManySorted.initial_partial_exists_of_encoded_initial_exists
+
+#check Resolution.Diaconescu.BinarySpecialization.toFromPartialAlgEquiv
+#check Resolution.Diaconescu.BinarySpecialization.toManySorted_satisfiesGamma
+#check Resolution.Diaconescu.BinarySpecialization.fromManySorted_satisfiesGamma
+#check Resolution.Diaconescu.BinarySpecialization.generatedEquiv
+#check Resolution.Diaconescu.BinarySpecialization.sameOld_iff
+#check Resolution.Diaconescu.BinarySpecialization.gammaTruthEquiv
+#check Resolution.Diaconescu.BinarySpecialization.gammaEquiv
+#check Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_op
+#check Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_existenceEq
+#check Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_true
+
+#check Resolution.Conditional.termModel_initial
+#check Resolution.Conditional.initial_model_exists
+#check Resolution.Diaconescu.InitialExistence.modelsGamma_iff_satisfiesGamma
+#check Resolution.Diaconescu.InitialExistence.translateQuasiEquation_sat_iff_partial
+#check Resolution.Diaconescu.InitialExistence.clause_sat_roundtrip
+#check Resolution.Diaconescu.InitialExistence.initialEncodedModel_is_initial
+#check Resolution.Diaconescu.InitialExistence.quasiTheory_has_initial_partial_model
+
 #print axioms ResolutionSemantics.freeCompletionUniversal
+#print axioms ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization
+#print axioms ResolutionSemantics.MasterTheorems.orbitCompressionCauchy
+#print axioms ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit
+#print axioms ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective
 #print axioms ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem
 #print axioms ResolutionSemantics.intrinsicExtensionHasCanonicalPresentation
 #print axioms ResolutionSemantics.ResidualComparison.finiteBaseGeneratedResiduallyFinite
@@ -81,6 +158,35 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #print axioms ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective
 #print axioms ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing
 #print axioms ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding
+#print axioms ResolutionSemantics.RelativeObservers.finiteRelativeComplement_not_closed_under_binary_products
+#print axioms Resolution.RelativeEscapeComparison.relativeEscapeBeyondOrdinaryFiniteTargets
+#print axioms Resolution.RelativeEscapeComparison.natRelativeEscapeBeyondOrdinaryFiniteTargets
 #print axioms ResolutionSemantics.NatDivision.completionEmbeddingNotSurjective
 #print axioms ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective
 #print axioms Resolution.Probe.depthCauchy_not_observationalCauchy
+#print axioms Resolution.Diaconescu.gamma_satisfiesGamma
+#print axioms Resolution.Diaconescu.betaGamma_eval
+#print axioms Resolution.Diaconescu.gamma_persistent_liberality
+#print axioms Resolution.Diaconescu.ManySorted.term_evalPartial_sound
+#print axioms Resolution.Diaconescu.ManySorted.term_evalPartial_complete
+#print axioms Resolution.Diaconescu.ManySorted.alpha_satisfaction_condition
+#print axioms Resolution.Diaconescu.ManySorted.gamma_satisfiesGamma
+#print axioms Resolution.Diaconescu.ManySorted.betaGamma_evalPartial
+#print axioms Resolution.Diaconescu.ManySorted.gamma_persistent_liberality
+#print axioms Resolution.Diaconescu.ManySorted.betaHom_comp
+#print axioms Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv
+#print axioms Resolution.Diaconescu.ManySorted.gammaHom_comp
+#print axioms Resolution.Diaconescu.ManySorted.Formula.sat_iff_of_equiv
+#print axioms Resolution.Diaconescu.ManySorted.semantic_consequence_equivalence
+#print axioms Resolution.Diaconescu.ManySorted.gammaBetaCounit_natural
+#print axioms Resolution.Diaconescu.ManySorted.gammaBeta_triangle_gamma
+#print axioms Resolution.Diaconescu.ManySorted.gamma_preserves_initiality
+#print axioms Resolution.Diaconescu.ManySorted.beta_of_initial_encoded_is_initial
+#print axioms Resolution.Diaconescu.BinarySpecialization.generatedEquiv
+#print axioms Resolution.Diaconescu.BinarySpecialization.sameOld_iff
+#print axioms Resolution.Diaconescu.BinarySpecialization.gammaEquiv
+#print axioms Resolution.Diaconescu.BinarySpecialization.EncodedAlgEquiv.inv_map_existenceEq
+#print axioms Resolution.Conditional.termModel_initial
+#print axioms Resolution.Diaconescu.InitialExistence.translateQuasiEquation_sat_iff_partial
+#print axioms Resolution.Diaconescu.InitialExistence.initialEncodedModel_is_initial
+#print axioms Resolution.Diaconescu.InitialExistence.quasiTheory_has_initial_partial_model

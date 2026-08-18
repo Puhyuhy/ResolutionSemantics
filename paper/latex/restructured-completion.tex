@@ -1,0 +1,257 @@
+\section{Observational Filtration, Compression, and Escape}
+\label{sec:completion}
+
+The stage relations $\stageeq{n}$ form a descending filtration: agreement at a
+larger finite-tag budget implies agreement at every smaller budget.  By
+\cref{thm:finite-external-separation}, their intersection is equality, so the
+filtered space is separated.  A sequence is Cauchy when, for each fixed $n$,
+its tail is pairwise $\stageeq{n}$-equivalent.  Quotienting Cauchy sequences by
+eventual agreement at every stage gives the observational completion
+$\Comp{\RAlg{D}}$.  The constant-sequence map is injective and stage-dense, and
+standard diagonalization gives completeness.
+
+The central question is when this completion contains genuinely new points.
+The proof is best understood by separating two logically independent
+mechanisms.
+
+\subsection{Trajectory compression}
+
+Fix a generated unary family $t_0,t_1,\ldots$.  In a stage-$n$ observer, suppose
+its interpretation is the orbit of one deterministic self-map
+\[
+ s_{k+1}=F_n(s_k).
+\]
+We do not require the entire observer carrier to be finite.  It is enough that
+the single trajectory $(s_k)$ admit a finite code with bound $N(n)$ such that,
+for ordered times $i\le j$, equality of codes implies $s_i=s_j$.
+
+\begin{theorem}[Finite trajectory compression implies factorial Cauchy]
+\label{thm:trajectory-compression}
+If such a finite trajectory code exists uniformly at every stage, then the
+factorially sampled generated sequence
+\[
+ t_{0!},t_{1!},t_{2!},\ldots
+\]
+is Cauchy for the finite-tag filtration.
+\end{theorem}
+
+The formal statement is:
+\begin{leandisplay}
+\leanname{ResolutionSemantics.MasterTheorems.orbitCompressionCauchy}.
+\end{leandisplay}
+The proof is standard finite dynamics.  Among the first $N(n)+1$ coded orbit
+positions some state repeats.  The resulting eventual period is at most
+$N(n)$ and therefore divides $N(n)!$.  Sufficiently late factorial indices are
+multiples of this period, so all late factorial samples agree at stage $n$.
+
+The distinction between trajectory finiteness and carrier finiteness is
+essential.  For finite bases the whole stage observer can be coded finitely.  In
+the infinite-base old-fixing case the observer carrier remains infinite, but
+the relevant orbit admits a finite quotient after collapsing the pointwise
+fixed old states to a settled class.  Thus both cases instantiate the same
+dynamic theorem.
+
+\subsection{Finite-pattern escape}
+
+Compression explains Cauchy behavior but cannot by itself imply that the
+completion is proper: a Cauchy sequence might converge to a generated Answer.
+The anti-limit argument comes from the concrete finite-pattern realization
+mechanism.
+
+Assume the generated family has a growing unary syntactic form
+\[
+ t_{k+1}=\susp(u,t_k,\old(e))
+\]
+for a fixed operation symbol $u$ and fixed right base argument $e$.  Every step
+adds a new suspended constructor, so constructor size strictly increases.
+
+Fix a candidate generated Answer $x$.  Choose an orbit prefix $t_N$ longer
+than $x$ and build the finite-pattern observer from the two roots $x$ and
+$t_N$.  The observer evaluates every selected subterm to its exact injective
+encoding.  The next orbit node $t_{N+1}$ is too large to be a subterm of either
+selected root.  Hence the transition from the encoded prefix to the fixed right
+argument misses the selected lookup table and is sent to $\overflow$.  No
+selected node has overflow as an encoded left child, so the same unary context
+keeps overflow fixed thereafter.
+
+\begin{theorem}[Finite-pattern escape]
+\label{thm:finite-pattern-escape}
+For every candidate $x\in\RAlg{D}$, a candidate-dependent finite-tag observer
+separates $x$ from every sufficiently late term of the factorially sampled
+growing unary orbit.  Consequently the factorial sample has no generated
+limit.
+\end{theorem}
+
+Lean checks this as:
+\begin{leandisplay}
+\leanname{ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit}.
+\end{leandisplay}
+Unlike \cref{thm:trajectory-compression}, this proof does not use finite-state
+periodicity.  Its input is the finite-pattern observer together with syntactic
+growth and absorbing overflow.
+
+\subsection{Combined properness theorem}
+
+\begin{theorem}[Compression--escape properness]
+\label{thm:compression-escape-properness}
+Suppose a generated unary family satisfies both:
+\begin{enumerate}
+  \item at each finite observation stage its interpreted trajectory admits a
+        uniformly finite trajectory code; and
+  \item its generated syntax grows by repeated application of a fixed unary
+        context of the form $t\mapsto\susp(u,t,\old(e))$.
+\end{enumerate}
+Then the factorial sample is Cauchy and has no generated limit.  Therefore the
+generated filtered space is incomplete and the canonical embedding
+\[
+ \RAlg{D}\longrightarrow\Comp{\RAlg{D}}
+\]
+is not surjective.
+\end{theorem}
+
+The publication-facing Lean theorem is:
+\begin{leandisplay}
+\leanname{ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective}.
+\end{leandisplay}
+The incompleteness form is:
+\begin{leandisplay}
+\leanname{ResolutionSemantics.MasterTheorems.compressedEscapingOrbitNotComplete}.
+\end{leandisplay}
+
+This is the structural center of the properness theory.  Compression and escape
+are complementary rather than redundant: the first makes late terms
+observationally indistinguishable at each fixed stage, while the second shows
+that no finite generated Answer can absorb that Cauchy behavior as its limit.
+
+\subsection{Finite-base instance}
+
+Suppose $A$ injects into $\Fin(m)$ and some base application
+$\eval_D(f,a,z)$ is undefined.  Let $c_0=\old(a)$ and iterate the unresolved
+left comb $c_{k+1}=f(c_k,\old(z))$.  A stage-$n$ observer has at most
+$m+n+1$ coded states, so its comb trajectory is finitely coded.  The comb also
+has the growing unary syntax required by finite-pattern escape.
+
+\begin{theorem}[Finite-base properness criterion]
+\label{prop:proper-completion}
+For a finitely coded base, the canonical completion embedding is surjective if
+and only if the evaluator of $D$ is total.  Equivalently, the completion is
+proper exactly when some base application is undefined.
+\end{theorem}
+
+This is exposed through:
+\begin{leandisplay}
+\leanname{ResolutionSemantics.MasterTheorems.finiteBasePropernessCriterion}.
+\end{leandisplay}
+The reverse direction is elementary: if the evaluator is total, every generated
+Answer reduces to an embedded base value and every Cauchy sequence is eventually
+constant at a separating finite stage.
+
+\subsection{Infinite-base old-fixing instance}
+
+No finite code of the whole base is needed when the orbit is constrained by a
+context that fixes old elements pointwise.  Suppose
+\[
+ \eval_D(g,a,b)=\operatorname{none},
+ \qquad
+ \eval_D(u,x,e)=\operatorname{some}(x)\quad(x\in A),
+\]
+and define
+\[
+ c_0=\susp(g,\old(a),\old(b)),
+ \qquad
+ c_{k+1}=\susp(u,c_k,\old(e)).
+\]
+In any stage-$n$ observer, if the orbit enters the old base then the old-fixing
+law makes it constant.  Otherwise it stays entirely in the $n$ tags plus
+$\overflow$, hence in only $n+1$ external states.  This yields the sharp
+factorial synchronization
+\[
+ c_{(n+1)!}\stageeq{n}c_{(n+2)!}.
+\]
+
+\begin{theorem}[Old-fixing properness and unbounded rank]
+\label{thm:old-fixing-proper-completion}
+Under the hypotheses above, the observational completion is proper.  Moreover,
+for every $n$ the pair $c_{(n+1)!},c_{(n+2)!}$ is distinct but agrees at stage
+$n$, so its least finite-tag separation rank is greater than $n$.
+\end{theorem}
+
+The factorization through the combined structural theorem is:
+\begin{leandisplay}
+\leanname{ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster}.
+\end{leandisplay}
+The sharpened rank theorem is:
+\begin{leandisplay}
+\leanname{ResolutionSemantics.MasterTheorems.oldFixingRanksUnbounded}.
+\end{leandisplay}
+
+The finite-base and old-fixing hypotheses are incomparable.  A one-point
+partial algebra can be finitely coded while admitting no base-fixing unary
+context; natural arithmetic has the context $x\mapsto x+0$ but no finite code
+of its carrier.  The common theorem is not a common hypothesis on the base, but
+a common mechanism on the relevant observer trajectory.
+
+\subsection{Completed operations and universal extension}
+
+Every generated primitive operation preserves every stage relation and extends
+pointwise to the Cauchy completion.  The completed algebra is a compatible
+total extension with injective base embedding.  Relative to complete separated
+filtered compatible targets with jointly nonexpansive primitive operations,
+the completion satisfies the expected extension property.  Lean exposes
+completeness as:
+\begin{leandisplay}
+\leanname{ResolutionSemantics.completionComplete}.
+\end{leandisplay}
+The relative initiality package is:
+\begin{leandisplay}
+\leanname{Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra\_initial}.
+\end{leandisplay}
+
+\subsection{Why the filtration is not prefix-depth observation}
+
+The distinction from the classical infinite-tree metric is visible on an
+explicit unresolved comb.  Let
+\[
+ b_0=\old(a),\qquad b_{k+1}=\susp(f,b_k,\old(z)),
+\]
+where $\eval_D(f,a,z)$ is undefined.  Prefix-depth observation forgets what
+happens sufficiently far down the left spine: for every fixed depth $d$, all
+$b_i,b_j$ with $i,j\ge d$ have the same prefix through depth $d$.  Thus the
+comb sequence is Cauchy for the standard prefix-depth uniformity and has the
+usual infinite-comb limit in the corresponding tree completion.
+
+Finite-tag observation behaves differently.  There is one compatible stage-1
+observer that uses a single fresh tag $\tau$ and overflow $\overflow$.  The
+undefined base application is sent to $\tau$, and subsequent applications of
+the same comb context alternate
+\[
+ \tau\longmapsto\overflow\longmapsto\tau\longmapsto\overflow\longmapsto\cdots.
+\]
+Consequently the same fixed one-tag observer distinguishes $b_k$ from
+$b_{k+1}$ for every $k$, no matter how deep the disagreement lies.  The comb is
+therefore not observationally Cauchy.
+
+\begin{proposition}[Depth-Cauchy does not imply observational Cauchy]
+\label{prop:depth-observation-contrast}
+There is a generated comb sequence that is Cauchy for prefix-depth agreement
+but not Cauchy for the finite-tag observational filtration.  Hence the two
+uniformities are distinct.
+\end{proposition}
+
+The kernel-checked statement is
+\begin{leandisplay}
+\leanname{Resolution.Probe.depthCauchy\_not\_observationalCauchy}.
+\end{leandisplay}
+The fixed-budget separator itself is
+\begin{leandisplay}
+\leanname{Resolution.Probe.comb\_separatesAt\_one}.
+\end{leandisplay}
+In natural arithmetic the contrast is sharper: a tag-free observer can
+separate every two distinct combs by using the pointwise-retained numerical
+base as semantic memory.  This is checked by
+\begin{leandisplay}
+\leanname{Resolution.Probe.NatProbe.natComb\_pairwise\_separated\_at\_zero}.
+\end{leandisplay}
+Thus the observational completion is not the classical infinite-tree
+completion under another notation: fixed finite semantic budgets can see
+through arbitrarily large syntactic depth.

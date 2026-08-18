@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{resolution-paper}[2026/08/16 Resolution Mathematics manuscript style]
+\ProvidesPackage{resolution-paper}[2026/08/17 Resolution Mathematics manuscript style]
 
-\newcommand{\resolutionversion}{1.1.0}
+\newcommand{\resolutionversion}{1.2.0}
 
 \RequirePackage[T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
@@ -28,10 +28,10 @@
   linkcolor=ResolutionBlue,
   citecolor=ResolutionBlue,
   urlcolor=ResolutionBlue,
-  pdftitle={Resolution Semantics for Binary Partial Algebras: A Formalized Free Completion, Intrinsic Finite-Complement Separation, and Observational Completion},
+  pdftitle={Resolution Semantics for Partial Algebras: Intrinsic Finite-Complement Separation and Observational Completion, with a Lean-Checked Many-Sorted Encoding Bridge},
   pdfauthor={Adrian Puha},
-  pdfsubject={Free compatible completion, intrinsic finite-complement separation, and observational completion of binary partial algebras},
-  pdfkeywords={partial algebra, free completion, finite-complement separation, observational completion, division by zero, Lean formalization}
+  pdfsubject={Binary finite-complement separation and observational completion with a many-sorted partial-to-total encoding bridge},
+  pdfkeywords={partial algebra, Diaconescu encoding, persistent liberality, satisfaction condition, free completion, finite-complement separation, observational completion, Lean}
 }
 
 \setlength{\parindent}{0pt}
@@ -60,6 +60,7 @@
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{limitation}[theorem]{Scope limitation}
+\newtheorem{openquestion}{Open Question}[section]
 
 \crefname{theorem}{theorem}{theorems}
 \crefname{proposition}{proposition}{propositions}
