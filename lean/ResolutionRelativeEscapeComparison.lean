@@ -13,16 +13,17 @@ candidate-tailored separation in the abstract.
 This module isolates the stronger relative fact.  The concrete escape observer
 fixes the entire base pointwise and uses only finitely many extra tags plus
 one overflow state.  If the base itself admits no finite injective code, then
-neither does the escape observer carrier.  Nevertheless the same observer
-separates the chosen generated candidate from the entire sufficiently late
-syntactic tail.
+no finitely coded target can contain it injectively at all; in particular the
+escape observer carrier is necessarily non-finite as a whole.  Nevertheless
+the same observer separates the chosen generated candidate from the entire
+sufficiently late syntactic tail.
 
 Thus, under a non-finitely-codable base, the Resolution escape witness cannot
-be replaced by an ordinary finite target without abandoning pointwise base
-preservation.
+be replaced by an ordinary finite target without abandoning injective
+pointwise base preservation.
 -/
 
-universe u v
+universe u v w
 
 namespace Resolution
 namespace RelativeEscapeComparison
@@ -36,6 +37,27 @@ open Resolution.FinitePatternAntiLimit
 
 variable {Sigma : Signature.{u}}
 
+/-- A non-finitely-codable base cannot embed injectively into any finitely
+coded target.  This is the direct obstruction to replacing a relative observer
+by an ordinary finite target while retaining every base point distinctly. -/
+theorem no_finitely_coded_target_with_injective_base
+    {A : Type v} {T : Type w}
+    (hBase : forall m : Nat, Not (Nonempty (Coded A m)))
+    (embed : A -> T)
+    (hInjective : Function.Injective embed)
+    (m : Nat) :
+    Not (Nonempty (Coded T m)) := by
+  rintro ⟨C⟩
+  let B : Coded A m := {
+    code := fun a => C.code (embed a)
+    code_lt := fun a => C.code_lt (embed a)
+    code_inj := by
+      intro a b h
+      apply hInjective
+      exact C.code_inj _ _ h
+  }
+  exact hBase m ⟨B⟩
+
 /-- If the distinguished base has no injective code into any finite type, then
 neither does any canonical finite-tag carrier over that base.  The extra part
 is finite, but the pointwise-preserved base remains fully present. -/
@@ -44,17 +66,13 @@ theorem finiteTagCarrier_not_finitely_codable_of_base
     (hBase : forall m : Nat, Not (Nonempty (Coded D.Carrier m)))
     (n m : Nat) :
     Not (Nonempty (Coded (FiniteTagCarrier D n) m)) := by
-  rintro ⟨C⟩
-  let B : Coded D.Carrier m := {
-    code := fun a => C.code (Sum.inl a)
-    code_lt := fun a => C.code_lt (Sum.inl a)
-    code_inj := by
+  exact no_finitely_coded_target_with_injective_base
+    hBase
+    (fun a : D.Carrier => (Sum.inl a : FiniteTagCarrier D n))
+    (by
       intro a b h
-      have hab : (Sum.inl a : FiniteTagCarrier D n) = Sum.inl b :=
-        C.code_inj _ _ h
-      exact Sum.inl.inj hab
-  }
-  exact hBase m ⟨B⟩
+      exact Sum.inl.inj h)
+    m
 
 /-- The candidate-tailored pattern observer does more than witness
 non-convergence abstractly: once the first unseen continuation falls into
