@@ -272,6 +272,53 @@ theorem resolutionAnswer_extension_unique
         g = f := by
   exact resolutionAnswer_isUniversalTotalization S Y onSolution onResidual
 
+/-- Any other universal pointed totalization of the same specification is
+canonically equivalent to `ResolutionAnswer S`.  Thus the Strong Totality
+completion is unique up to equivalence once its universal property is fixed. -/
+theorem universalTotalization_equiv_resolutionAnswer
+    (S : Specification.{u})
+    (X : Type u)
+    (includeSolution : Specification.Solution S -> X)
+    (residual : X)
+    (hX : IsUniversalTotalization S X includeSolution residual) :
+    X ≃ ResolutionAnswer S := by
+  rcases hX (ResolutionAnswer S) (@realizeSolution S) .residual with
+    ⟨toRA, hto, _⟩
+  rcases resolutionAnswer_isUniversalTotalization S X includeSolution residual with
+    ⟨fromRA, hfrom, _⟩
+  refine {
+    toFun := toRA
+    invFun := fromRA
+    left_inv := ?_
+    right_inv := ?_
+  }
+  · have hcompExt :
+        ((forall x : Specification.Solution S,
+            (fun z => fromRA (toRA z)) (includeSolution x) = includeSolution x) ∧
+          (fun z => fromRA (toRA z)) residual = residual) := by
+      constructor
+      · intro x
+        rw [hto.1 x, hfrom.1 x]
+      · rw [hto.2, hfrom.2]
+    have hidExt :
+        ((forall x : Specification.Solution S,
+            (fun z : X => z) (includeSolution x) = includeSolution x) ∧
+          (fun z : X => z) residual = residual) := by
+      exact ⟨fun _ => rfl, rfl⟩
+    rcases hX X includeSolution residual with ⟨f, _, huniq⟩
+    have hcomp : (fun z => fromRA (toRA z)) = f := huniq _ hcompExt
+    have hid : (fun z : X => z) = f := huniq _ hidExt
+    intro x
+    exact congrFun (hcomp.trans hid.symm) x
+  · intro a
+    cases a with
+    | realized x hx =>
+        have hto' := hto.1 (⟨x, hx⟩ : Specification.Solution S)
+        have hfrom' := hfrom.1 (⟨x, hx⟩ : Specification.Solution S)
+        simpa [realizeSolution, hto'] using congrArg toRA hfrom'
+    | residual =>
+        rw [hto.2, hfrom.2]
+
 /-! ## Families of arbitrary specifications -/
 
 /-- A partial resolver for a family of specifications.  It may return an
