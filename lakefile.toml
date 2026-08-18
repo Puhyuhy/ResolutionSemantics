@@ -11,6 +11,7 @@ roots = [
   "ResolutionStrongTotality",
   "ResolutionStrongTotalityFunctorial",
   "ResolutionStrongTotalityComposition",
+  "ResolutionStrongTotalityDependent",
   "ResolutionModels",
   "ResolutionExternal",
   "ResolutionFiniteTagProof",
