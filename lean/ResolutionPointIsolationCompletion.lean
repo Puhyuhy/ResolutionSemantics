@@ -93,11 +93,13 @@ theorem generatedNotComplete_iff_exists_cauchy_not_eventuallyConstant :
   classical
   constructor
   · intro hnot
-    by_contra hnone
+    apply Classical.byContradiction
+    intro hnone
     apply hnot
     apply (generatedComplete_iff_allCauchyEventuallyConstant D).2
     intro s hs
-    by_contra hne
+    apply Classical.byContradiction
+    intro hne
     apply hnone
     exact ⟨s, hs, hne⟩
   · rintro ⟨s, hs, hne⟩ hcomplete
