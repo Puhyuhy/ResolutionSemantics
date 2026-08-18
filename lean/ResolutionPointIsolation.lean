@@ -29,7 +29,12 @@ theorem patternEncode_susp_of_not_mem
     (h : RawAns.susp f l r ∉ patternSelected D roots) :
     patternEncode D roots (RawAns.susp f l r) = patternOverflow D := by
   classical
-  unfold patternEncode
+  change
+    (if hmem : RawAns.susp f l r ∈ patternSelected D roots then
+      (Sum.inr (Sum.inl
+        (tagIndex (RawAns.susp f l r) (patternSelected D roots) hmem)) :
+          FiniteTagCarrier D (patternSelected D roots).length)
+    else patternOverflow D) = patternOverflow D
   rw [dif_neg h]
 
 /-- If one side is selected, equality of pattern encodings already determines
