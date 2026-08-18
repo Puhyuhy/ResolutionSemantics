@@ -102,7 +102,10 @@ Headline declaration:
 
 - `ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit`
 
-Core module: `ResolutionFinitePatternAntiLimit.lean`.
+Core modules:
+
+- `ResolutionFinitePatternAntiLimit.lean`
+- `ResolutionRelativeEscapeComparison.lean`
 
 For growing unary syntax
 `t_(k+1) = susp(u, t_k, old(e))`, a candidate-tailored finite-pattern observer
@@ -111,8 +114,25 @@ The next unseen iterate falls outside the selected finite subterm pattern and is
 sent to overflow; overflow is absorbing along the continuation. Hence no
 generated Answer can be the limit of the factorial sample.
 
-This theorem is independent of finite-state periodicity. It is the
-Resolution-specific no-limit half of the properness argument.
+The abstract topological pattern "candidate-specific separator + new completion
+point" is not itself treated as novel; ordinary profinite settings have close
+analogues. The Resolution-specific distinction is relative to the retained
+base. `ResolutionRelativeEscapeComparison.lean` proves that if the base admits
+no finite injective code, then the actual candidate-tailored escape observer
+also admits no finite code as a whole, even though its outside complement is
+finite. The same observer still separates the chosen candidate from every
+sufficiently late syntactic iterate. Headline declarations are:
+
+- `Resolution.RelativeEscapeComparison.relativeEscapeBeyondOrdinaryFiniteTargets`
+- `Resolution.RelativeEscapeComparison.natRelativeEscapeBeyondOrdinaryFiniteTargets`
+
+Thus the escape witness can be globally infinite while remaining finitely
+complex only outside a pointwise-preserved infinite base. This distinguishes the
+formal mechanism from ordinary finite-target profinite recognition without
+claiming anti-limit separation in the abstract as new.
+
+The anti-limit theorem is independent of finite-state periodicity. It is the
+relative no-limit half of the properness argument.
 
 ## 6. Combined compression–escape properness theorem
 
