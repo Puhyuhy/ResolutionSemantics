@@ -46,6 +46,7 @@ roots = [
   "ResolutionFinitePatternRealization",
   "ResolutionFinitePatternRealizationPublic",
   "ResolutionFinitaryPatternRealization",
+  "ResolutionPointIsolation",
   "ResolutionOrbitCompressionMaster",
   "ResolutionFinitePatternAntiLimit",
   "ResolutionRelativeEscapeComparison",
