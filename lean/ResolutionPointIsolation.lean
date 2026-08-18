@@ -20,8 +20,21 @@ open FiniteTagProof
 variable {Sigma : Signature.{u}}
 variable (D : PartialAlg.{u,v} Sigma)
 
+/-- An unselected suspension is encoded by the distinguished overflow state.
+This is kept explicit rather than delegated to the simplifier because the
+constructor separation is part of the structural argument below. -/
+theorem patternEncode_susp_of_not_mem
+    {roots : List (RawAns Sigma D.Carrier)}
+    {f : Sigma.Op} {l r : RawAns Sigma D.Carrier}
+    (h : RawAns.susp f l r ∉ patternSelected D roots) :
+    patternEncode D roots (RawAns.susp f l r) = patternOverflow D := by
+  classical
+  unfold patternEncode
+  rw [dif_neg h]
+
 /-- If one side is selected, equality of pattern encodings already determines
-the arbitrary other raw Answer.  The other Answer need not itself be selected. -/
+the arbitrary other raw Answer.  The other Answer need not itself be selected.
+The proof uses only explicit constructor disjointness of old/tag/overflow. -/
 theorem eq_of_patternEncode_eq_of_mem_right
     {roots : List (RawAns Sigma D.Carrier)}
     {s t : RawAns Sigma D.Carrier}
@@ -33,23 +46,52 @@ theorem eq_of_patternEncode_eq_of_mem_right
   | old a =>
       cases t with
       | old b =>
-          simp only [patternEncode] at henc
+          change
+            (Sum.inl a : FiniteTagCarrier D (patternSelected D roots).length) =
+              Sum.inl b at henc
           exact congrArg RawAns.old (Sum.inl.inj henc)
       | susp g l r =>
           rw [patternEncode_susp_of_mem D ht] at henc
-          simp [patternEncode] at henc
+          change
+            (Sum.inl a : FiniteTagCarrier D (patternSelected D roots).length) =
+              Sum.inr (Sum.inl
+                (tagIndex (RawAns.susp g l r) (patternSelected D roots) ht)) at henc
+          cases henc
   | susp f l r =>
       cases t with
       | old b =>
           by_cases hs : RawAns.susp f l r ∈ patternSelected D roots
           · rw [patternEncode_susp_of_mem D hs] at henc
-            simp [patternEncode] at henc
-          · simp [patternEncode, hs] at henc
+            change
+              (Sum.inr (Sum.inl
+                (tagIndex (RawAns.susp f l r) (patternSelected D roots) hs)) :
+                  FiniteTagCarrier D (patternSelected D roots).length) =
+                Sum.inl b at henc
+            cases henc
+          · rw [patternEncode_susp_of_not_mem D hs] at henc
+            change
+              (Sum.inr (Sum.inr ()) :
+                FiniteTagCarrier D (patternSelected D roots).length) =
+                Sum.inl b at henc
+            cases henc
       | susp g l' r' =>
           by_cases hs : RawAns.susp f l r ∈ patternSelected D roots
           · exact patternEncode_injective_on D hs ht henc
-          · rw [patternEncode_susp_of_mem D ht] at henc
-            simp [patternEncode, hs, patternOverflow] at henc
+          · rw [patternEncode_susp_of_not_mem D hs,
+              patternEncode_susp_of_mem D ht] at henc
+            change
+              (Sum.inr (Sum.inr ()) :
+                FiniteTagCarrier D (patternSelected D roots).length) =
+                Sum.inr (Sum.inl
+                  (tagIndex (RawAns.susp g l' r')
+                    (patternSelected D roots) ht)) at henc
+            have hinner :
+                (Sum.inr () :
+                  Sum (Fin (patternSelected D roots).length) Unit) =
+                  Sum.inl (tagIndex (RawAns.susp g l' r')
+                    (patternSelected D roots) ht) :=
+              Sum.inr.inj henc
+            cases hinner
 
 /-- An unselected suspension cannot accidentally hit the finite table through
 children whose encodings coincide with selected children. -/
@@ -107,18 +149,14 @@ theorem patternOp_encode_susp_of_not_mem
           by_cases hrmem : RawAns.susp g r1 r2 ∈ patternSelected D roots
           · rw [patternEncode_susp_of_mem D hrmem] at htable ⊢
             simpa [patternOp] using htable
-          · have hrenc :
-                patternEncode D roots (RawAns.susp g r1 r2) = patternOverflow D := by
-              simp [patternEncode, hrmem]
+          · have hrenc := patternEncode_susp_of_not_mem D hrmem
             rw [hrenc] at htable ⊢
             simpa [patternOp, patternOverflow] using htable
   | susp g l1 l2 =>
       by_cases hlmem : RawAns.susp g l1 l2 ∈ patternSelected D roots
       · rw [patternEncode_susp_of_mem D hlmem] at htable ⊢
         simpa [patternOp] using htable
-      · have hlenc :
-            patternEncode D roots (RawAns.susp g l1 l2) = patternOverflow D := by
-          simp [patternEncode, hlmem]
+      · have hlenc := patternEncode_susp_of_not_mem D hlmem
         rw [hlenc] at htable ⊢
         simpa [patternOp, patternOverflow] using htable
 
@@ -145,10 +183,7 @@ theorem foldRaw_eq_patternEncode_all
       by_cases hs : RawAns.susp f l r ∈ patternSelected D roots
       · exact patternOp_encode_susp D hs hn
       · have hop := patternOp_encode_susp_of_not_mem D hs hn
-        have henc :
-            patternEncode D roots (RawAns.susp f l r) = patternOverflow D := by
-          simp [patternEncode, hs]
-        rw [henc]
+        rw [patternEncode_susp_of_not_mem D hs]
         exact hop
 
 /-- A singleton pattern observer recognizes its chosen generated Answer among
