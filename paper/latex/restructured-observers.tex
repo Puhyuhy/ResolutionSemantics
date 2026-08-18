@@ -69,6 +69,29 @@ The finite-pattern theorem is structurally stronger than the pairwise bound,
 while the pairwise implementation retains the sharper explicit estimate
 $n=|x|+|y|$.
 
+\begin{proposition}[Product obstruction over an infinite fixed base]
+\label{prop:relative-product-obstruction}
+The carrier-side condition ``pointwise-fixed base with finite outside
+complement'' is not closed under ordinary binary products.  Concretely, each
+embedding
+\[
+ \mathbb N\hookrightarrow \mathbb N\sqcup\{\star\}
+\]
+has a one-point outside complement, whereas the diagonal embedding of
+$\mathbb N$ into
+$(\mathbb N\sqcup\{\star\})^2$ has infinite outside complement.  Indeed, the
+mixed points $(a,\star)$, for $a\in\mathbb N$, form an injective copy of
+$\mathbb N$ outside the diagonal old image.
+\end{proposition}
+
+Lean checks the explicit carrier-level counterexample as
+\leanname{ResolutionSemantics.RelativeObservers.finiteRelativeComplement_not_closed_under_binary_products}.
+Thus the usual residual argument that combines finitely many pairwise
+separators by taking their Cartesian product does not stay inside the present
+observer class when the preserved base is infinite.  The direct finite-pattern
+construction in \cref{thm:finite-pattern-realization} is therefore not replaced
+by that standard product trick.
+
 \begin{remark}[What is and is not being claimed]
 The selected-subterm plus sink construction has standard automata-theoretic
 antecedents \cite{ComonEtAl2008}.  The contribution claimed here is not the
