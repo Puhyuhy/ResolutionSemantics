@@ -13,7 +13,7 @@ representation cannot silently turn an unresolved answer into an ordinary
 solution, while every genuine solution is transported conservatively.
 -/
 
-universe u
+universe u v
 
 namespace Resolution
 namespace StrongTotality
@@ -125,6 +125,17 @@ theorem solution?_map
     (map f a).solution? = Option.map (SpecMorphism.mapSolution f) a.solution? := by
   cases a <;> rfl
 
+/-- Canonical totalization commutes with translation of specifications.  This is
+the naturality square connecting partial ordinary solution data with total
+Resolution data. -/
+theorem map_totalize
+    {S T : Specification.{u}}
+    (f : SpecMorphism S T)
+    (a : Option (Specification.Solution S)) :
+    map f (totalize S a) =
+      totalize T (Option.map (SpecMorphism.mapSolution f) a) := by
+  cases a <;> rfl
+
 end ResolutionAnswer
 
 /-- Strong Totality is invariant under specification translation in the precise
@@ -146,6 +157,37 @@ theorem realized_translation_ne_residual
       (ResolutionAnswer.residual : ResolutionAnswer T) := by
   rw [ResolutionAnswer.map_realizeSolution]
   exact realizeSolution_ne_residual (SpecMorphism.mapSolution f x)
+
+/-! ## Naturality for families of specifications -/
+
+/-- Translate a partial resolver pointwise along a family of specification
+morphisms. -/
+def mapPartialResolver
+    {I : Type v}
+    {F G : I -> Specification.{u}}
+    (eta : forall i : I, SpecMorphism (F i) (G i))
+    (r : PartialResolver F) : PartialResolver G :=
+  fun i => Option.map (SpecMorphism.mapSolution (eta i)) (r i)
+
+/-- Translate a total Resolution resolver pointwise. -/
+def mapResolver
+    {I : Type v}
+    {F G : I -> Specification.{u}}
+    (eta : forall i : I, SpecMorphism (F i) (G i))
+    (R : Resolver F) : Resolver G :=
+  fun i => ResolutionAnswer.map (eta i) (R i)
+
+/-- Pointwise Strong Totality is natural: translating after totalization is
+identical to translating the partial resolver first and then totalizing. -/
+theorem totalizeResolver_natural
+    {I : Type v}
+    {F G : I -> Specification.{u}}
+    (eta : forall i : I, SpecMorphism (F i) (G i))
+    (r : PartialResolver F) :
+    mapResolver eta (totalizeResolver F r) =
+      totalizeResolver G (mapPartialResolver eta r) := by
+  funext i
+  exact ResolutionAnswer.map_totalize (eta i) (r i)
 
 end StrongTotality
 end Resolution
