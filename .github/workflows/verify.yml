@@ -47,7 +47,9 @@ jobs:
       - name: Build and inspect committed PDF
         run: bash scripts/build-paper.sh --check-committed
       - name: Preserve rebuilt PDF
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: resolution-semantics-paper
           path: build/paper/Resolution_Semantics_Adrian_Puha.pdf
+          if-no-files-found: error
