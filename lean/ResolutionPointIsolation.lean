@@ -104,9 +104,23 @@ theorem patternOp_encode_susp_of_not_mem
           have hnone : D.eval f a b = none := hn.2.2 a b rfl rfl
           simpa [patternOp, patternEncode, hnone] using htable
       | susp g r1 r2 =>
-          simpa [patternOp, patternEncode] using htable
+          by_cases hrmem : RawAns.susp g r1 r2 ∈ patternSelected D roots
+          · rw [patternEncode_susp_of_mem D hrmem] at htable ⊢
+            simpa [patternOp] using htable
+          · have hrenc :
+                patternEncode D roots (RawAns.susp g r1 r2) = patternOverflow D := by
+              simp [patternEncode, hrmem]
+            rw [hrenc] at htable ⊢
+            simpa [patternOp, patternOverflow] using htable
   | susp g l1 l2 =>
-      simpa [patternOp, patternEncode] using htable
+      by_cases hlmem : RawAns.susp g l1 l2 ∈ patternSelected D roots
+      · rw [patternEncode_susp_of_mem D hlmem] at htable ⊢
+        simpa [patternOp] using htable
+      · have hlenc :
+            patternEncode D roots (RawAns.susp g l1 l2) = patternOverflow D := by
+          simp [patternEncode, hlmem]
+        rw [hlenc] at htable ⊢
+        simpa [patternOp, patternOverflow] using htable
 
 /-- Exact global recognition: the finite-pattern observer computes the declared
 pattern encoding on every normalized raw Answer, not only on selected nodes. -/
