@@ -7,14 +7,28 @@ an established line of work on partial algebras and Schmidt-type completions
 a closely related partial-to-total perspective \cite{Diaconescu2009}.  These
 results motivate the substrate but are not novelty claims of the present paper.
 
-\subsection{Recognizable trees and finite separators}
+\subsection{Recognizable trees, discrimination, and finite separators}
 For finite bases and finite signatures, the normalized ground-equational
 presentation lies within classical tree-automata and recognizability theory
 \cite{Kozen1977,Brainerd1969,DauchetTison1990,ComonEtAl2008}.  Finite selected
-subterm closures plus a sink state are familiar constructions.  The relative
-feature studied here is the requirement that every observer preserve an
-arbitrary partial base pointwise while only the complement over that base is
-budgeted.  This permits infinite codomains with finite external complexity.
+subterm closures plus a sink state are familiar constructions.  Likewise, the
+abstract requirement that one homomorphism be injective on a prescribed finite
+set belongs to the established language of discrimination and fully residual
+algebras.  The relative feature studied here is therefore more restrictive:
+every observer must preserve an arbitrary partial base pointwise while only the
+complement over that base is budgeted.  This permits infinite codomains with
+finite external complexity.
+
+This restriction matters structurally.  The usual residual argument can combine
+pairwise separators by taking their Cartesian product.  That operation does not
+preserve the present observer class over an infinite fixed base.  As shown in
+\cref{prop:relative-product-obstruction}, each one-point extension
+$\mathbb N\hookrightarrow\mathbb N\sqcup\{\star\}$ has finite outside
+complement, whereas the diagonal copy of $\mathbb N$ in the product of two such
+extensions has infinitely many mixed outside points $(a,\star)$.  Consequently,
+the finite-family theorem here is obtained by a direct relative finite-pattern
+construction rather than by product closure of pairwise separators.  We do not
+claim abstract finite-set discrimination itself as new.
 
 \subsection{Filtered and profinite completions}
 Cauchy completion of separated filtrations and factorial synchronization of
@@ -48,8 +62,9 @@ The contribution claimed by this paper is concentrated in the following
 package:
 \begin{enumerate}
   \item an intrinsic finite-complement observer class over a pointwise-fixed,
-        possibly infinite partial base, together with finite-pattern
-        realization;
+        possibly infinite partial base, together with a direct finite-pattern
+        realization theorem inside a class that is not product-closed over
+        infinite bases;
   \item the induced observational filtration and its trajectory-level
         compression theorem;
   \item the Resolution-specific finite-pattern escape mechanism and the
@@ -58,5 +73,6 @@ package:
         sharper unbounded-rank witnesses, and exact equational conservativity.
 \end{enumerate}
 The factorial-periodicity argument itself is treated as standard machinery.
-Likewise, the many-sorted Diaconescu development is a verified compatibility and
-provenance layer rather than an independent novelty claim.
+Likewise, abstract finite-set discrimination, selected-subterm sink
+constructions in isolation, and the many-sorted Diaconescu development are
+background or compatibility layers rather than independent novelty claims.
