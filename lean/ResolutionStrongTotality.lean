@@ -26,13 +26,18 @@ This gives the universal form of the principle:
 
 More strongly, every partial resolver of an arbitrary family of specifications
 extends canonically to a total Resolution resolver: existing ordinary answers
-are preserved, while missing answers become residuals.  This construction is
-constructive; a separate classical theorem below shows how excluded middle can
-refine a specification to either a realized answer or a proof that no ordinary
-solution exists.
+are preserved, while missing answers become residuals.  The canonical answer
+type is then shown to be the free pointed extension of the ordinary solution
+type.  This is the first nontrivial universal property of Strong Totality: any
+interpretation of ordinary solutions together with one interpretation of the
+residual extends uniquely to all Resolution Answers.
+
+The construction is constructive; a separate classical theorem below shows how
+excluded middle can refine a specification to either a realized answer or a
+proof that no ordinary solution exists.
 -/
 
-universe u v
+universe u v w
 
 namespace Resolution
 namespace StrongTotality
@@ -65,6 +70,12 @@ inductive ResolutionAnswer (S : Specification.{u}) : Type u where
   | realized (x : S.Candidate) (hx : S.accepts x)
   | residual
 
+/-- Embed an ordinary satisfying solution into its Resolution completion. -/
+def realizeSolution
+    {S : Specification.{u}}
+    (x : Specification.Solution S) : ResolutionAnswer S :=
+  .realized x.1 x.2
+
 /-- Forget a Resolution Answer back to an optional ordinary solution. -/
 def ResolutionAnswer.solution?
     {S : Specification.{u}} :
@@ -72,19 +83,44 @@ def ResolutionAnswer.solution?
   | .realized x hx => some ⟨x, hx⟩
   | .residual => none
 
+@[simp] theorem solution?_realizeSolution
+    {S : Specification.{u}}
+    (x : Specification.Solution S) :
+    (realizeSolution x).solution? = some x := by
+  rfl
+
+/-- Conservativity: two ordinary solutions remain distinct after passing to
+Resolution Answers. -/
+theorem realizeSolution_injective
+    {S : Specification.{u}} :
+    Function.Injective (@realizeSolution S) := by
+  intro x y h
+  have h' := congrArg ResolutionAnswer.solution? h
+  simpa using h'
+
+/-- The residual answer is genuinely new: it is not an ordinary realized
+solution. -/
+theorem realizeSolution_ne_residual
+    {S : Specification.{u}}
+    (x : Specification.Solution S) :
+    realizeSolution x ≠ (ResolutionAnswer.residual : ResolutionAnswer S) := by
+  intro h
+  have h' := congrArg ResolutionAnswer.solution? h
+  simp at h'
+
 /-- Totalize one partial attempt to solve `S`.  Existing solutions are kept
 verbatim; absence of an ordinary answer becomes the residual Resolution
 Answer. -/
 def totalize
     (S : Specification.{u}) :
     Option (Specification.Solution S) -> ResolutionAnswer S
-  | some x => .realized x.1 x.2
+  | some x => realizeSolution x
   | none => .residual
 
 @[simp] theorem totalize_some
     (S : Specification.{u})
     (x : Specification.Solution S) :
-    totalize S (some x) = .realized x.1 x.2 := by
+    totalize S (some x) = realizeSolution x := by
   rfl
 
 @[simp] theorem totalize_none
@@ -103,6 +139,33 @@ def totalize
     (totalize S none).solution? = none := by
   rfl
 
+@[simp] theorem totalize_solution?
+    {S : Specification.{u}}
+    (a : ResolutionAnswer S) :
+    totalize S a.solution? = a := by
+  cases a <;> rfl
+
+@[simp] theorem solution?_totalize
+    (S : Specification.{u})
+    (a : Option (Specification.Solution S)) :
+    (totalize S a).solution? = a := by
+  cases a <;> rfl
+
+/-- Resolution Answer adds exactly one residual state to the ordinary solution
+type.  This equivalence is useful as a minimality statement: no additional
+states are hidden in the construction. -/
+def resolutionAnswerEquivOption
+    (S : Specification.{u}) :
+    ResolutionAnswer S ≃ Option (Specification.Solution S) where
+  toFun := ResolutionAnswer.solution?
+  invFun := totalize S
+  left_inv := by
+    intro a
+    exact totalize_solution? a
+  right_inv := by
+    intro a
+    exact solution?_totalize S a
+
 /-- **Strong Totality.** Every well-formed mathematical specification has a
 Resolution Answer.  This theorem is constructive: no decidability or excluded
 middle is required because a genuinely unresolved specification is itself
@@ -111,6 +174,103 @@ theorem strongTotality
     (S : Specification.{u}) :
     Nonempty (ResolutionAnswer S) := by
   exact ⟨.residual⟩
+
+/-! ## Universal property: free pointed completion -/
+
+/-- Eliminate a Resolution Answer into any target by specifying what ordinary
+solutions mean there and what the residual means there. -/
+def ResolutionAnswer.fold
+    {S : Specification.{u}}
+    {X : Type w}
+    (onSolution : Specification.Solution S -> X)
+    (onResidual : X) :
+    ResolutionAnswer S -> X
+  | .realized x hx => onSolution ⟨x, hx⟩
+  | .residual => onResidual
+
+@[simp] theorem ResolutionAnswer.fold_realized
+    {S : Specification.{u}}
+    {X : Type w}
+    (onSolution : Specification.Solution S -> X)
+    (onResidual : X)
+    (x : S.Candidate)
+    (hx : S.accepts x) :
+    ResolutionAnswer.fold onSolution onResidual (.realized x hx) =
+      onSolution ⟨x, hx⟩ := by
+  rfl
+
+@[simp] theorem ResolutionAnswer.fold_residual
+    {S : Specification.{u}}
+    {X : Type w}
+    (onSolution : Specification.Solution S -> X)
+    (onResidual : X) :
+    ResolutionAnswer.fold onSolution onResidual
+      (ResolutionAnswer.residual : ResolutionAnswer S) = onResidual := by
+  rfl
+
+/-- A pointed totalization is universal when every interpretation of ordinary
+solutions plus one chosen residual point extends uniquely across its carrier. -/
+def IsUniversalTotalization
+    (S : Specification.{u})
+    (X : Type u)
+    (includeSolution : Specification.Solution S -> X)
+    (residual : X) : Prop :=
+  forall (Y : Type u)
+      (onSolution : Specification.Solution S -> Y)
+      (onResidual : Y),
+    Exists fun f : X -> Y =>
+      ((forall x : Specification.Solution S,
+          f (includeSolution x) = onSolution x) ∧
+        f residual = onResidual) ∧
+      forall g : X -> Y,
+        ((forall x : Specification.Solution S,
+            g (includeSolution x) = onSolution x) ∧
+          g residual = onResidual) ->
+        g = f
+
+/-- The canonical Resolution Answer construction is the free pointed extension
+of the ordinary solution type.  Hence its totalization is universal, not merely
+an arbitrary addition of a failure value. -/
+theorem resolutionAnswer_isUniversalTotalization
+    (S : Specification.{u}) :
+    IsUniversalTotalization S (ResolutionAnswer S)
+      (@realizeSolution S) .residual := by
+  intro Y onSolution onResidual
+  let f : ResolutionAnswer S -> Y :=
+    ResolutionAnswer.fold onSolution onResidual
+  refine ⟨f, ?_, ?_⟩
+  · constructor
+    · intro x
+      cases x
+      rfl
+    · rfl
+  · intro g hg
+    funext a
+    cases a with
+    | realized x hx =>
+        have h := hg.1 (⟨x, hx⟩ : Specification.Solution S)
+        simpa [f, realizeSolution] using h
+    | residual =>
+        simpa [f] using hg.2
+
+/-- Explicit universal extension theorem, in the form most useful downstream:
+there is exactly one map out of Resolution Answers once its action on ordinary
+solutions and on the residual has been fixed. -/
+theorem resolutionAnswer_extension_unique
+    (S : Specification.{u})
+    (Y : Type u)
+    (onSolution : Specification.Solution S -> Y)
+    (onResidual : Y) :
+    Exists fun f : ResolutionAnswer S -> Y =>
+      ((forall x : Specification.Solution S,
+          f (realizeSolution x) = onSolution x) ∧
+        f .residual = onResidual) ∧
+      forall g : ResolutionAnswer S -> Y,
+        ((forall x : Specification.Solution S,
+            g (realizeSolution x) = onSolution x) ∧
+          g .residual = onResidual) ->
+        g = f := by
+  exact resolutionAnswer_isUniversalTotalization S Y onSolution onResidual
 
 /-! ## Families of arbitrary specifications -/
 
@@ -142,7 +302,7 @@ def totalizeResolver
     (i : I)
     (x : Specification.Solution (F i))
     (h : r i = some x) :
-    totalizeResolver F r i = .realized x.1 x.2 := by
+    totalizeResolver F r i = realizeSolution x := by
   simp [totalizeResolver, h]
 
 @[simp] theorem totalizeResolver_none
