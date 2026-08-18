@@ -65,6 +65,23 @@ infinite family of mixed outside points `(a, star)`.  Therefore the class
 products, and the direct finite-pattern construction used by Master I does
 additional work beyond the standard product-of-separators argument.
 
+## Why finite-pattern escape is not merely ordinary finite-target recognition
+
+The abstract topological pattern "a candidate can be separated while a Cauchy
+family converges to a new completion point" has classical profinite analogues,
+and is not claimed as new.  The Resolution distinction is relative to the
+base.  A new Lean-checked comparison shows that when the pointwise-preserved
+base is not finitely codable, the candidate-tailored escape observer cannot be
+encoded into any finite carrier as a whole, even though its external complement
+is finite.  The same globally infinite relative observer still separates the
+chosen generated candidate from every sufficiently late term of the syntactic
+tail.
+
+This differs both from ordinary finite-target profinite recognition and from
+nominal/pro-orbit-finite approaches to infinite alphabets: Resolution does not
+quotient base elements by renaming symmetry or finite support.  Every base
+point is retained individually; only the complement is finitely budgeted.
+
 ## Other main formal results
 
 - normalized free compatible completion of a binary partial algebra and its
@@ -95,14 +112,16 @@ Totality.
 ## Novelty discipline
 
 The paper explicitly treats the following as background rather than novelty:
-free compatible completion, finite selected-subterm/sink constructions in
-isolation, finite-state eventual periodicity, factorial synchronization,
-generic Cauchy completion, and Diaconescu's encoding itself.
+free compatible completion, abstract finite-family discrimination,
+candidate-specific anti-limit separation in ordinary profinite settings,
+finite selected-subterm/sink constructions in isolation, finite-state eventual
+periodicity, factorial synchronization, generic Cauchy completion,
+nominal/pro-orbit-finite topology, and Diaconescu's encoding itself.
 
 The strongest contribution under review is the interaction of a pointwise-
 preserved possibly infinite partial base, finite complexity only outside that
 base, simultaneous finite-pattern realization, trajectory-level compression,
-and finite-pattern escape witnesses that force proper observational
+and relative finite-pattern escape witnesses that force proper observational
 completions.
 
 ## Reproducing the formal verification
