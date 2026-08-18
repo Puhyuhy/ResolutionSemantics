@@ -125,6 +125,8 @@ end Filtered
 namespace External
 namespace FinitePatternRealization
 
+open FiniteTagProof
+
 variable {Sigma : Signature.{u}}
 variable (D : PartialAlg.{u,v} Sigma)
 
@@ -132,12 +134,12 @@ variable (D : PartialAlg.{u,v} Sigma)
 abbrev EventuallyConstantAt
     (s : Nat → Free.GeneratedAns D)
     (x : Free.GeneratedAns D) : Prop :=
-  Filtered.EventuallyConstantAt s x
+  Filtered.EventuallyConstantAt (S := generatedFilteredSpace D) s x
 
 /-- Backwards-compatible Resolution-specialized notation. -/
 abbrev EventuallyConstant
     (s : Nat → Free.GeneratedAns D) : Prop :=
-  Filtered.EventuallyConstant s
+  Filtered.EventuallyConstant (S := generatedFilteredSpace D) s
 
 /-- Quantitative point isolation in the observational filtration: the canonical
 stage `nodeCount x` already has singleton class at `x`. -/
@@ -148,12 +150,11 @@ theorem finiteTagEqAt_singleton_at_nodeCount
   intro y
   constructor
   · intro hxy
+    have hbudget : isolationBudget D x = nodeCount D x.1 :=
+      isolationBudget_eq_nodeCount D x
+    rw [← hbudget] at hxy
     have hobs := hxy (isolationObserver D x)
-    have hbudget := isolationBudget_eq_nodeCount D x
-    have hrec := isolationObserver_recognizes D x y
-    apply hrec.mp
-    rw [hbudget] at hobs
-    exact hobs.symm
+    exact (isolationObserver_recognizes D x y).1 hobs.symm
   · intro hy
     cases hy
     exact finiteTagEqAt_refl D (nodeCount D x.1) x
