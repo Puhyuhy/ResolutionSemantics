@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: verify-${{ github.workflow }}-${{ github.ref }}
@@ -44,8 +44,20 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
             texlive-latex-base texlive-latex-extra texlive-fonts-recommended \
             lmodern poppler-utils
-      - name: Build and inspect committed PDF
-        run: bash scripts/build-paper.sh --check-committed
+      - name: Build promoted manuscript PDF
+        run: bash scripts/build-paper.sh
+      - name: Promote exact generated PDF on branch push
+        if: github.event_name == 'push' && github.ref == 'refs/heads/agent/relative-pattern-orbit-compression'
+        run: |
+          cp build/paper/Resolution_Semantics_Adrian_Puha.pdf paper/Resolution_Semantics_Adrian_Puha.pdf
+          if git diff --quiet -- paper/Resolution_Semantics_Adrian_Puha.pdf; then
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add paper/Resolution_Semantics_Adrian_Puha.pdf
+          git commit -m "Update promoted manuscript PDF"
+          git push
       - name: Build restructured preview
         run: bash scripts/build-restructured-paper.sh
       - name: Preserve rebuilt PDF
