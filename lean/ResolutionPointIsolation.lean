@@ -209,6 +209,39 @@ theorem singletonPatternObserver_recognizes
     eq_of_patternEncode_eq_of_mem_right D hxsel h
   exact Subtype.ext hraw
 
+/-- Canonical finite tag budget used to isolate one generated Answer.  It is
+the size of the singleton root's selected subterm closure. -/
+def isolationBudget (x : Free.GeneratedAns D) : Nat :=
+  (patternSelected D [x.1]).length
+
+/-- The canonical singleton observer at the isolation budget. -/
+noncomputable def isolationObserver
+    (x : Free.GeneratedAns D) : FiniteTagAlg D (isolationBudget D x) :=
+  patternAlg D [x.1]
+
+/-- The canonical isolation budget is exactly the constructor count of the raw
+Answer.  This makes point isolation quantitative rather than merely
+existential. -/
+@[simp] theorem isolationBudget_eq_nodeCount
+    (x : Free.GeneratedAns D) :
+    isolationBudget D x = nodeCount D x.1 := by
+  simp [isolationBudget, patternSelected]
+
+/-- The canonical singleton observer has exactly one generated Answer in the
+fiber of the chosen point. -/
+theorem isolationObserver_recognizes
+    (x y : Free.GeneratedAns D) :
+    Free.TotalAlg.interp D ((isolationObserver D x).toTotalAlg D) y =
+        Free.TotalAlg.interp D ((isolationObserver D x).toTotalAlg D) x ↔
+      y = x := by
+  constructor
+  · intro h
+    exact singletonPatternObserver_recognizes D x y
+      (by simpa [isolationObserver] using h)
+  · intro hy
+    cases hy
+    rfl
+
 /-- Publication-independent point-isolation form: every generated Answer has a
 finite-tag observer whose fiber at that Answer is a singleton. -/
 theorem generatedPointIsolated
@@ -217,15 +250,8 @@ theorem generatedPointIsolated
       ∀ y : Free.GeneratedAns D,
         Free.TotalAlg.interp D (T.toTotalAlg D) y =
           Free.TotalAlg.interp D (T.toTotalAlg D) x ↔ y = x := by
-  let n := (patternSelected D [x.1]).length
-  let T : FiniteTagAlg D n := patternAlg D [x.1]
-  refine ⟨n, T, ?_⟩
-  intro y
-  constructor
-  · exact singletonPatternObserver_recognizes D x y
-  · intro hy
-    cases hy
-    rfl
+  exact ⟨isolationBudget D x, isolationObserver D x,
+    isolationObserver_recognizes D x⟩
 
 end FinitePatternRealization
 end External
