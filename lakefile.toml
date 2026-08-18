@@ -10,6 +10,7 @@ roots = [
   "ResolutionFree",
   "ResolutionStrongTotality",
   "ResolutionStrongTotalityFunctorial",
+  "ResolutionStrongTotalityComposition",
   "ResolutionModels",
   "ResolutionExternal",
   "ResolutionFiniteTagProof",
