@@ -14,7 +14,7 @@ The central question is when this completion contains genuinely new points.
 The proof is best understood by separating two logically independent
 mechanisms.
 
-\subsection{Master II: trajectory compression}
+\subsection{Trajectory compression}
 
 Fix a generated unary family $t_0,t_1,\ldots$.  In a stage-$n$ observer, suppose
 its interpretation is the orbit of one deterministic self-map
@@ -176,7 +176,7 @@ for every $n$ the pair $c_{(n+1)!},c_{(n+2)!}$ is distinct but agrees at stage
 $n$, so its least finite-tag separation rank is greater than $n$.
 \end{theorem}
 
-The combined-master factorization is:
+The factorization through the combined structural theorem is:
 \begin{leandisplay}
 \leanname{ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster}.
 \end{leandisplay}
@@ -207,12 +207,51 @@ The relative initiality package is:
 \leanname{Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra\_initial}.
 \end{leandisplay}
 
-The observational filtration differs from prefix-depth observation on trees.
-An unresolved comb can be Cauchy for the classical prefix-depth metric while a
-single finite-tag observer separates adjacent combs at every depth.  The formal
-contrast is:
+\subsection{Why the filtration is not prefix-depth observation}
+
+The distinction from the classical infinite-tree metric is visible on an
+explicit unresolved comb.  Let
+\[
+ b_0=\old(a),\qquad b_{k+1}=\susp(f,b_k,\old(z)),
+\]
+where $\eval_D(f,a,z)$ is undefined.  Prefix-depth observation forgets what
+happens sufficiently far down the left spine: for every fixed depth $d$, all
+$b_i,b_j$ with $i,j\ge d$ have the same prefix through depth $d$.  Thus the
+comb sequence is Cauchy for the standard prefix-depth uniformity and has the
+usual infinite-comb limit in the corresponding tree completion.
+
+Finite-tag observation behaves differently.  There is one compatible stage-1
+observer that uses a single fresh tag $\tau$ and overflow $\overflow$.  The
+undefined base application is sent to $\tau$, and subsequent applications of
+the same comb context alternate
+\[
+ \tau\longmapsto\overflow\longmapsto\tau\longmapsto\overflow\longmapsto\cdots.
+\]
+Consequently the same fixed one-tag observer distinguishes $b_k$ from
+$b_{k+1}$ for every $k$, no matter how deep the disagreement lies.  The comb is
+therefore not observationally Cauchy.
+
+\begin{proposition}[Depth-Cauchy does not imply observational Cauchy]
+\label{prop:depth-observation-contrast}
+There is a generated comb sequence that is Cauchy for prefix-depth agreement
+but not Cauchy for the finite-tag observational filtration.  Hence the two
+uniformities are distinct.
+\end{proposition}
+
+The kernel-checked statement is
 \begin{leandisplay}
 \leanname{Resolution.Probe.depthCauchy\_not\_observationalCauchy}.
 \end{leandisplay}
-Thus the completion studied here is not merely the classical infinite-tree
-completion under another notation.
+The fixed-budget separator itself is
+\begin{leandisplay}
+\leanname{Resolution.Probe.comb\_separatesAt\_one}.
+\end{leandisplay}
+In natural arithmetic the contrast is sharper: a tag-free observer can
+separate every two distinct combs by using the pointwise-retained numerical
+base as semantic memory.  This is checked by
+\begin{leandisplay}
+\leanname{Resolution.Probe.NatProbe.natComb\_pairwise\_separated\_at\_zero}.
+\end{leandisplay}
+Thus the observational completion is not the classical infinite-tree
+completion under another notation: fixed finite semantic budgets can see
+through arbitrarily large syntactic depth.

@@ -23,26 +23,26 @@ specialist questions; no historical-priority claim is made.
 
 ## Structural result architecture
 
-The promoted manuscript is organized around two master principles and one
-Resolution-specific anti-limit mechanism.
+The promoted manuscript is organized around two structural principles and one
+relative anti-limit mechanism.
 
-1. **Master I — relative finite-pattern realization.** For every finite family
-   of generated Answers, one compatible finite-complement observer fixes the
+1. **Relative finite-pattern realization.** For every finite family of
+   generated Answers, one compatible finite-complement observer fixes the
    entire partial base pointwise and is simultaneously injective on that
    family. Pairwise finite-tag separation is the two-point consequence; the
    explicit constructor-size pair bound is retained.
-2. **Master II — trajectory compression.** At each finite observation stage it
-   is enough for the single deterministic trajectory relevant to a chosen
-   generated unary family to admit a finite code. The whole observer carrier
-   need not be finite. Standard periodicity and factorial divisibility then
-   make the factorial sample Cauchy.
+2. **Trajectory compression.** At each finite observation stage it is enough
+   for the single deterministic trajectory relevant to a chosen generated
+   unary family to admit a finite code. The whole observer carrier need not be
+   finite. Standard periodicity and factorial divisibility then make the
+   factorial sample Cauchy.
 3. **Finite-pattern escape.** For a syntactically growing unary orbit, a
-   candidate-tailored finite-pattern observer realizes the candidate and a
-   long orbit prefix exactly, sends the next unseen iterate to absorbing
-   overflow, and thereby rules out every generated candidate as a limit.
-4. **Combined properness theorem.** Trajectory compression plus finite-pattern
-   escape yields a Cauchy sequence with no generated limit, hence a proper
-   observational completion.
+   candidate-tailored finite-pattern observer realizes the candidate and a long
+   orbit prefix exactly, sends the next unseen iterate to absorbing overflow,
+   and thereby rules out every generated candidate as a limit.
+4. **Compression--escape properness.** Trajectory compression plus
+   finite-pattern escape yields a Cauchy sequence with no generated limit,
+   hence a proper observational completion.
 
 The finite-base criterion and the arbitrary-base old-fixing theorem are
 formally checked instances of this same combined mechanism. In the old-fixing
@@ -52,35 +52,49 @@ case the sharp stage-`n` witness is
 
 which gives unbounded finite separation ranks.
 
-## Why Master I is not just the standard product trick
+The Lean namespace `ResolutionSemantics.MasterTheorems` is retained as a stable
+API name inherited from development. The paper itself does not use "master
+theorem" as mathematical terminology.
+
+## Why finite-pattern realization is not just the standard product trick
 
 Abstract finite-family discrimination is classical, but the usual proof that
 combines pairwise separators by taking their finite Cartesian product does not
-stay inside the Resolution observer class over an infinite fixed base.  This
-is now Lean-checked already at carrier level: each embedding
+stay inside the Resolution observer class over an infinite fixed base. This is
+Lean-checked already at carrier level: each embedding
 `Nat -> Nat ⊕ Unit` has one-point relative complement, whereas the diagonal
 embedding of `Nat` into the product of two such one-point extensions has an
-infinite family of mixed outside points `(a, star)`.  Therefore the class
+infinite family of mixed outside points `(a, star)`. Therefore the class
 "pointwise-fixed base + finite external complement" is not closed under binary
-products, and the direct finite-pattern construction used by Master I does
-additional work beyond the standard product-of-separators argument.
+products, and the direct finite-pattern construction performs work that cannot
+be replaced by the standard product-of-separators argument inside the same
+observer class.
 
 ## Why finite-pattern escape is not merely ordinary finite-target recognition
 
 The abstract topological pattern "a candidate can be separated while a Cauchy
 family converges to a new completion point" has classical profinite analogues,
-and is not claimed as new.  The Resolution distinction is relative to the
-base.  A new Lean-checked comparison shows that when the pointwise-preserved
-base is not finitely codable, the candidate-tailored escape observer cannot be
-encoded into any finite carrier as a whole, even though its external complement
-is finite.  The same globally infinite relative observer still separates the
-chosen generated candidate from every sufficiently late term of the syntactic
-tail.
+and is not claimed as new. The Resolution distinction is relative to the base.
+A Lean-checked comparison shows that when the pointwise-preserved base is not
+finitely codable, the candidate-tailored escape observer cannot be encoded into
+any finite carrier as a whole, even though its external complement is finite.
+The same globally infinite relative observer still separates the chosen
+generated candidate from every sufficiently late term of the syntactic tail.
 
 This differs both from ordinary finite-target profinite recognition and from
 nominal/pro-orbit-finite approaches to infinite alphabets: Resolution does not
-quotient base elements by renaming symmetry or finite support.  Every base
-point is retained individually; only the complement is finitely budgeted.
+quotient base elements by renaming symmetry or finite support. Every base point
+is retained individually; only the complement is finitely budgeted.
+
+## Why the completion is not the prefix-depth tree completion
+
+An explicit Lean-checked comb sequence is Cauchy for ordinary prefix-depth
+agreement but is not Cauchy for Resolution observation. A single compatible
+one-tag observer distinguishes every adjacent pair, alternating its external
+state between the tag and overflow at arbitrary syntactic depth. In the natural
+arithmetic instance, a zero-tag observer can separate all distinct combs using
+only the pointwise-retained numerical base. Thus fixed semantic budgets can see
+through unbounded syntactic depth.
 
 ## Other main formal results
 
@@ -93,7 +107,7 @@ point is retained individually; only the complement is finitely budgeted.
 - for finitely coded bases, properness exactly when some base application is
   undefined;
 - over arbitrary bases, the old-fixing-context instance of the combined
-  compression–escape theorem;
+  compression--escape theorem;
 - natural- and integer-arithmetic instances using the undefined seed `0/0` and
   the context `x ↦ x + 0`;
 - a supporting many-sorted, arbitrary-finite-arity formalization of the
@@ -158,11 +172,14 @@ deterministic build.
 
 ## Repository structure
 
-- `paper/` — committed PDF, LaTeX source, and bibliography;
+- `paper/` — committed PDF, the single promoted LaTeX root, section sources,
+  and bibliography;
 - `lean/` — proof sources required by the manuscript;
 - [`THEOREM_MAP.md`](THEOREM_MAP.md) — structural claims mapped to Lean declarations;
 - [`REVIEW_GUIDE.md`](REVIEW_GUIDE.md) — focused questions for independent review;
-- [`MASTER_THEOREMS.md`](MASTER_THEOREMS.md) — research reduction behind the promoted architecture;
+- [`MASTER_THEOREMS.md`](MASTER_THEOREMS.md) — historical development notes for
+  the structural reduction; the filename is retained for branch history, not as
+  publication terminology;
 - `scripts/` — reproducible verification and paper-build commands;
 - `.github/workflows/verify.yml` — continuous verification.
 

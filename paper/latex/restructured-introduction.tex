@@ -27,8 +27,8 @@ finite-complement observer that is simultaneously injective on the whole list.
 The observer retains the full base pointwise, assigns finite tags to the
 selected suspended subterms, and sends unselected behavior to one overflow
 state.  Pairwise separation is therefore not the primitive phenomenon: it is
-the two-point instance of a finite-pattern theorem.  This is the first master
-principle of the paper.
+the two-point instance of a finite-pattern theorem.  This is the first
+structural principle used in the paper.
 
 \paragraph{Compression and escape.}
 The finite observers induce a separated filtration and a Cauchy completion.
@@ -95,12 +95,15 @@ the original Resolution implementation.  This bridge is supporting provenance,
 not a third novelty claim.
 
 The formal development is checked in Lean~4.33.0.  The publication-facing
-master statements are
+structural declarations are
 \leanname{ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization},
 \leanname{ResolutionSemantics.MasterTheorems.orbitCompressionCauchy},
 \leanname{ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit},
 and
 \leanname{ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective}.
+The namespace name \texttt{MasterTheorems} is retained only as a stable Lean API
+identifier; no special mathematical meaning is attached to the word
+``master'' in the exposition.
 
 \subsection{Main results and paper organization}
 
