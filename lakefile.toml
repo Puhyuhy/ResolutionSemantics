@@ -8,6 +8,7 @@ srcDir = "lean"
 roots = [
   "ResolutionKernel",
   "ResolutionFree",
+  "ResolutionStrongTotality",
   "ResolutionModels",
   "ResolutionExternal",
   "ResolutionFiniteTagProof",
