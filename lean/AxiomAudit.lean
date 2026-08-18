@@ -5,6 +5,7 @@ import ResolutionFiniteBasePropernessPublic
 import ResolutionOldFixingContextPropernessPublic
 import ResolutionPropernessCriteriaComparison
 import ResolutionRelativeProductObstruction
+import ResolutionRelativeEscapeComparison
 import ResolutionArithmeticPropernessPublic
 import ResolutionCompletionProbe
 import ResolutionMasterTheorems
@@ -65,6 +66,8 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #check ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing
 #check ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding
 #check ResolutionSemantics.RelativeObservers.finiteRelativeComplement_not_closed_under_binary_products
+#check Resolution.RelativeEscapeComparison.relativeEscapeBeyondOrdinaryFiniteTargets
+#check Resolution.RelativeEscapeComparison.natRelativeEscapeBeyondOrdinaryFiniteTargets
 
 #check ResolutionSemantics.NatDivision.oldFixingCriterion
 #check ResolutionSemantics.NatDivision.separationRanksUnbounded
@@ -156,6 +159,8 @@ results; `scripts/verify.sh` permits only `propext`, `Classical.choice`, and
 #print axioms ResolutionSemantics.PropernessCriteria.onePointProperWithoutOldFixing
 #print axioms ResolutionSemantics.PropernessCriteria.natProperWithoutFiniteCoding
 #print axioms ResolutionSemantics.RelativeObservers.finiteRelativeComplement_not_closed_under_binary_products
+#print axioms Resolution.RelativeEscapeComparison.relativeEscapeBeyondOrdinaryFiniteTargets
+#print axioms Resolution.RelativeEscapeComparison.natRelativeEscapeBeyondOrdinaryFiniteTargets
 #print axioms ResolutionSemantics.NatDivision.completionEmbeddingNotSurjective
 #print axioms ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective
 #print axioms Resolution.Probe.depthCauchy_not_observationalCauchy
