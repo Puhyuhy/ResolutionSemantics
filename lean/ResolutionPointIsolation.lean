@@ -236,8 +236,9 @@ theorem isolationObserver_recognizes
       y = x := by
   constructor
   · intro h
-    exact singletonPatternObserver_recognizes D x y
-      (by simpa [isolationObserver] using h)
+    change Free.TotalAlg.interp D ((patternAlg D [x.1]).toTotalAlg D) y =
+      Free.TotalAlg.interp D ((patternAlg D [x.1]).toTotalAlg D) x at h
+    exact singletonPatternObserver_recognizes D x y h
   · intro hy
     cases hy
     rfl
