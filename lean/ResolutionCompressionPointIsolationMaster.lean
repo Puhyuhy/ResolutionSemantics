@@ -60,11 +60,9 @@ theorem factorialSampleNontrivial_of_injective
     (hinj : Function.Injective (factorialSample W)) :
     FactorialSampleNontrivial W := by
   rintro ⟨x, N, hN⟩
-  have hEq : factorialSample W N = factorialSample W (N + 1) := by
-    calc
-      factorialSample W N = x := hN N (Nat.le_refl N)
-      _ = factorialSample W (N + 1) :=
-        (hN (N + 1) (Nat.le_succ N)).symm
+  have hEq : factorialSample W N = factorialSample W (N + 1) :=
+    (hN N (Nat.le_refl N)).trans
+      (hN (N + 1) (Nat.le_succ N)).symm
   have hIndex : N = N + 1 := hinj hEq
   omega
 
@@ -81,17 +79,18 @@ theorem factorialSampleNontrivial_of_term_injective
   let k := Nat.max N 1
   have hkN : N ≤ k := Nat.le_max_left N 1
   have hk1 : 1 ≤ k := Nat.le_max_right N 1
-  have hEq : factorialSample W k = factorialSample W (k + 1) := by
-    calc
-      factorialSample W k = x := hN k hkN
-      _ = factorialSample W (k + 1) :=
-        (hN (k + 1) (by omega)).symm
+  have hEq : factorialSample W k = factorialSample W (k + 1) :=
+    (hN k hkN).trans (hN (k + 1) (by omega)).symm
   have hFact : fact k = fact (k + 1) := by
     apply hinj
     exact hEq
   have hPos : 0 < fact k := fact_pos k
+  have hkSucc : 1 < k + 1 := by omega
+  have hStrict : 1 * fact k < (k + 1) * fact k :=
+    Nat.mul_lt_mul_of_pos_right hkSucc hPos
   change fact k = (k + 1) * fact k at hFact
-  omega
+  simp only [Nat.one_mul] at hStrict
+  exact (Nat.ne_of_lt hStrict) hFact
 
 /-- Consequently, an injective factorial sample plus trajectory compression is
 enough for properness. -/
@@ -131,6 +130,10 @@ theorem finiteBaseCompression_term_injective
   have hraw := congrArg Subtype.val hij
   have hcount := congrArg
     (Resolution.External.FiniteTagProof.nodeCount D) hraw
+  change Resolution.External.FiniteTagProof.nodeCount D
+      (Resolution.Probe.combRaw D f a z i) =
+    Resolution.External.FiniteTagProof.nodeCount D
+      (Resolution.Probe.combRaw D f a z j) at hcount
   rw [Resolution.Probe.combRaw_nodeCount D f a z hUndefined i,
     Resolution.Probe.combRaw_nodeCount D f a z hUndefined j] at hcount
   omega
