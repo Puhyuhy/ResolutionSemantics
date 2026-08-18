@@ -74,10 +74,12 @@ theorem patternTable_miss_of_not_mem
             patternEncode D roots r' = patternEncode D roots r := by
           simpa only [PatternMatchNode] using hm
         have hc := children_mem_patternSelected D hsmem
-        have hl : l' = l :=
-          eq_of_patternEncode_eq_of_mem_right D hc.1 hm'.2.1 |>.symm
-        have hr : r' = r :=
-          eq_of_patternEncode_eq_of_mem_right D hc.2 hm'.2.2 |>.symm
+        have hl0 : l = l' :=
+          eq_of_patternEncode_eq_of_mem_right D hc.1 hm'.2.1.symm
+        have hr0 : r = r' :=
+          eq_of_patternEncode_eq_of_mem_right D hc.2 hm'.2.2.symm
+        have hl : l' = l := hl0.symm
+        have hr : r' = r := hr0.symm
         cases hm'.1
         cases hl
         cases hr
