@@ -49,6 +49,7 @@ roots = [
   "ResolutionPointIsolation",
   "ResolutionPointIsolationCompletion",
   "ResolutionOrbitCompressionMaster",
+  "ResolutionCompressionPointIsolationMaster",
   "ResolutionFinitePatternAntiLimit",
   "ResolutionRelativeEscapeComparison",
   "ResolutionMasterTheorems",
