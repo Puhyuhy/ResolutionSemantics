@@ -1,9 +1,9 @@
 # Resolution Semantics theorem map
 
-The publication-facing structural facade is
-`lean/ResolutionMasterTheorems.lean`. The manuscript is organized around the
-following dependency chain rather than around the historical order in which the
-individual properness lemmas were developed.
+The publication-facing structural facade is implemented in
+`lean/ResolutionMasterTheorems.lean`.  The namespace/file name is retained as a
+stable Lean API identifier; the mathematical exposition uses descriptive names
+for the results.
 
 ## 1. Free compatible completion substrate
 
@@ -13,10 +13,10 @@ Headline declarations:
 - `ResolutionSemantics.expressionKernelQuotientInjective`
 - `ResolutionSemantics.expressionKernelQuotientSurjective`
 
-This is the normalized free-compatible-completion substrate. It is established
-partial-algebra infrastructure and is not the paper's novelty headline.
+This is established partial-algebra infrastructure and is not a novelty
+headline.
 
-## 2. Master I — relative finite-pattern realization
+## 2. Relative finite-pattern realization
 
 Headline declarations:
 
@@ -35,13 +35,11 @@ Core modules:
 
 One compatible finite-complement observer is simultaneously injective on any
 chosen finite family of generated Answers while fixing the entire partial base
-pointwise. Pairwise finite-tag separation is the two-point consequence. The
-older pair-specific implementation retains the explicit constructor-size bound.
+pointwise.  Pairwise separation is the two-point consequence.  The older
+pair-specific implementation retains the explicit constructor-size bound.
 
-The intrinsic observer budget counts only genuinely outside states. The base may
-therefore be infinite. Canonical finite-tag carriers have the form
-`D.Carrier ⊔ Fin(n) ⊔ {overflow}`. The intrinsic/canonical correspondence is
-recorded by:
+The observer budget counts only genuinely outside states, so the base may be
+infinite.  The intrinsic/canonical correspondence is recorded by:
 
 - `ResolutionSemantics.OutsideOld`
 - `ResolutionSemantics.oldOrOutsideEquiv`
@@ -49,19 +47,13 @@ recorded by:
 - `ResolutionSemantics.intrinsicExtensionHasCanonicalPresentation`
 - `ResolutionSemantics.intrinsicSeparationIffFiniteTag`
 
-A supporting obstruction explains why finite-family realization over an
-infinite fixed base is not obtained by the standard residual-finiteness product
-trick. `ResolutionRelativeProductObstruction.lean` proves at carrier level that
-both embeddings `Nat -> Nat ⊕ Unit` have finite relative complement, while the
-diagonal embedding into their Cartesian product does not. The product contains
-infinitely many mixed outside points `(a, star)`. The headline declaration is:
+The supporting product obstruction is:
 
 - `ResolutionSemantics.RelativeObservers.finiteRelativeComplement_not_closed_under_binary_products`
 
-Thus the restricted observer class is not binary-product closed over an
-infinite base, so the direct finite-pattern construction in Master I performs
-work that cannot be replaced by simply multiplying pairwise separators inside
-the same class.
+It proves that the restricted observer class is not binary-product closed over
+an infinite base, so the finite-family theorem is not recovered inside the
+same class by multiplying pairwise separators.
 
 ## 3. Observational filtration and completed algebra
 
@@ -72,17 +64,13 @@ Headline declarations:
 - `Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra_initial`
 - `ResolutionSemantics.equationConservative`
 
-The finite-tag stages induce a separated filtration. Cauchy sequences modulo
-stagewise eventual agreement form the observational completion. Primitive
+Finite-tag stages induce a separated filtration.  Cauchy sequences modulo
+stagewise eventual agreement form the observational completion.  Primitive
 operations extend continuously, and the completed algebra preserves and
 reflects exactly the constant-bearing universal equations of the generated
 Answer algebra.
 
-The prefix-depth comparison is formally witnessed by
-`Resolution.Probe.depthCauchy_not_observationalCauchy`, so this is not simply
-the classical tree-prefix completion under different notation.
-
-## 4. Master II — relative trajectory compression
+## 4. Trajectory compression
 
 Headline declaration:
 
@@ -90,13 +78,12 @@ Headline declaration:
 
 Core module: `ResolutionOrbitCompressionMaster.lean`.
 
-At every stage only the deterministic observer trajectory relevant to the
-chosen generated unary family needs a finite code. The whole observer carrier
-may remain infinite. Standard pigeonhole periodicity plus factorial divisibility
-gives the Cauchy half; this finite-dynamics argument is explicitly background
-machinery rather than a novelty claim.
+Only the deterministic observer trajectory relevant to the chosen generated
+unary family needs a finite code.  The full observer carrier may remain
+infinite.  Pigeonhole periodicity plus factorial divisibility gives the Cauchy
+half; this finite-dynamics argument is background machinery.
 
-## 5. Finite-pattern escape — the anti-limit mechanism
+## 5. Relative finite-pattern escape
 
 Headline declaration:
 
@@ -107,34 +94,22 @@ Core modules:
 - `ResolutionFinitePatternAntiLimit.lean`
 - `ResolutionRelativeEscapeComparison.lean`
 
-For growing unary syntax
-`t_(k+1) = susp(u, t_k, old(e))`, a candidate-tailored finite-pattern observer
-realizes a generated candidate and a sufficiently long orbit prefix exactly.
-The next unseen iterate falls outside the selected finite subterm pattern and is
-sent to overflow; overflow is absorbing along the continuation. Hence no
-generated Answer can be the limit of the factorial sample.
+For growing unary syntax, a candidate-tailored finite-pattern observer realizes
+the candidate and a sufficiently long orbit prefix exactly, sends the first
+unseen continuation to overflow, and keeps the later tail there.  Thus no
+generated Answer is the limit of the factorial sample.
 
-The abstract topological pattern "candidate-specific separator + new completion
-point" is not itself treated as novel; ordinary profinite settings have close
-analogues. The Resolution-specific distinction is relative to the retained
-base. `ResolutionRelativeEscapeComparison.lean` proves that if the base admits
-no finite injective code, then the actual candidate-tailored escape observer
-also admits no finite code as a whole, even though its outside complement is
-finite. The same observer still separates the chosen candidate from every
-sufficiently late syntactic iterate. Headline declarations are:
+The structural comparison with ordinary finite-target recognition is exposed by:
 
+- `Resolution.RelativeEscapeComparison.no_finitely_coded_target_with_injective_base`
 - `Resolution.RelativeEscapeComparison.relativeEscapeBeyondOrdinaryFiniteTargets`
 - `Resolution.RelativeEscapeComparison.natRelativeEscapeBeyondOrdinaryFiniteTargets`
 
-Thus the escape witness can be globally infinite while remaining finitely
-complex only outside a pointwise-preserved infinite base. This distinguishes the
-formal mechanism from ordinary finite-target profinite recognition without
-claiming anti-limit separation in the abstract as new.
+When the pointwise-preserved base is not finitely codable, the actual escape
+observer is globally non-finite while retaining only finite external
+complexity.  The abstract anti-limit pattern itself is not claimed as new.
 
-The anti-limit theorem is independent of finite-state periodicity. It is the
-relative no-limit half of the properness argument.
-
-## 6. Combined compression–escape properness theorem
+## 6. Compression--escape properness
 
 Headline declarations:
 
@@ -143,7 +118,7 @@ Headline declarations:
 
 Logical form:
 
-`finite trajectory compression + finite-pattern escape`
+`finite trajectory compression + relative finite-pattern escape`
 
 `=> factorial Cauchy + no generated limit`
 
@@ -164,9 +139,8 @@ Equivalent public results include:
 - `ResolutionSemantics.FiniteBaseCompletion.completeIffTotal`
 - `ResolutionSemantics.FiniteBaseCompletion.embeddingNotSurjectiveIffExistsUndefined`
 
-When the old carrier injects into `Fin(baseSize)`, the whole stage observer is
-finite, so trajectory compression is automatic. The exact criterion is:
-`completion proper <=> some base application undefined`.
+For a finitely coded base, the completion is proper exactly when some base
+application is undefined.
 
 Finite-base residual-finiteness consequences remain available through:
 
@@ -175,7 +149,7 @@ Finite-base residual-finiteness consequences remain available through:
 - `ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal`
 
 The qualitative finite-signature ground-term residual-finiteness subcase is
-positioned as classical recognizability, not new mathematics.
+positioned as classical recognizability.
 
 ## 8. Infinite-base old-fixing instance
 
@@ -190,16 +164,25 @@ Related public declarations:
 - `ResolutionSemantics.OldFixingContextCompletion.factorialSequenceNoLimit`
 - `ResolutionSemantics.OldFixingContextCompletion.embeddingNotSurjective`
 
-If an undefined seed exists and a unary context fixes every old element
-pointwise, the relevant observer trajectory has finite external complexity even
-when the old carrier itself is infinite. The sharp checked stage witness is
-`c_(n+1)! ~_n c_(n+2)!`, and therefore the least finite separation rank is
-strictly greater than `n`.
+An undefined seed plus a unary context fixing every base element pointwise
+provides trajectory compression even over an infinite base.  The sharp checked
+stage witness is `c_(n+1)! ~_n c_(n+2)!`, giving unbounded least finite-tag
+separation ranks.
 
-The finite-base and old-fixing hypotheses are incomparable; the supporting
-comparison lives in `ResolutionPropernessCriteriaComparison.lean`.
+## 9. Prefix-depth contrast
 
-## 9. Arithmetic instances
+Headline declarations:
+
+- `Resolution.Probe.depthCauchy_not_observationalCauchy`
+- `Resolution.Probe.comb_separatesAt_one`
+- `Resolution.Probe.NatProbe.natComb_pairwise_separated_at_zero`
+
+The same unresolved comb sequence is Cauchy for prefix-depth agreement but not
+for Resolution observation.  One fixed one-tag observer separates adjacent
+combs at arbitrary depth; in Nat, a zero-tag observer separates all distinct
+combs.  Therefore the two uniformities are genuinely different.
+
+## 10. Arithmetic instances
 
 Natural arithmetic:
 
@@ -215,13 +198,13 @@ Integer arithmetic:
 - `ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective`
 - `ResolutionSemantics.IntDivision.separationRanksUnbounded`
 
-The undefined seed is `0/0`; the old-fixing context is `x ↦ x + 0`. Division by
-zero remains a structured unresolved Answer rather than an ordinary number.
+The undefined seed is `0/0`; the base-fixing context is `x ↦ x + 0`.  Division
+by zero remains a structured unresolved Answer rather than an ordinary number.
 
-## 10. Many-sorted Diaconescu provenance bridge
+## 11. Many-sorted Diaconescu provenance bridge
 
 The bridge is supporting formalization of established partial-to-total
-infrastructure, not a third novelty axis.
+infrastructure, not a separate novelty axis.
 
 Core declarations include:
 
@@ -239,32 +222,16 @@ Core declarations include:
 - `Resolution.Diaconescu.BinarySpecialization.generatedEquiv`
 - `Resolution.Diaconescu.BinarySpecialization.gammaEquiv`
 
-Relevant modules:
-
-- `ResolutionDiaconescuEncoding.lean`
-- `ResolutionDiaconescuManySorted.lean`
-- `ResolutionDiaconescuContinuation.lean`
-- `ResolutionDiaconescuAdjunction.lean`
-- `ResolutionDiaconescuBinarySpecialization.lean`
-- `ResolutionConditionalInitial.lean`
-- `ResolutionDiaconescuInitialExistence.lean`
-
 The formalization covers the fixed-signature operations-only fragment used by
 the paper: arbitrary finite arities, separate total/partial operation families,
 the satisfaction condition, recovery, persistent liberality, hom-set
 adjunction laws, semantic consequence, initiality transfers, and the
-singleton-sort binary specialization. Arbitrary signature morphisms and the
-full institution/comorphism layer remain outside scope.
+singleton-sort binary specialization.
 
-## 11. Formal audit
+## 12. Formal audit
 
 `lean/AxiomAudit.lean` checks every manuscript-linked declaration and prints
-axiom dependencies for the principal theorems. `scripts/verify.sh` accepts only
-Lean's standard:
-
-- `propext`
-- `Classical.choice`
-- `Quot.sound`
-
-The promoted manuscript/API checker additionally requires the master-theorem
-headlines above and rejects superseded old-fixing indexing.
+axiom dependencies for the principal results. `scripts/verify.sh` accepts only
+Lean's standard `propext`, `Classical.choice`, and `Quot.sound` dependencies.
+The promoted manuscript/API checker rejects stale theorem indexing and missing
+paper-facing declarations.
