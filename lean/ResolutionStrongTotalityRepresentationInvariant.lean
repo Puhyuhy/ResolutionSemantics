@@ -84,10 +84,8 @@ theorem mapSolution_left_inv
     (x : Specification.Solution S) :
     SpecMorphism.mapSolution e.invMorphism
         (SpecMorphism.mapSolution e.toMorphism x) = x := by
-  cases x with
-  | mk x hx =>
-      cases e.left_inv x
-      rfl
+  apply Subtype.ext
+  exact e.left_inv x.1
 
 /-- Backward then forward transport of certified ordinary solutions is the
 identity. -/
@@ -97,10 +95,8 @@ theorem mapSolution_right_inv
     (y : Specification.Solution T) :
     SpecMorphism.mapSolution e.toMorphism
         (SpecMorphism.mapSolution e.invMorphism y) = y := by
-  cases y with
-  | mk y hy =>
-      cases e.right_inv y
-      rfl
+  apply Subtype.ext
+  exact e.right_inv y.1
 
 /-- Equivalent specifications have equivalent types of ordinary certified
 solutions. -/
@@ -137,8 +133,19 @@ theorem resolution_left_inv
   cases a with
   | residual => rfl
   | realized x hx =>
-      cases e.left_inv x
-      rfl
+      have hs :
+          SpecMorphism.mapSolution e.invMorphism
+              (SpecMorphism.mapSolution e.toMorphism
+                (⟨x, hx⟩ : Specification.Solution S)) =
+            (⟨x, hx⟩ : Specification.Solution S) :=
+        mapSolution_left_inv e ⟨x, hx⟩
+      change
+        realizeSolution
+            (SpecMorphism.mapSolution e.invMorphism
+              (SpecMorphism.mapSolution e.toMorphism
+                (⟨x, hx⟩ : Specification.Solution S))) =
+          realizeSolution (⟨x, hx⟩ : Specification.Solution S)
+      exact congrArg realizeSolution hs
 
 /-- Backward then forward transport of minimal Resolution Answers is the
 identity. -/
@@ -151,8 +158,19 @@ theorem resolution_right_inv
   cases a with
   | residual => rfl
   | realized y hy =>
-      cases e.right_inv y
-      rfl
+      have hs :
+          SpecMorphism.mapSolution e.toMorphism
+              (SpecMorphism.mapSolution e.invMorphism
+                (⟨y, hy⟩ : Specification.Solution T)) =
+            (⟨y, hy⟩ : Specification.Solution T) :=
+        mapSolution_right_inv e ⟨y, hy⟩
+      change
+        realizeSolution
+            (SpecMorphism.mapSolution e.toMorphism
+              (SpecMorphism.mapSolution e.invMorphism
+                (⟨y, hy⟩ : Specification.Solution T))) =
+          realizeSolution (⟨y, hy⟩ : Specification.Solution T)
+      exact congrArg realizeSolution hs
 
 /-- The canonical Resolution completion preserves equivalence of mathematical
 specifications. -/
