@@ -14,9 +14,11 @@ Consequently, on every unsatisfiable specification, inhabitation of the answer
 space is equivalent to inhabitation of the residual vocabulary itself.
 
 The same criterion is forced on every universal residual extension, not merely
-on the canonical constructor.  Hence a universal competitor cannot obtain a
-nonempty total semantics for an unsatisfiable specification while using an
-empty residual vocabulary.
+on the canonical constructor.  Moreover every universal residual extension is
+canonically equivalent to `ResolutionAnswerWith S E`, with a unique equivalence
+that preserves every ordinary solution and every individual residual value.
+Hence a universal competitor cannot obtain extra hidden states or alter the
+specified residual provenance while retaining the same universal property.
 
 Thus one residual point is not merely sufficient for unconditional totality.
 In the presence of any unsatisfiable specification it is also necessary.  The
@@ -100,6 +102,109 @@ theorem universalResidualExtension_nonempty_iff_canonical
   exact (universalResidualExtension_nonempty_iff
     S E X includeSolution includeResidual hX).trans
       (resolutionAnswerWith_nonempty_iff S E).symm
+
+/-- Structural canonicity for arbitrary residual provenance: every universal
+residual extension admits a structure-preserving equivalence to the canonical
+`ResolutionAnswerWith S E`, and every other equivalence preserving all ordinary
+solutions and all residual values is equal to it. -/
+theorem universalResidualExtension_unique_structural_equiv
+    (S : Specification.{u})
+    (E : Type r)
+    (X : Type (max u r))
+    (includeSolution : Specification.Solution S -> X)
+    (includeResidual : E -> X)
+    (hX : IsUniversalResidualExtension S E X includeSolution includeResidual) :
+    Exists fun e : Equiv X (ResolutionAnswerWith S E) =>
+      ((forall x : Specification.Solution S,
+          e (includeSolution x) = ResolutionAnswerWith.realize x) ∧
+        (forall q : E,
+          e (includeResidual q) =
+            (ResolutionAnswerWith.residual q : ResolutionAnswerWith S E))) ∧
+      forall g : Equiv X (ResolutionAnswerWith S E),
+        ((forall x : Specification.Solution S,
+            g (includeSolution x) = ResolutionAnswerWith.realize x) ∧
+          (forall q : E,
+            g (includeResidual q) =
+              (ResolutionAnswerWith.residual q : ResolutionAnswerWith S E))) ->
+        g = e := by
+  rcases hX
+      (ResolutionAnswerWith S E)
+      (@ResolutionAnswerWith.realize S E)
+      (fun q : E =>
+        (ResolutionAnswerWith.residual q : ResolutionAnswerWith S E)) with
+    ⟨toCanonical, hto, htoUnique⟩
+  rcases resolutionAnswerWith_isUniversalResidualExtension S E
+      X includeSolution includeResidual with
+    ⟨fromCanonical, hfrom, _⟩
+  have hleft : forall z : X, fromCanonical (toCanonical z) = z := by
+    have hcomp :
+        ((forall x : Specification.Solution S,
+            (fun z => fromCanonical (toCanonical z)) (includeSolution x) =
+              includeSolution x) ∧
+          (forall q : E,
+            (fun z => fromCanonical (toCanonical z)) (includeResidual q) =
+              includeResidual q)) := by
+      constructor
+      · intro x
+        calc
+          fromCanonical (toCanonical (includeSolution x)) =
+              fromCanonical (ResolutionAnswerWith.realize x) :=
+            congrArg fromCanonical (hto.1 x)
+          _ = includeSolution x := hfrom.1 x
+      · intro q
+        calc
+          fromCanonical (toCanonical (includeResidual q)) =
+              fromCanonical
+                (ResolutionAnswerWith.residual q : ResolutionAnswerWith S E) :=
+            congrArg fromCanonical (hto.2 q)
+          _ = includeResidual q := hfrom.2 q
+    have hid :
+        ((forall x : Specification.Solution S,
+            (fun z : X => z) (includeSolution x) = includeSolution x) ∧
+          (forall q : E,
+            (fun z : X => z) (includeResidual q) = includeResidual q)) :=
+      ⟨fun _ => rfl, fun _ => rfl⟩
+    rcases hX X includeSolution includeResidual with ⟨f, _, huniq⟩
+    have hc : (fun z => fromCanonical (toCanonical z)) = f :=
+      huniq _ hcomp
+    have hi : (fun z : X => z) = f := huniq _ hid
+    intro z
+    exact congrFun (hc.trans hi.symm) z
+  have hright : forall a : ResolutionAnswerWith S E,
+      toCanonical (fromCanonical a) = a := by
+    intro a
+    cases a with
+    | realized x hx =>
+        let sx : Specification.Solution S := ⟨x, hx⟩
+        calc
+          toCanonical (fromCanonical (.realized x hx)) =
+              toCanonical (fromCanonical (ResolutionAnswerWith.realize sx)) := by
+            rfl
+          _ = toCanonical (includeSolution sx) :=
+            congrArg toCanonical (hfrom.1 sx)
+          _ = ResolutionAnswerWith.realize sx := hto.1 sx
+          _ = .realized x hx := by rfl
+    | residual q =>
+        calc
+          toCanonical (fromCanonical
+              (ResolutionAnswerWith.residual q : ResolutionAnswerWith S E)) =
+              toCanonical (includeResidual q) :=
+            congrArg toCanonical (hfrom.2 q)
+          _ = (ResolutionAnswerWith.residual q : ResolutionAnswerWith S E) :=
+            hto.2 q
+  let structural : Equiv X (ResolutionAnswerWith S E) := {
+    toFun := toCanonical
+    invFun := fromCanonical
+    left_inv := hleft
+    right_inv := hright
+  }
+  refine ⟨structural, hto, ?_⟩
+  intro g hg
+  have hgfun : g.toFun = toCanonical :=
+    (htoUnique g.toFun hg).trans (htoUnique toCanonical hto).symm
+  apply Equiv.ext
+  change g.toFun = toCanonical
+  exact hgfun
 
 /-- On an unsatisfiable specification, a structured Resolution Answer exists
 exactly when the residual vocabulary itself has an inhabitant. -/
