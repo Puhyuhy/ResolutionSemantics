@@ -112,8 +112,15 @@ def totalizeDependent
       Option (Specification.Solution (T s)))
     (h : second sx = none) :
     totalizeDependent S T (some sx) second = .residual := by
-  unfold totalizeDependent dependentPartialCompose
-  rw [h]
+  have hcompose :
+      dependentPartialCompose S T (some sx) second = none := by
+    change
+      (match second sx with
+       | none => none
+       | some sy => some ⟨⟨sx, sy.1⟩, sy.2⟩) = none
+    rw [h]
+  unfold totalizeDependent
+  rw [hcompose]
   rfl
 
 @[simp] theorem totalizeDependent_realized
@@ -127,8 +134,19 @@ def totalizeDependent
     totalizeDependent S T (some sx) second =
       realizeSolution (⟨⟨sx, sy.1⟩, sy.2⟩ :
         Specification.Solution (dependentSpecification S T)) := by
-  unfold totalizeDependent dependentPartialCompose
-  rw [h]
+  have hcompose :
+      dependentPartialCompose S T (some sx) second =
+        some (⟨⟨sx, sy.1⟩, sy.2⟩ :
+          Specification.Solution (dependentSpecification S T)) := by
+    change
+      (match second sx with
+       | none => none
+       | some sy => some ⟨⟨sx, sy.1⟩, sy.2⟩) =
+        some (⟨⟨sx, sy.1⟩, sy.2⟩ :
+          Specification.Solution (dependentSpecification S T))
+    rw [h]
+  unfold totalizeDependent
+  rw [hcompose]
   rfl
 
 /-- Totalizing the dependent computation is exactly the canonical Strong
