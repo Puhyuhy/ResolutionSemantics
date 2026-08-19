@@ -111,7 +111,8 @@ def tracedDependentBind
   match first with
   | .residual e => .residual (DependentResidualTrace.first e)
   | .realized x hx =>
-      tracedDependentAt S T E F ⟨x, hx⟩ (second ⟨x, hx⟩)
+      let sx : Specification.Solution S := ⟨x, hx⟩
+      tracedDependentAt S T E F sx (second sx)
 
 @[simp] theorem tracedDependentBind_first_residual
     (S : Specification.{u})
@@ -141,8 +142,12 @@ def tracedDependentBind
       .residual (DependentResidualTrace.second sx q) := by
   cases sx with
   | mk x hx =>
-      change tracedDependentAt S T E F ⟨x, hx⟩ (second ⟨x, hx⟩) =
-        .residual (DependentResidualTrace.second ⟨x, hx⟩ q)
+      change tracedDependentAt S T E F
+          (⟨x, hx⟩ : Specification.Solution S)
+          (second (⟨x, hx⟩ : Specification.Solution S)) =
+        .residual
+          (DependentResidualTrace.second
+            (⟨x, hx⟩ : Specification.Solution S) q)
       rw [h]
       rfl
 
@@ -163,12 +168,26 @@ def tracedDependentBind
   | mk x hx =>
       cases sy with
       | mk y hy =>
-          change tracedDependentAt S T E F ⟨x, hx⟩ (second ⟨x, hx⟩) =
-            (.realized ⟨⟨x, hx⟩, y⟩ hy : TracedDependentAnswer S T E F)
+          change tracedDependentAt S T E F
+              (⟨x, hx⟩ : Specification.Solution S)
+              (second (⟨x, hx⟩ : Specification.Solution S)) =
+            (.realized
+              ⟨(⟨x, hx⟩ : Specification.Solution S), y⟩ hy :
+                TracedDependentAnswer S T E F)
           rw [h]
           rfl
 
 namespace ResolutionAnswer
+
+/-- Continue minimal dependent resolution after a certified first-stage
+solution has already been obtained. -/
+def bindDependentAt
+    (S : Specification.{u})
+    (T : Specification.Solution S -> Specification.{u})
+    (sx : Specification.Solution S) :
+    ResolutionAnswer (T sx) -> ResolutionAnswer (dependentSpecification S T)
+  | .residual => .residual
+  | .realized y hy => .realized ⟨sx, y⟩ hy
 
 /-- Minimal dependent bind obtained by forgetting all residual provenance. -/
 def bindDependent
@@ -180,11 +199,25 @@ def bindDependent
   match first with
   | .residual => .residual
   | .realized x hx =>
-      match second ⟨x, hx⟩ with
-      | .residual => .residual
-      | .realized y hy => .realized ⟨⟨x, hx⟩, y⟩ hy
+      let sx : Specification.Solution S := ⟨x, hx⟩
+      bindDependentAt S T sx (second sx)
 
 end ResolutionAnswer
+
+/-- Local coarsening commutes exactly with continuation at a certified
+first-stage solution. -/
+theorem coarsen_tracedDependentAt
+    (S : Specification.{u})
+    (T : Specification.Solution S -> Specification.{u})
+    (E : Type r)
+    (F : Specification.Solution S -> Type s)
+    (sx : Specification.Solution S)
+    (a : ResolutionAnswerWith (T sx) (F sx)) :
+    coarsenResidual (tracedDependentAt S T E F sx a) =
+      ResolutionAnswer.bindDependentAt S T sx (coarsenResidual a) := by
+  cases a with
+  | realized y hy => rfl
+  | residual q => rfl
 
 /-- Typed dependent bind is a provenance refinement of minimal dependent bind:
 forgetting the full trace gives exactly the same minimal Resolution Answer. -/
@@ -204,15 +237,28 @@ theorem coarsen_tracedDependentBind
   | residual e =>
       rfl
   | realized x hx =>
-      cases h : second ⟨x, hx⟩ with
-      | residual q =>
-          unfold tracedDependentBind ResolutionAnswer.bindDependent
-          rw [h]
-          rfl
-      | realized y hy =>
-          unfold tracedDependentBind ResolutionAnswer.bindDependent
-          rw [h]
-          rfl
+      change coarsenResidual
+          (tracedDependentAt S T E F
+            (⟨x, hx⟩ : Specification.Solution S)
+            (second (⟨x, hx⟩ : Specification.Solution S))) =
+        ResolutionAnswer.bindDependentAt S T
+          (⟨x, hx⟩ : Specification.Solution S)
+          (coarsenResidual
+            (second (⟨x, hx⟩ : Specification.Solution S)))
+      exact coarsen_tracedDependentAt S T E F
+        (⟨x, hx⟩ : Specification.Solution S)
+        (second (⟨x, hx⟩ : Specification.Solution S))
+
+/-- Stage-only continuation after a certified first-stage solution. -/
+def stageDependentAt
+    (S : Specification.{u})
+    (T : Specification.Solution S -> Specification.{u})
+    (E : Type r)
+    (F : Specification.Solution S -> Type s)
+    (sx : Specification.Solution S) :
+    ResolutionAnswerWith (T sx) (F sx) -> StructuredDependentAnswer S T
+  | .residual _ => .residual (.second sx)
+  | .realized y hy => .realized ⟨sx, y⟩ hy
 
 /-- Stage-only dependent bind.  This retains where resolution stopped but
 forgets the actual residual payloads. -/
@@ -228,9 +274,25 @@ def stageDependentBind
   match first with
   | .residual _ => .residual .first
   | .realized x hx =>
-      match second ⟨x, hx⟩ with
-      | .residual _ => .residual (.second ⟨x, hx⟩)
-      | .realized y hy => .realized ⟨⟨x, hx⟩, y⟩ hy
+      let sx : Specification.Solution S := ⟨x, hx⟩
+      stageDependentAt S T E F sx (second sx)
+
+/-- Local payload forgetting commutes exactly with continuation at a certified
+first-stage solution. -/
+theorem forgetStage_tracedDependentAt
+    (S : Specification.{u})
+    (T : Specification.Solution S -> Specification.{u})
+    (E : Type r)
+    (F : Specification.Solution S -> Type s)
+    (sx : Specification.Solution S)
+    (a : ResolutionAnswerWith (T sx) (F sx)) :
+    ResolutionAnswerWith.mapResidual
+        (@DependentResidualTrace.forgetStage S E F)
+        (tracedDependentAt S T E F sx a) =
+      stageDependentAt S T E F sx a := by
+  cases a with
+  | realized y hy => rfl
+  | residual q => rfl
 
 /-- Forgetting residual payloads from the typed trace recovers exactly the
 stage-only dependent semantics. -/
@@ -250,15 +312,17 @@ theorem forgetStage_tracedDependentBind
   | residual e =>
       rfl
   | realized x hx =>
-      cases h : second ⟨x, hx⟩ with
-      | residual q =>
-          unfold tracedDependentBind stageDependentBind
-          rw [h]
-          rfl
-      | realized y hy =>
-          unfold tracedDependentBind stageDependentBind
-          rw [h]
-          rfl
+      change ResolutionAnswerWith.mapResidual
+          (@DependentResidualTrace.forgetStage S E F)
+          (tracedDependentAt S T E F
+            (⟨x, hx⟩ : Specification.Solution S)
+            (second (⟨x, hx⟩ : Specification.Solution S))) =
+        stageDependentAt S T E F
+          (⟨x, hx⟩ : Specification.Solution S)
+          (second (⟨x, hx⟩ : Specification.Solution S))
+      exact forgetStage_tracedDependentAt S T E F
+        (⟨x, hx⟩ : Specification.Solution S)
+        (second (⟨x, hx⟩ : Specification.Solution S))
 
 /-- The traced dependent answer space is the canonical universal extension for
 its typed trace vocabulary. -/
