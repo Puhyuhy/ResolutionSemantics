@@ -104,9 +104,9 @@ theorem realizeSolution_ne_residual
     {S : Specification.{u}}
     (x : Specification.Solution S) :
     realizeSolution x ≠ (ResolutionAnswer.residual : ResolutionAnswer S) := by
+  cases x
   intro h
-  have h' := congrArg ResolutionAnswer.solution? h
-  simp at h'
+  cases h
 
 /-- Totalize one partial attempt to solve `S`.  Existing solutions are kept
 verbatim; absence of an ordinary answer becomes the residual Resolution
@@ -156,7 +156,7 @@ type.  This equivalence is useful as a minimality statement: no additional
 states are hidden in the construction. -/
 def resolutionAnswerEquivOption
     (S : Specification.{u}) :
-    ResolutionAnswer S ≃ Option (Specification.Solution S) where
+    Equiv (ResolutionAnswer S) (Option (Specification.Solution S)) where
   toFun := ResolutionAnswer.solution?
   invFun := totalize S
   left_inv := by
@@ -281,7 +281,7 @@ theorem universalTotalization_equiv_resolutionAnswer
     (includeSolution : Specification.Solution S -> X)
     (residual : X)
     (hX : IsUniversalTotalization S X includeSolution residual) :
-    X ≃ ResolutionAnswer S := by
+    Equiv X (ResolutionAnswer S) := by
   rcases hX (ResolutionAnswer S) (@realizeSolution S) .residual with
     ⟨toRA, hto, _⟩
   rcases resolutionAnswer_isUniversalTotalization S X includeSolution residual with
