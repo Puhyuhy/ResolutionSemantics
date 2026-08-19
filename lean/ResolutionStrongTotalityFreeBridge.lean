@@ -16,7 +16,12 @@ generated suspension trees, including their complete `RawAns` provenance.
 The resulting structured Strong Totality answer type is equivalent to
 `Free.GeneratedAns D`.  Hence the pre-existing free Resolution algebra is not a
 parallel construction: it is exactly a provenance-preserving Strong Totality
-completion for the generated-old specification.
+presentation of the generated-answer layer.
+
+No global inhabitance claim is made for `GeneratedAns D`: if the old carrier is
+empty, there need not be any closed expression to generate an answer.  Strong
+Totality remains the statement about arbitrary well-formed specifications; the
+free generated layer is identified here only when generated data exist.
 -/
 
 universe u v
@@ -107,8 +112,8 @@ identity. -/
       rfl
 
 /-- The generated free Resolution algebra is exactly the structured Strong
-Totality completion obtained by separating generated old results from generated
-suspension provenance. -/
+Totality presentation obtained by separating generated old results from
+generated suspension provenance. -/
 def generatedAnsEquivStrong
     (D : PartialAlg.{u,v} Sigma) :
     Equiv (Free.GeneratedAns D) (GeneratedStrongAnswer D) where
@@ -176,16 +181,6 @@ def generatedAnsToMinimal
       (ResolutionAnswer.residual :
         ResolutionAnswer (generatedOldSpecification D)) := by
   rfl
-
-/-- The whole generated free algebra therefore supplies Strong Totality for its
-extensional generated-old specification. -/
-theorem generatedFree_isStructuredStrongTotality
-    (D : PartialAlg.{u,v} Sigma) :
-    Nonempty (GeneratedStrongAnswer D) := by
-  exact ⟨generatedAnsToStrong D (Free.generatedOld D (Classical.choice
-    (show Nonempty D.Carrier from by
-      classical
-      exact Classical.choice (propComplete (Nonempty D.Carrier)))))⟩
 
 end StrongTotality
 end Resolution
