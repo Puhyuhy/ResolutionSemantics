@@ -141,7 +141,7 @@ end ResolutionAnswer
 /-- Strong Totality is invariant under specification translation in the precise
 sense that every existing Resolution Answer transports to one for the target
 specification. -/
-theorem strongTotality_natural
+def strongTotality_natural
     {S T : Specification.{u}}
     (f : SpecMorphism S T) :
     ResolutionAnswer S -> ResolutionAnswer T :=
