@@ -70,7 +70,7 @@ def fold
 or one residual datum. -/
 def equivSum
     (S : Specification.{u}) (E : Type u) :
-    ResolutionAnswerWith S E ≃ Sum (Specification.Solution S) E where
+    Equiv (ResolutionAnswerWith S E) (Sum (Specification.Solution S) E) where
   toFun := fun a =>
     match a with
     | .realized x hx => .inl ⟨x, hx⟩
@@ -169,7 +169,7 @@ def coarsenResidual
 instance of the structured construction. -/
 def unitResidualEquiv
     (S : Specification.{u}) :
-    ResolutionAnswerWith S Unit ≃ ResolutionAnswer S where
+    Equiv (ResolutionAnswerWith S Unit) (ResolutionAnswer S) where
   toFun := coarsenResidual
   invFun := fun a =>
     match a with
