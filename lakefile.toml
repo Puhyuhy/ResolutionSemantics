@@ -14,6 +14,7 @@ roots = [
   "ResolutionStrongTotalityComposition",
   "ResolutionStrongTotalityDependent",
   "ResolutionStrongTotalityResidualStructure",
+  "ResolutionStrongTotalityResidualMinimality",
   "ResolutionStrongTotalityResidualRefinement",
   "ResolutionStrongTotalityUnifiedMorphisms",
   "ResolutionStrongTotalityResidualFiber",
