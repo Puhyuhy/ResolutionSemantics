@@ -136,6 +136,62 @@ theorem strongTotalityWith
     Nonempty (ResolutionAnswerWith S E) := by
   exact ⟨.residual e⟩
 
+/-- A structured residual totalization is inhabited exactly when either the
+specification already has an ordinary solution or the residual vocabulary is
+itself inhabited. -/
+theorem resolutionAnswerWith_nonempty_iff
+    (S : Specification.{u})
+    (E : Type r) :
+    Nonempty (ResolutionAnswerWith S E) ↔
+      Specification.Satisfiable S ∨ Nonempty E := by
+  constructor
+  · intro h
+    rcases h with ⟨a⟩
+    cases a with
+    | realized x hx =>
+        exact Or.inl ⟨x, hx⟩
+    | residual e =>
+        exact Or.inr ⟨e⟩
+  · intro h
+    cases h with
+    | inl hs =>
+        rcases hs with ⟨x, hx⟩
+        exact ⟨.realized x hx⟩
+    | inr he =>
+        rcases he with ⟨e⟩
+        exact ⟨.residual e⟩
+
+/-- For an unsatisfiable specification, residual inhabitation is not merely
+sufficient for totality: it is necessary. -/
+theorem unsatisfiable_resolutionAnswerWith_nonempty_iff
+    (S : Specification.{u})
+    (E : Type r)
+    (hS : Not (Specification.Satisfiable S)) :
+    Nonempty (ResolutionAnswerWith S E) ↔ Nonempty E := by
+  constructor
+  · intro h
+    have hor := (resolutionAnswerWith_nonempty_iff S E).1 h
+    cases hor with
+    | inl hs =>
+        exact False.elim (hS hs)
+    | inr he =>
+        exact he
+  · intro he
+    exact (resolutionAnswerWith_nonempty_iff S E).2 (Or.inr he)
+
+/-- An empty residual vocabulary cannot totalize an unsatisfiable
+specification.  Hence at least one residual point is required in the generic
+Strong Totality construction. -/
+theorem unsatisfiable_emptyResidual_not_total
+    (S : Specification.{u})
+    (hS : Not (Specification.Satisfiable S)) :
+    Not (Nonempty (ResolutionAnswerWith S Empty)) := by
+  intro h
+  have he : Nonempty Empty :=
+    (unsatisfiable_resolutionAnswerWith_nonempty_iff S Empty hS).1 h
+  rcases he with ⟨e⟩
+  exact nomatch e
+
 def coarsenResidual
     {S : Specification.{u}} {E : Type r} :
     ResolutionAnswerWith S E -> ResolutionAnswer S
