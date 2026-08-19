@@ -14,20 +14,25 @@ type `E`.  The resulting construction is the free extension of the ordinary
 solution type by `E`.  The original one-residual theory is exactly the special
 case `E = Unit`.
 
+The residual vocabulary may live in a universe different from the candidate
+space.  This matters for kernel provenance, where operation symbols and carrier
+values can inhabit independent universes.
+
 For dependent two-stage specifications we then choose a residual type with two
 forms: the first stage is unresolved, or the first stage has a certified
 solution and the second stage is unresolved.  A canonical coarsening map
 forgets this provenance and recovers the earlier single-residual semantics.
 -/
 
-universe u
+universe u r w
 
 namespace Resolution
 namespace StrongTotality
 
-/-- Resolution Answers with an arbitrary typed residual vocabulary `E`. -/
+/-- Resolution Answers with an arbitrary typed residual vocabulary `E`.
+Candidate and residual universes are independent. -/
 inductive ResolutionAnswerWith
-    (S : Specification.{u}) (E : Type u) : Type u where
+    (S : Specification.{u}) (E : Type r) : Type (max u r) where
   | realized (x : S.Candidate) (hx : S.accepts x)
   | residual (e : E)
 
@@ -35,14 +40,14 @@ namespace ResolutionAnswerWith
 
 /-- Embed an ordinary satisfying solution. -/
 def realize
-    {S : Specification.{u}} {E : Type u}
+    {S : Specification.{u}} {E : Type r}
     (x : Specification.Solution S) : ResolutionAnswerWith S E :=
   .realized x.1 x.2
 
 /-- Interpret a structured Resolution Answer by separately interpreting
 ordinary solutions and residual data. -/
 def fold
-    {S : Specification.{u}} {E X : Type u}
+    {S : Specification.{u}} {E : Type r} {X : Type w}
     (onSolution : Specification.Solution S -> X)
     (onResidual : E -> X) :
     ResolutionAnswerWith S E -> X
@@ -50,7 +55,7 @@ def fold
   | .residual e => onResidual e
 
 @[simp] theorem fold_realized
-    {S : Specification.{u}} {E X : Type u}
+    {S : Specification.{u}} {E : Type r} {X : Type w}
     (onSolution : Specification.Solution S -> X)
     (onResidual : E -> X)
     (x : S.Candidate) (hx : S.accepts x) :
@@ -58,7 +63,7 @@ def fold
   rfl
 
 @[simp] theorem fold_residual
-    {S : Specification.{u}} {E X : Type u}
+    {S : Specification.{u}} {E : Type r} {X : Type w}
     (onSolution : Specification.Solution S -> X)
     (onResidual : E -> X)
     (e : E) :
@@ -69,7 +74,7 @@ def fold
 /-- Structured Resolution Answers contain exactly either an ordinary solution
 or one residual datum. -/
 def equivSum
-    (S : Specification.{u}) (E : Type u) :
+    (S : Specification.{u}) (E : Type r) :
     Equiv (ResolutionAnswerWith S E) (Sum (Specification.Solution S) E) where
   toFun := fun a =>
     match a with
@@ -89,13 +94,15 @@ def equivSum
 end ResolutionAnswerWith
 
 /-- Universal property for adjoining an arbitrary residual type to ordinary
-solutions. -/
+solutions.  The carrier is taken in the join of the solution and residual
+universes, which is exactly the universe of `ResolutionAnswerWith S E`. -/
 def IsUniversalResidualExtension
     (S : Specification.{u})
-    (E X : Type u)
+    (E : Type r)
+    (X : Type (max u r))
     (includeSolution : Specification.Solution S -> X)
     (includeResidual : E -> X) : Prop :=
-  forall (Y : Type u)
+  forall (Y : Type (max u r))
       (onSolution : Specification.Solution S -> Y)
       (onResidual : E -> Y),
     Exists fun f : X -> Y =>
@@ -111,7 +118,7 @@ def IsUniversalResidualExtension
 /-- `ResolutionAnswerWith S E` is the free extension of the solution type by
 exactly the residual vocabulary `E`. -/
 theorem resolutionAnswerWith_isUniversalResidualExtension
-    (S : Specification.{u}) (E : Type u) :
+    (S : Specification.{u}) (E : Type r) :
     IsUniversalResidualExtension S E (ResolutionAnswerWith S E)
       (@ResolutionAnswerWith.realize S E)
       (fun e => ResolutionAnswerWith.residual e) := by
@@ -138,7 +145,7 @@ theorem resolutionAnswerWith_isUniversalResidualExtension
 for every well-formed specification. -/
 theorem strongTotalityWith
     (S : Specification.{u})
-    {E : Type u}
+    {E : Type r}
     (e : E) :
     Nonempty (ResolutionAnswerWith S E) := by
   exact ⟨.residual e⟩
@@ -146,20 +153,20 @@ theorem strongTotalityWith
 /-- Forget all residual provenance and return to the minimal single-residual
 Strong Totality semantics. -/
 def coarsenResidual
-    {S : Specification.{u}} {E : Type u} :
+    {S : Specification.{u}} {E : Type r} :
     ResolutionAnswerWith S E -> ResolutionAnswer S
   | .realized x hx => .realized x hx
   | .residual _ => .residual
 
 @[simp] theorem coarsenResidual_realized
-    {S : Specification.{u}} {E : Type u}
+    {S : Specification.{u}} {E : Type r}
     (x : S.Candidate) (hx : S.accepts x) :
     coarsenResidual (.realized x hx : ResolutionAnswerWith S E) =
       (.realized x hx : ResolutionAnswer S) := by
   rfl
 
 @[simp] theorem coarsenResidual_residual
-    {S : Specification.{u}} {E : Type u}
+    {S : Specification.{u}} {E : Type r}
     (e : E) :
     coarsenResidual (.residual e : ResolutionAnswerWith S E) =
       (ResolutionAnswer.residual : ResolutionAnswer S) := by
