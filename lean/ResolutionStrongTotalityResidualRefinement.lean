@@ -151,8 +151,8 @@ corresponding Strong Totality answer types. -/
 def mapResidualEquiv
     (S : Specification.{u})
     {E F : Type u}
-    (e : E ≃ F) :
-    ResolutionAnswerWith S E ≃ ResolutionAnswerWith S F where
+    (e : Equiv E F) :
+    Equiv (ResolutionAnswerWith S E) (ResolutionAnswerWith S F) where
   toFun := mapResidual e
   invFun := mapResidual e.symm
   left_inv := by
