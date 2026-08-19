@@ -199,6 +199,17 @@ theorem strongTotality_master_initial
       forall g : CompletionHom (canonicalCompletion S) A, g = f :=
   canonicalCompletion_initial S A
 
+/-- Categorical canonicity: every pointed completion satisfying the universal
+Strong Totality property is uniquely isomorphic, through solution- and
+residual-preserving morphisms, to the canonical completion. -/
+theorem strongTotality_master_uniqueCompletionIso
+    (S : Specification.{u})
+    (A : CompletionObject S)
+    (hA : IsUniversalTotalization S A.Carrier A.includeSolution A.residual) :
+    Exists fun i : CompletionIso A (canonicalCompletion S) =>
+      forall j : CompletionIso A (canonicalCompletion S), j = i :=
+  universalCompletion_unique_iso S A hA
+
 /-- Strong Totality is natural under every validity-preserving translation of
 specifications. -/
 theorem strongTotality_master_natural
