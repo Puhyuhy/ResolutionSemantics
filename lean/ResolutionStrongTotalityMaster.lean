@@ -1,4 +1,5 @@
 import ResolutionStrongTotalityMinimality
+import ResolutionStrongTotalityResidualClassification
 
 /-!
 # Master theorem package for Strong Totality
@@ -14,12 +15,12 @@ an ordinary solution; it still has a typed residual Resolution Answer.
 
 The surrounding theorems record the properties already established for the
 canonical completion: exactness with respect to satisfiability, universality,
-rigidity/minimality, structural canonicity, naturality, representation
-invariance, dependent closure, and agreement with the existing kernel/free-
-algebra layer.
+rigidity/minimality, structural canonicity, residual classification, naturality,
+representation invariance, dependent closure, and agreement with the existing
+kernel/free-algebra layer.
 -/
 
-universe u v
+universe u v r
 
 namespace Resolution
 namespace StrongTotality
@@ -86,6 +87,27 @@ theorem strongTotality_master_canonical
         g = e :=
   universalTotalization_unique_structural_equiv
     S X includeSolution residual hX
+
+/-- Full classification for arbitrary residual provenance: a carrier is a
+universal residual extension exactly when there exists one and only one
+equivalence to the canonical structured answer space that preserves every
+ordinary-solution generator and every residual generator. -/
+theorem strongTotality_master_residualClassification
+    (S : Specification.{u})
+    (E : Type r)
+    (X : Type (max u r))
+    (includeSolution : Specification.Solution S -> X)
+    (includeResidual : E -> X) :
+    IsUniversalResidualExtension S E X includeSolution includeResidual ↔
+      Exists fun e : Equiv X (ResolutionAnswerWith S E) =>
+        IsStructuralResidualEquiv
+            S E X includeSolution includeResidual e ∧
+          forall g : Equiv X (ResolutionAnswerWith S E),
+            IsStructuralResidualEquiv
+                S E X includeSolution includeResidual g ->
+              g = e :=
+  universalResidualExtension_iff_unique_structuralEquiv
+    S E X includeSolution includeResidual
 
 /-- Operation-family form: every input of every well-formed dependent
 mathematical operation specification has a Resolution Answer. -/
