@@ -1,4 +1,5 @@
 import ResolutionKernel
+import ResolutionTypeEquiv
 
 universe u v w
 
