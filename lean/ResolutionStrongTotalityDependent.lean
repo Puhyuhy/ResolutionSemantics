@@ -112,7 +112,9 @@ def totalizeDependent
       Option (Specification.Solution (T s)))
     (h : second sx = none) :
     totalizeDependent S T (some sx) second = .residual := by
-  simp [totalizeDependent, dependentPartialCompose, h]
+  unfold totalizeDependent dependentPartialCompose
+  rw [h]
+  rfl
 
 @[simp] theorem totalizeDependent_realized
     (S : Specification.{u})
@@ -125,7 +127,9 @@ def totalizeDependent
     totalizeDependent S T (some sx) second =
       realizeSolution (⟨⟨sx, sy.1⟩, sy.2⟩ :
         Specification.Solution (dependentSpecification S T)) := by
-  simp [totalizeDependent, dependentPartialCompose, h]
+  unfold totalizeDependent dependentPartialCompose
+  rw [h]
+  rfl
 
 /-- Totalizing the dependent computation is exactly the canonical Strong
 Totality totalization of its ordinary partial composite.  This theorem records
