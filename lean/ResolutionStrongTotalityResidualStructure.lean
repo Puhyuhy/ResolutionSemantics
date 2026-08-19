@@ -29,8 +29,6 @@ universe u r w
 namespace Resolution
 namespace StrongTotality
 
-/-- Resolution Answers with an arbitrary typed residual vocabulary `E`.
-Candidate and residual universes are independent. -/
 inductive ResolutionAnswerWith
     (S : Specification.{u}) (E : Type r) : Type (max u r) where
   | realized (x : S.Candidate) (hx : S.accepts x)
@@ -38,14 +36,11 @@ inductive ResolutionAnswerWith
 
 namespace ResolutionAnswerWith
 
-/-- Embed an ordinary satisfying solution. -/
 def realize
     {S : Specification.{u}} {E : Type r}
     (x : Specification.Solution S) : ResolutionAnswerWith S E :=
   .realized x.1 x.2
 
-/-- Interpret a structured Resolution Answer by separately interpreting
-ordinary solutions and residual data. -/
 def fold
     {S : Specification.{u}} {E : Type r} {X : Type w}
     (onSolution : Specification.Solution S -> X)
@@ -71,8 +66,6 @@ def fold
       onResidual e := by
   rfl
 
-/-- Structured Resolution Answers contain exactly either an ordinary solution
-or one residual datum. -/
 def equivSum
     (S : Specification.{u}) (E : Type r) :
     Equiv (ResolutionAnswerWith S E) (Sum (Specification.Solution S) E) where
@@ -93,9 +86,6 @@ def equivSum
 
 end ResolutionAnswerWith
 
-/-- Universal property for adjoining an arbitrary residual type to ordinary
-solutions.  The carrier is taken in the join of the solution and residual
-universes, which is exactly the universe of `ResolutionAnswerWith S E`. -/
 def IsUniversalResidualExtension
     (S : Specification.{u})
     (E : Type r)
@@ -115,8 +105,6 @@ def IsUniversalResidualExtension
           (forall e : E, g (includeResidual e) = onResidual e)) ->
         g = f
 
-/-- `ResolutionAnswerWith S E` is the free extension of the solution type by
-exactly the residual vocabulary `E`. -/
 theorem resolutionAnswerWith_isUniversalResidualExtension
     (S : Specification.{u}) (E : Type r) :
     IsUniversalResidualExtension S E (ResolutionAnswerWith S E)
@@ -141,8 +129,6 @@ theorem resolutionAnswerWith_isUniversalResidualExtension
     | residual e =>
         simpa [f] using hg.2 e
 
-/-- If the residual vocabulary is inhabited, structured Strong Totality holds
-for every well-formed specification. -/
 theorem strongTotalityWith
     (S : Specification.{u})
     {E : Type r}
@@ -150,8 +136,6 @@ theorem strongTotalityWith
     Nonempty (ResolutionAnswerWith S E) := by
   exact ⟨.residual e⟩
 
-/-- Forget all residual provenance and return to the minimal single-residual
-Strong Totality semantics. -/
 def coarsenResidual
     {S : Specification.{u}} {E : Type r} :
     ResolutionAnswerWith S E -> ResolutionAnswer S
@@ -172,8 +156,6 @@ def coarsenResidual
       (ResolutionAnswer.residual : ResolutionAnswer S) := by
   rfl
 
-/-- The original Strong Totality answer type is precisely the one-residual
-instance of the structured construction. -/
 def unitResidualEquiv
     (S : Specification.{u}) :
     Equiv (ResolutionAnswerWith S Unit) (ResolutionAnswer S) where
@@ -193,25 +175,23 @@ def unitResidualEquiv
     intro a
     cases a <;> rfl
 
-/-! ## Provenance-preserving dependent resolution -/
-
-/-- Residual provenance for a two-stage dependent specification.
-
-`first` means no ordinary solution of the first stage was supplied.
-`second sx` records that the first stage was solved by `sx`, but the dependent
-second stage selected by `sx` remained unresolved. -/
 inductive DependentResidual (S : Specification.{u}) : Type u where
   | first
   | second (sx : Specification.Solution S)
 
-/-- The provenance-preserving answer type for a two-stage dependent problem. -/
 abbrev StructuredDependentAnswer
     (S : Specification.{u})
     (T : Specification.Solution S -> Specification.{u}) : Type u :=
   ResolutionAnswerWith (dependentSpecification S T) (DependentResidual S)
 
-/-- Totalize a dependent two-stage computation while preserving the exact
-stage at which ordinary resolution stopped. -/
+def structuredTotalizeAt
+    (S : Specification.{u})
+    (T : Specification.Solution S -> Specification.{u})
+    (sx : Specification.Solution S) :
+    Option (Specification.Solution (T sx)) -> StructuredDependentAnswer S T
+  | none => .residual (.second sx)
+  | some sy => .realized ⟨sx, sy.1⟩ sy.2
+
 def structuredTotalizeDependent
     (S : Specification.{u})
     (T : Specification.Solution S -> Specification.{u})
@@ -221,10 +201,17 @@ def structuredTotalizeDependent
     StructuredDependentAnswer S T :=
   match first with
   | none => .residual .first
-  | some sx =>
-      match second sx with
-      | none => .residual (.second sx)
-      | some sy => .realized ⟨sx, sy.1⟩ sy.2
+  | some sx => structuredTotalizeAt S T sx (second sx)
+
+theorem structuredTotalizeDependent_some
+    (S : Specification.{u})
+    (T : Specification.Solution S -> Specification.{u})
+    (sx : Specification.Solution S)
+    (second : (s : Specification.Solution S) ->
+      Option (Specification.Solution (T s))) :
+    structuredTotalizeDependent S T (some sx) second =
+      structuredTotalizeAt S T sx (second sx) := by
+  rfl
 
 @[simp] theorem structuredTotalizeDependent_first_none
     (S : Specification.{u})
@@ -243,8 +230,8 @@ def structuredTotalizeDependent
     (h : second sx = none) :
     structuredTotalizeDependent S T (some sx) second =
       .residual (.second sx) := by
-  unfold structuredTotalizeDependent
-  rw [h]
+  rw [structuredTotalizeDependent_some S T sx second, h]
+  rfl
 
 @[simp] theorem structuredTotalizeDependent_realized
     (S : Specification.{u})
@@ -256,11 +243,9 @@ def structuredTotalizeDependent
     (h : second sx = some sy) :
     structuredTotalizeDependent S T (some sx) second =
       (.realized ⟨sx, sy.1⟩ sy.2 : StructuredDependentAnswer S T) := by
-  unfold structuredTotalizeDependent
-  rw [h]
+  rw [structuredTotalizeDependent_some S T sx second, h]
+  rfl
 
-/-- Forgetting provenance after structured dependent totalization gives exactly
-the earlier canonical one-residual dependent totalization. -/
 theorem coarsen_structuredTotalizeDependent
     (S : Specification.{u})
     (T : Specification.Solution S -> Specification.{u})
@@ -282,9 +267,6 @@ theorem coarsen_structuredTotalizeDependent
           rw [totalizeDependent_realized S T sx second sy h]
           rfl
 
-/-- Every coarse dependent Resolution Answer has a provenance-preserving
-refinement.  The coarse residual may always be refined as a first-stage
-residual; realized answers refine canonically. -/
 theorem structuredCoarsening_surjective
     (S : Specification.{u})
     (T : Specification.Solution S -> Specification.{u}) :
@@ -297,10 +279,6 @@ theorem structuredCoarsening_surjective
   | realized z hz =>
       exact ⟨.realized z hz, rfl⟩
 
-/-- When the first specification has a certified solution, the structured
-semantics genuinely contains more information than the coarse one: first-stage
-and second-stage residual provenance are distinct but coarsen to the same
-single residual. -/
 theorem structuredCoarsening_not_injective
     (S : Specification.{u})
     (T : Specification.Solution S -> Specification.{u})
@@ -315,9 +293,6 @@ theorem structuredCoarsening_not_injective
         (.residual (.second sx) : StructuredDependentAnswer S T) by rfl)
   cases h
 
-/-- The provenance-preserving dependent answer type inherits a universal
-property immediately: it is the free extension of ordinary dependent solutions
-by exactly the two-stage residual vocabulary. -/
 theorem structuredDependent_isUniversal
     (S : Specification.{u})
     (T : Specification.Solution S -> Specification.{u}) :
