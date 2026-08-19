@@ -17,27 +17,31 @@ For every specification morphism `f : S -> T` and every semantic object over
 `S` with the *same* residual vocabulary `E`.  The chosen lift has specification
 part `f` and residual part the identity on `E`.
 
+Residual vocabularies may live in universes independent of the specification
+universe.  This is required for the literal one-point vocabulary `Unit` and
+matches the universe-general structured semantics developed upstream.
+
 This module proves the corresponding factorization property directly, without
 an external category-theory dependency.  The chosen lifts are stable under
 identity and composition, so the projection carries a split-fibration
 structure in this elementary sense.
 -/
 
-universe u
+universe u r s t
 
 namespace Resolution
 namespace StrongTotality
 
 /-- An object of the total Strong Totality semantics: a mathematical
-specification together with a residual vocabulary. -/
+specification together with a residual vocabulary in an independent universe. -/
 structure TotalSemanticsObject where
   specification : Specification.{u}
-  Residual : Type u
+  Residual : Type r
 
 namespace TotalSemanticsObject
 
 /-- The minimal semantic object over a specification. -/
-def minimal (S : Specification.{u}) : TotalSemanticsObject where
+def minimal (S : Specification.{u}) : TotalSemanticsObject.{u, 0} where
   specification := S
   Residual := Unit
 
@@ -46,8 +50,8 @@ provenance is unchanged. -/
 def reindex
     {S T : Specification.{u}}
     (f : SpecMorphism S T)
-    (B : TotalSemanticsObject)
-    (hB : B.specification = T) : TotalSemanticsObject where
+    (B : TotalSemanticsObject.{u, r})
+    (hB : B.specification = T) : TotalSemanticsObject.{u, r} where
   specification := S
   Residual := B.Residual
 
@@ -56,30 +60,35 @@ end TotalSemanticsObject
 /-- Morphisms in the total semantics are exactly the previously defined unified
 semantic morphisms. -/
 abbrev TotalSemanticsHom
-    (A B : TotalSemanticsObject.{u}) : Type u :=
+    (A : TotalSemanticsObject.{u, r})
+    (B : TotalSemanticsObject.{u, s}) : Type (max u r s) :=
   SemanticsMorphism A.specification B.specification A.Residual B.Residual
 
 namespace TotalSemanticsHom
 
 /-- Identity total-semantics morphism. -/
-def id (A : TotalSemanticsObject.{u}) : TotalSemanticsHom A A :=
+def id (A : TotalSemanticsObject.{u, r}) : TotalSemanticsHom A A :=
   SemanticsMorphism.id A.specification A.Residual
 
 /-- Composition in the total semantics. -/
 def comp
-    {A B C : TotalSemanticsObject.{u}}
+    {A : TotalSemanticsObject.{u, r}}
+    {B : TotalSemanticsObject.{u, s}}
+    {C : TotalSemanticsObject.{u, t}}
     (g : TotalSemanticsHom B C)
     (f : TotalSemanticsHom A B) : TotalSemanticsHom A C :=
   SemanticsMorphism.comp g f
 
 @[simp] theorem mapAnswer_id
-    (A : TotalSemanticsObject.{u})
+    (A : TotalSemanticsObject.{u, r})
     (a : ResolutionAnswerWith A.specification A.Residual) :
     SemanticsMorphism.mapAnswer (id A) a = a := by
   exact SemanticsMorphism.mapAnswer_id A.specification A.Residual a
 
 @[simp] theorem mapAnswer_comp
-    {A B C : TotalSemanticsObject.{u}}
+    {A : TotalSemanticsObject.{u, r}}
+    {B : TotalSemanticsObject.{u, s}}
+    {C : TotalSemanticsObject.{u, t}}
     (g : TotalSemanticsHom B C)
     (f : TotalSemanticsHom A B)
     (a : ResolutionAnswerWith A.specification A.Residual) :
@@ -91,25 +100,24 @@ end TotalSemanticsHom
 
 /-- Projection of a total semantic object to its mathematical specification. -/
 def semanticsProjection
-    (A : TotalSemanticsObject.{u}) : Specification.{u} :=
+    (A : TotalSemanticsObject.{u, r}) : Specification.{u} :=
   A.specification
 
 /-- Projection of a total semantic morphism to its specification component. -/
 def semanticsProjectionMap
-    {A B : TotalSemanticsObject.{u}}
+    {A : TotalSemanticsObject.{u, r}}
+    {B : TotalSemanticsObject.{u, s}}
     (f : TotalSemanticsHom A B) :
     SpecMorphism (semanticsProjection A) (semanticsProjection B) :=
   f.specification
 
 /-! ## Chosen cartesian lifts -/
 
-/-- Reindex an object over `T` along `f : S -> T`.  This formulation avoids an
-extra equality witness by taking the target object explicitly to have base
-specification `T`. -/
+/-- Reindex an object over `T` along `f : S -> T`. -/
 def pullbackObject
     {S T : Specification.{u}}
     (f : SpecMorphism S T)
-    (E : Type u) : TotalSemanticsObject where
+    (E : Type r) : TotalSemanticsObject.{u, r} where
   specification := S
   Residual := E
 
@@ -117,16 +125,16 @@ def pullbackObject
 def cartesianLift
     {S T : Specification.{u}}
     (f : SpecMorphism S T)
-    (E : Type u) :
+    (E : Type r) :
     TotalSemanticsHom (pullbackObject f E)
-      ({ specification := T, Residual := E } : TotalSemanticsObject) where
+      ({ specification := T, Residual := E } : TotalSemanticsObject.{u, r}) where
   specification := f
   residual := ResidualRefinement.id E
 
 @[simp] theorem cartesianLift_projection
     {S T : Specification.{u}}
     (f : SpecMorphism S T)
-    (E : Type u) :
+    (E : Type r) :
     semanticsProjectionMap (cartesianLift f E) = f := by
   rfl
 
@@ -135,7 +143,7 @@ def cartesianLift
 chosen lift. -/
 def cartesianFactor
     {R S T : Specification.{u}}
-    {D E : Type u}
+    {D : Type r} {E : Type s}
     (f : SpecMorphism S T)
     (h : SpecMorphism R S)
     (g : SemanticsMorphism R T D E) :
@@ -147,20 +155,18 @@ def cartesianFactor
 residual translation. -/
 @[simp] theorem cartesianFactor_residual
     {R S T : Specification.{u}}
-    {D E : Type u}
+    {D : Type r} {E : Type s}
     (f : SpecMorphism S T)
     (h : SpecMorphism R S)
     (g : SemanticsMorphism R T D E) :
     (cartesianFactor f h g).residual = g.residual := by
   rfl
 
-/-- If the base component of `g` is literally the composite `f ∘ h`, then the
-chosen cartesian factor composes back to `g` on Resolution Answers.  Stating
-the result at the semantic action level avoids irrelevant proof-field equality
-inside `SpecMorphism`. -/
+/-- If the base component of `g` is the composite `f ∘ h` on candidates, then
+the chosen cartesian factor composes back to `g` on Resolution Answers. -/
 theorem cartesianLift_factorization_on_answers
     {R S T : Specification.{u}}
-    {D E : Type u}
+    {D : Type r} {E : Type s}
     (f : SpecMorphism S T)
     (h : SpecMorphism R S)
     (g : SemanticsMorphism R T D E)
@@ -175,17 +181,26 @@ theorem cartesianLift_factorization_on_answers
   cases a with
   | residual e => rfl
   | realized x hx =>
-      simp only [SemanticsMorphism.mapAnswer]
-      have hm := hbase x
-      cases hm
-      rfl
+      have hs :
+          SpecMorphism.mapSolution (SpecMorphism.comp f h)
+              (⟨x, hx⟩ : Specification.Solution R) =
+            SpecMorphism.mapSolution g.specification
+              (⟨x, hx⟩ : Specification.Solution R) := by
+        apply Subtype.eq
+        exact (hbase x).symm
+      change
+        ResolutionAnswerWith.realize
+            (SpecMorphism.mapSolution (SpecMorphism.comp f h)
+              (⟨x, hx⟩ : Specification.Solution R)) =
+          ResolutionAnswerWith.realize
+            (SpecMorphism.mapSolution g.specification
+              (⟨x, hx⟩ : Specification.Solution R))
+      rw [hs]
 
-/-- Uniqueness of the residual part of a factor through a cartesian lift: if a
-candidate factor composes to `g` on residual answers, its residual translation
-must be exactly `g.residual`. -/
+/-- Uniqueness of the residual part of a factor through a cartesian lift. -/
 theorem cartesianFactor_residual_unique
     {R S T : Specification.{u}}
-    {D E : Type u}
+    {D : Type r} {E : Type s}
     (f : SpecMorphism S T)
     (h : SpecMorphism R S)
     (g : SemanticsMorphism R T D E)
@@ -201,7 +216,7 @@ theorem cartesianFactor_residual_unique
   have he := hk e
   exact congrArg (fun a => match a with
     | ResolutionAnswerWith.realized _ _ => none
-    | ResolutionAnswerWith.residual r => some r) he
+    | ResolutionAnswerWith.residual q => some q) he
     |> Option.some.inj
 
 /-! ## Split stability -/
@@ -210,19 +225,17 @@ theorem cartesianFactor_residual_unique
 semantic object unchanged up to definitional equality of its fields. -/
 theorem pullbackObject_id_fields
     (S : Specification.{u})
-    (E : Type u) :
+    (E : Type r) :
     (pullbackObject (SpecMorphism.id S) E).specification = S ∧
       (pullbackObject (SpecMorphism.id S) E).Residual = E := by
   exact ⟨rfl, rfl⟩
 
-/-- Reindexing residual vocabularies is strictly stable under composition: both
-a one-step pullback and a two-step pullback retain exactly the same residual
-type. -/
+/-- Reindexing residual vocabularies is strictly stable under composition. -/
 theorem pullbackObject_comp_residual
     {R S T : Specification.{u}}
     (f : SpecMorphism R S)
     (g : SpecMorphism S T)
-    (E : Type u) :
+    (E : Type r) :
     (pullbackObject (SpecMorphism.comp g f) E).Residual =
       (pullbackObject f (pullbackObject g E).Residual).Residual := by
   rfl
@@ -232,7 +245,7 @@ theorem cartesianLift_comp_on_answers
     {R S T : Specification.{u}}
     (f : SpecMorphism R S)
     (g : SpecMorphism S T)
-    (E : Type u)
+    (E : Type r)
     (a : ResolutionAnswerWith R E) :
     SemanticsMorphism.mapAnswer
         (cartesianLift (SpecMorphism.comp g f) E) a =
@@ -241,18 +254,18 @@ theorem cartesianLift_comp_on_answers
   cases a <;> rfl
 
 /-- The fiber over `S` recovered from the total semantics is exactly the
-previous residual fiber: fixing `S` leaves only the residual vocabulary and its
-translations. -/
+previous residual fiber. -/
 def totalObjectOfFiber
     {S : Specification.{u}}
-    (A : ResidualFiberObject S) : TotalSemanticsObject where
+    (A : ResidualFiberObject.{u, r} S) : TotalSemanticsObject.{u, r} where
   specification := S
   Residual := A.Residual
 
 /-- Fiber morphisms embed into the total semantics with identity base map. -/
 def totalHomOfFiber
     {S : Specification.{u}}
-    {A B : ResidualFiberObject S}
+    {A : ResidualFiberObject.{u, r} S}
+    {B : ResidualFiberObject.{u, s} S}
     (f : ResidualFiberHom A B) :
     TotalSemanticsHom (totalObjectOfFiber A) (totalObjectOfFiber B) where
   specification := SpecMorphism.id S
@@ -262,7 +275,8 @@ def totalHomOfFiber
 specification. -/
 @[simp] theorem totalHomOfFiber_projection
     {S : Specification.{u}}
-    {A B : ResidualFiberObject S}
+    {A : ResidualFiberObject.{u, r} S}
+    {B : ResidualFiberObject.{u, s} S}
     (f : ResidualFiberHom A B) :
     semanticsProjectionMap (totalHomOfFiber f) = SpecMorphism.id S := by
   rfl
