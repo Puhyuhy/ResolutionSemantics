@@ -88,14 +88,15 @@ theorem ext
     (p q : CompletionHomOver f A B)
     (h : forall x : A.Carrier, p.toFun x = q.toFun x) :
     p = q := by
-  cases p
-  cases q
-  simp only at h
-  have hfun : toFun = toFun_1 := by
-    funext x
-    exact h x
-  cases hfun
-  rfl
+  cases p with
+  | mk pto psol pres =>
+      cases q with
+      | mk qto qsol qres =>
+          have hfun : pto = qto := by
+            funext x
+            exact h x
+          cases hfun
+          rfl
 
 end CompletionHomOver
 
