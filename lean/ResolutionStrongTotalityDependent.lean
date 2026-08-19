@@ -40,8 +40,8 @@ pairs of ordinary solutions. -/
 def dependentSolutionEquiv
     (S : Specification.{u})
     (T : Specification.Solution S -> Specification.{u}) :
-    Specification.Solution (dependentSpecification S T) ≃
-      Sigma fun sx : Specification.Solution S => Specification.Solution (T sx) where
+    Equiv (Specification.Solution (dependentSpecification S T))
+      (Sigma fun sx : Specification.Solution S => Specification.Solution (T sx)) where
   toFun := fun z => ⟨z.1.1, ⟨z.1.2, z.2⟩⟩
   invFun := fun z => ⟨⟨z.1, z.2.1⟩, z.2.2⟩
   left_inv := by
