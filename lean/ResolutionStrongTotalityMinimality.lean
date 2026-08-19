@@ -147,19 +147,23 @@ theorem universalTotalization_rigid
   ⟩
 
 /-- Any universal totalization is canonically equivalent to `ResolutionAnswer S`:
-there exists exactly one equivalence whose forward map sends every included
-ordinary solution to its canonical realization and sends the distinguished
-residual to the canonical residual. -/
+there exists a structure-preserving equivalence, and every other equivalence
+with the same structural action is equal to it. -/
 theorem universalTotalization_unique_structural_equiv
     (S : Specification.{u})
     (X : Type u)
     (includeSolution : Specification.Solution S -> X)
     (residual : X)
     (hX : IsUniversalTotalization S X includeSolution residual) :
-    ∃! e : Equiv X (ResolutionAnswer S),
+    Exists fun e : Equiv X (ResolutionAnswer S) =>
       ((forall x : Specification.Solution S,
           e (includeSolution x) = realizeSolution x) ∧
-        e residual = (ResolutionAnswer.residual : ResolutionAnswer S)) := by
+        e residual = (ResolutionAnswer.residual : ResolutionAnswer S)) ∧
+      forall g : Equiv X (ResolutionAnswer S),
+        ((forall x : Specification.Solution S,
+            g (includeSolution x) = realizeSolution x) ∧
+          g residual = (ResolutionAnswer.residual : ResolutionAnswer S)) ->
+        g = e := by
   rcases hX (ResolutionAnswer S) (@realizeSolution S) .residual with
     ⟨toRA, hto, htoUnique⟩
   rcases resolutionAnswer_isUniversalTotalization S X includeSolution residual with
@@ -213,14 +217,13 @@ theorem universalTotalization_unique_structural_equiv
     left_inv := hleft
     right_inv := hright
   }
-  refine ⟨e, ?_, ?_⟩
-  · exact hto
-  · intro g hg
-    have hgfun : g.toFun = toRA :=
-      (htoUnique g.toFun hg).trans (htoUnique toRA hto).symm
-    apply Equiv.ext
-    intro z
-    exact congrFun hgfun z
+  refine ⟨e, hto, ?_⟩
+  intro g hg
+  have hgfun : g.toFun = toRA :=
+    (htoUnique g.toFun hg).trans (htoUnique toRA hto).symm
+  apply Equiv.ext
+  intro z
+  exact congrFun hgfun z
 
 /-- The canonical Strong Totality completion therefore contains no hidden
 states: every answer is either a realized ordinary solution or the residual. -/
