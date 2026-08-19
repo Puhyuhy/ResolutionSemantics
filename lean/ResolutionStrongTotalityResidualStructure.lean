@@ -243,7 +243,8 @@ def structuredTotalizeDependent
     (h : second sx = none) :
     structuredTotalizeDependent S T (some sx) second =
       .residual (.second sx) := by
-  simp [structuredTotalizeDependent, h]
+  unfold structuredTotalizeDependent
+  rw [h]
 
 @[simp] theorem structuredTotalizeDependent_realized
     (S : Specification.{u})
@@ -255,7 +256,8 @@ def structuredTotalizeDependent
     (h : second sx = some sy) :
     structuredTotalizeDependent S T (some sx) second =
       (.realized ⟨sx, sy.1⟩ sy.2 : StructuredDependentAnswer S T) := by
-  simp [structuredTotalizeDependent, h]
+  unfold structuredTotalizeDependent
+  rw [h]
 
 /-- Forgetting provenance after structured dependent totalization gives exactly
 the earlier canonical one-residual dependent totalization. -/
@@ -270,7 +272,15 @@ theorem coarsen_structuredTotalizeDependent
   cases first with
   | none => rfl
   | some sx =>
-      cases second sx <;> rfl
+      cases h : second sx with
+      | none =>
+          rw [structuredTotalizeDependent_second_none S T sx second h]
+          rw [totalizeDependent_second_none S T sx second h]
+          rfl
+      | some sy =>
+          rw [structuredTotalizeDependent_realized S T sx second sy h]
+          rw [totalizeDependent_realized S T sx second sy h]
+          rfl
 
 /-- Every coarse dependent Resolution Answer has a provenance-preserving
 refinement.  The coarse residual may always be refined as a first-stage
