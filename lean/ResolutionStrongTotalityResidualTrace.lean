@@ -206,21 +206,11 @@ theorem coarsen_tracedDependentBind
   | realized x hx =>
       cases h : second ⟨x, hx⟩ with
       | residual q =>
-          change coarsenResidual
-              (tracedDependentAt S T E F ⟨x, hx⟩
-                (.residual q : ResolutionAnswerWith (T ⟨x, hx⟩) (F ⟨x, hx⟩))) =
-            ResolutionAnswer.bindDependent S T
-              (.realized x hx)
-              (fun sx => coarsenResidual (second sx))
+          unfold tracedDependentBind ResolutionAnswer.bindDependent
           rw [h]
           rfl
       | realized y hy =>
-          change coarsenResidual
-              (tracedDependentAt S T E F ⟨x, hx⟩
-                (.realized y hy : ResolutionAnswerWith (T ⟨x, hx⟩) (F ⟨x, hx⟩))) =
-            ResolutionAnswer.bindDependent S T
-              (.realized x hx)
-              (fun sx => coarsenResidual (second sx))
+          unfold tracedDependentBind ResolutionAnswer.bindDependent
           rw [h]
           rfl
 
@@ -262,21 +252,11 @@ theorem forgetStage_tracedDependentBind
   | realized x hx =>
       cases h : second ⟨x, hx⟩ with
       | residual q =>
-          change ResolutionAnswerWith.mapResidual
-              (@DependentResidualTrace.forgetStage S E F)
-              (tracedDependentAt S T E F ⟨x, hx⟩
-                (.residual q : ResolutionAnswerWith (T ⟨x, hx⟩) (F ⟨x, hx⟩))) =
-            stageDependentBind S T E F
-              (.realized x hx : ResolutionAnswerWith S E) second
+          unfold tracedDependentBind stageDependentBind
           rw [h]
           rfl
       | realized y hy =>
-          change ResolutionAnswerWith.mapResidual
-              (@DependentResidualTrace.forgetStage S E F)
-              (tracedDependentAt S T E F ⟨x, hx⟩
-                (.realized y hy : ResolutionAnswerWith (T ⟨x, hx⟩) (F ⟨x, hx⟩))) =
-            stageDependentBind S T E F
-              (.realized x hx : ResolutionAnswerWith S E) second
+          unfold tracedDependentBind stageDependentBind
           rw [h]
           rfl
 
