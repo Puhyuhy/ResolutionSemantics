@@ -196,11 +196,33 @@ theorem totalizePartialArrow_comp
   funext x
   cases h : f x with
   | none =>
-      simp [totalizePartialArrow, PartialArrow.comp, ResolutionArrow.comp,
-        totalize, h]
+      calc
+        totalizePartialArrow (PartialArrow.comp g f) x =
+            (ResolutionAnswer.residual : ResolutionAnswer U) := by
+              unfold totalizePartialArrow PartialArrow.comp totalize
+              rw [h]
+        _ = ResolutionAnswer.bind
+              (ResolutionAnswer.residual : ResolutionAnswer T)
+              (totalizePartialArrow g) :=
+              (ResolutionAnswer.bind_residual (totalizePartialArrow g)).symm
+        _ = ResolutionArrow.comp
+              (totalizePartialArrow g) (totalizePartialArrow f) x := by
+              unfold ResolutionArrow.comp totalizePartialArrow totalize
+              rw [h]
   | some y =>
-      simp [totalizePartialArrow, PartialArrow.comp, ResolutionArrow.comp,
-        totalize, h]
+      calc
+        totalizePartialArrow (PartialArrow.comp g f) x =
+            totalizePartialArrow g y := by
+              unfold totalizePartialArrow PartialArrow.comp
+              rw [h]
+        _ = ResolutionAnswer.bind
+              (realizeSolution y) (totalizePartialArrow g) :=
+              (ResolutionAnswer.bind_realizeSolution
+                y (totalizePartialArrow g)).symm
+        _ = ResolutionArrow.comp
+              (totalizePartialArrow g) (totalizePartialArrow f) x := by
+              unfold ResolutionArrow.comp totalizePartialArrow totalize
+              rw [h]
 
 /-- Strong Totality is therefore closed under any finite two-stage partial
 mathematical computation: compose first in the partial world or totalize each
