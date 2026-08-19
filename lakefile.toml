@@ -16,6 +16,7 @@ roots = [
   "ResolutionStrongTotalityResidualStructure",
   "ResolutionStrongTotalityResidualMinimality",
   "ResolutionStrongTotalityResidualClassification",
+  "ResolutionStrongTotalityStructuredExactness",
   "ResolutionStrongTotalityResidualRefinement",
   "ResolutionStrongTotalityUnifiedMorphisms",
   "ResolutionStrongTotalityResidualFiber",
