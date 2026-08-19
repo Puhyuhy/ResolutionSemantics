@@ -221,9 +221,11 @@ theorem universalTotalization_unique_structural_equiv
   intro g hg
   have hgfun : g.toFun = toRA :=
     (htoUnique g.toFun hg).trans (htoUnique toRA hto).symm
-  apply Equiv.ext
-  intro z
-  exact congrFun hgfun z
+  cases g with
+  | mk gto ginv gleft gright =>
+      dsimp at hgfun
+      subst gto
+      rfl
 
 /-- The canonical Strong Totality completion therefore contains no hidden
 states: every answer is either a realized ordinary solution or the residual. -/
