@@ -21,6 +21,7 @@ roots = [
   "ResolutionStrongTotalityMinimalSection",
   "ResolutionStrongTotalityCompletionCategory",
   "ResolutionStrongTotalityUniversalNaturality",
+  "ResolutionStrongTotalityRepresentationInvariant",
   "ResolutionModels",
   "ResolutionExternal",
   "ResolutionFiniteTagProof",
