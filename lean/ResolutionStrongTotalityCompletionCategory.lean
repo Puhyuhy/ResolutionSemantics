@@ -86,14 +86,15 @@ theorem ext
     (f g : CompletionHom A B)
     (h : forall x : A.Carrier, f.toFun x = g.toFun x) :
     f = g := by
-  cases f
-  cases g
-  simp only at h
-  have hfun : toFun = toFun_1 := by
-    funext x
-    exact h x
-  cases hfun
-  rfl
+  cases f with
+  | mk fto fsol fres =>
+      cases g with
+      | mk gto gsol gres =>
+          have hfun : fto = gto := by
+            funext x
+            exact h x
+          cases hfun
+          rfl
 
 @[simp] theorem comp_id
     {S : Specification.{u}}
@@ -228,9 +229,19 @@ theorem universalCompletion_has_inverse_maps
       exact congrFun (hc.trans hi.symm) x
     intro x
     exact congrArg (fun k => k.toFun x) hcomp
-  · have hcomp : CompletionHom.comp toCanonical fromCanonical =
-        CompletionHom.id (canonicalCompletion S) := by
-      apply canonicalCompletion_map_unique (canonicalCompletion S)
+  · have hc : CompletionHom.comp toCanonical fromCanonical =
+        canonicalCompletionMap (canonicalCompletion S) :=
+      canonicalCompletion_map_unique
+        (canonicalCompletion S)
+        (CompletionHom.comp toCanonical fromCanonical)
+    have hi : CompletionHom.id (canonicalCompletion S) =
+        canonicalCompletionMap (canonicalCompletion S) :=
+      canonicalCompletion_map_unique
+        (canonicalCompletion S)
+        (CompletionHom.id (canonicalCompletion S))
+    have hcomp : CompletionHom.comp toCanonical fromCanonical =
+        CompletionHom.id (canonicalCompletion S) :=
+      hc.trans hi.symm
     intro a
     exact congrArg (fun k => k.toFun a) hcomp
 
