@@ -1,4 +1,4 @@
-import ResolutionStrongTotalityExactness
+import ResolutionStrongTotalityMinimality
 
 /-!
 # Master theorem package for Strong Totality
@@ -14,8 +14,8 @@ an ordinary solution; it still has a typed residual Resolution Answer.
 
 The surrounding theorems record the properties already established for the
 canonical completion: exactness with respect to satisfiability, universality,
-naturality, representation invariance, dependent closure, and agreement with
-the existing kernel/free-algebra layer.
+rigidity/minimality, naturality, representation invariance, dependent closure,
+and agreement with the existing kernel/free-algebra layer.
 -/
 
 universe u v
@@ -47,6 +47,22 @@ theorem strongTotality_master_unsatisfiable_unique
       forall a : ResolutionAnswer S,
         a = (ResolutionAnswer.residual : ResolutionAnswer S) :=
   not_satisfiable_iff_all_residual S
+
+/-- Any universal pointed totalization is rigid: ordinary solutions remain
+injectively embedded, none can collapse to the residual, and there are no
+additional hidden states beyond those images and the single residual point. -/
+theorem strongTotality_master_rigid
+    (S : Specification.{u})
+    (X : Type u)
+    (includeSolution : Specification.Solution S -> X)
+    (residual : X)
+    (hX : IsUniversalTotalization S X includeSolution residual) :
+    Function.Injective includeSolution ∧
+      (forall x : Specification.Solution S, includeSolution x ≠ residual) ∧
+      (forall z : X,
+        (Exists fun x : Specification.Solution S => z = includeSolution x) ∨
+        z = residual) :=
+  universalTotalization_rigid S X includeSolution residual hX
 
 /-- Operation-family form: every input of every well-formed dependent
 mathematical operation specification has a Resolution Answer. -/
