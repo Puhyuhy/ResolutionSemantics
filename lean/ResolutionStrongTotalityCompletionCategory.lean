@@ -127,6 +127,35 @@ theorem ext
 
 end CompletionHom
 
+/-- An isomorphism of pointed completions, expressed without importing any
+external category-theory library. -/
+structure CompletionIso
+    {S : Specification.{u}}
+    (A B : CompletionObject S) where
+  hom : CompletionHom A B
+  inv : CompletionHom B A
+  hom_inv_id : CompletionHom.comp inv hom = CompletionHom.id A
+  inv_hom_id : CompletionHom.comp hom inv = CompletionHom.id B
+
+namespace CompletionIso
+
+/-- Completion isomorphisms are determined by their two structure-preserving
+maps; the inverse-law fields are propositions. -/
+theorem ext
+    {S : Specification.{u}}
+    {A B : CompletionObject S}
+    (e f : CompletionIso A B)
+    (hhom : e.hom = f.hom)
+    (hinv : e.inv = f.inv) :
+    e = f := by
+  cases e
+  cases f
+  cases hhom
+  cases hinv
+  rfl
+
+end CompletionIso
+
 /-- The canonical Resolution completion of a specification. -/
 def canonicalCompletion
     (S : Specification.{u}) : CompletionObject S where
@@ -244,6 +273,80 @@ theorem universalCompletion_has_inverse_maps
       hc.trans hi.symm
     intro a
     exact congrArg (fun k => k.toFun a) hcomp
+
+/-- Every universal pointed completion is uniquely isomorphic, as a pointed
+completion, to the canonical `ResolutionAnswer` completion.  This is the
+categorical canonicity form of Strong Totality: not only the carrier type but
+the solution embedding and residual point are fixed up to one unique
+structure-preserving isomorphism. -/
+theorem universalCompletion_unique_iso
+    (S : Specification.{u})
+    (A : CompletionObject S)
+    (hA : IsUniversalTotalization S A.Carrier A.includeSolution A.residual) :
+    Exists fun i : CompletionIso A (canonicalCompletion S) =>
+      forall j : CompletionIso A (canonicalCompletion S), j = i := by
+  rcases universalCompletion_has_inverse_maps S A hA with
+    ⟨toCanonical, fromCanonical, hleft, hright⟩
+  have hleftHom :
+      CompletionHom.comp fromCanonical toCanonical = CompletionHom.id A := by
+    apply CompletionHom.ext
+    intro x
+    exact hleft x
+  have hrightHom :
+      CompletionHom.comp toCanonical fromCanonical =
+        CompletionHom.id (canonicalCompletion S) := by
+    apply CompletionHom.ext
+    intro a
+    exact hright a
+  let i : CompletionIso A (canonicalCompletion S) := {
+    hom := toCanonical
+    inv := fromCanonical
+    hom_inv_id := hleftHom
+    inv_hom_id := hrightHom
+  }
+  refine ⟨i, ?_⟩
+  intro j
+  have hhom : j.hom = toCanonical := by
+    rcases hA (ResolutionAnswer S) (@realizeSolution S) .residual with
+      ⟨f, _, huniq⟩
+    have hjPres :
+        ((forall x : Specification.Solution S,
+            j.hom.toFun (A.includeSolution x) = realizeSolution x) ∧
+          j.hom.toFun A.residual =
+            (ResolutionAnswer.residual : ResolutionAnswer S)) := by
+      constructor
+      · intro x
+        change j.hom.toFun (A.includeSolution x) = realizeSolution x
+        exact j.hom.map_solution x
+      · change j.hom.toFun A.residual =
+          (ResolutionAnswer.residual : ResolutionAnswer S)
+        exact j.hom.map_residual
+    have hiPres :
+        ((forall x : Specification.Solution S,
+            toCanonical.toFun (A.includeSolution x) = realizeSolution x) ∧
+          toCanonical.toFun A.residual =
+            (ResolutionAnswer.residual : ResolutionAnswer S)) := by
+      constructor
+      · intro x
+        change toCanonical.toFun (A.includeSolution x) = realizeSolution x
+        exact toCanonical.map_solution x
+      · change toCanonical.toFun A.residual =
+          (ResolutionAnswer.residual : ResolutionAnswer S)
+        exact toCanonical.map_residual
+    have hj : j.hom.toFun = f := huniq j.hom.toFun hjPres
+    have hi : toCanonical.toFun = f := huniq toCanonical.toFun hiPres
+    apply CompletionHom.ext
+    intro x
+    exact congrFun (hj.trans hi.symm) x
+  have hinv : j.inv = fromCanonical := by
+    have hj := canonicalCompletion_map_unique A j.inv
+    have hi := canonicalCompletion_map_unique A fromCanonical
+    exact hj.trans hi.symm
+  apply CompletionIso.ext
+  · change j.hom = toCanonical
+    exact hhom
+  · change j.inv = fromCanonical
+    exact hinv
 
 /-- Strong Totality follows immediately from the canonical completion object:
 its carrier is always inhabited by its distinguished residual point. -/
