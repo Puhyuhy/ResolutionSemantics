@@ -309,6 +309,11 @@ theorem decode_kernelOperationResolution
           D.liftOp op (.old a) (.old b) =
             RawAns.susp op (.old a) (.old b) := by
         unfold PartialAlg.liftOp
+        change
+          (match D.eval op a b with
+           | some c => RawAns.old c
+           | none => RawAns.susp op (.old a) (.old b)) =
+            RawAns.susp op (.old a) (.old b)
         rw [h]
       rw [kernelOperationResolution_none D op a b h, hlift]
       rfl
@@ -316,6 +321,11 @@ theorem decode_kernelOperationResolution
       have hlift :
           D.liftOp op (.old a) (.old b) = RawAns.old c := by
         unfold PartialAlg.liftOp
+        change
+          (match D.eval op a b with
+           | some d => RawAns.old d
+           | none => RawAns.susp op (.old a) (.old b)) =
+            RawAns.old c
         rw [h]
       rw [kernelOperationResolution_some D op a b c h, hlift]
       rfl
