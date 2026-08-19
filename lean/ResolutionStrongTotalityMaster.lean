@@ -109,6 +109,45 @@ theorem strongTotality_master_residualClassification
   universalResidualExtension_iff_unique_structuralEquiv
     S E X includeSolution includeResidual
 
+/-- Exact residual existence criterion: a structured answer exists precisely
+when either an ordinary solution exists or the chosen residual vocabulary has
+an inhabitant. -/
+theorem strongTotality_master_residualExistence
+    (S : Specification.{u})
+    (E : Type r) :
+    Nonempty (ResolutionAnswerWith S E) ↔
+      Specification.Satisfiable S ∨ Nonempty E :=
+  resolutionAnswerWith_nonempty_iff S E
+
+/-- On an unsatisfiable specification, residual inhabitation is necessary and
+sufficient for Strong Totality.  No residual-free completion can evade this
+obstruction. -/
+theorem strongTotality_master_unsatisfiableResidualMinimal
+    (S : Specification.{u})
+    (E : Type r)
+    (hS : Not (Specification.Satisfiable S)) :
+    Nonempty (ResolutionAnswerWith S E) ↔ Nonempty E :=
+  unsatisfiable_resolutionAnswerWith_nonempty_iff S E hS
+
+/-- Literal no-go theorem: an empty residual vocabulary cannot totalize any
+unsatisfiable specification. -/
+theorem strongTotality_master_emptyResidual_noGo
+    (S : Specification.{u})
+    (hS : Not (Specification.Satisfiable S)) :
+    Not (Nonempty (ResolutionAnswerWith S Empty)) :=
+  unsatisfiable_emptyResidual_not_total S hS
+
+/-- Uniform residual minimality: once an unsatisfiable specification exists,
+a residual vocabulary supports Strong Totality for every specification exactly
+when that vocabulary is inhabited. -/
+theorem strongTotality_master_uniformResidualMinimality
+    (S0 : Specification.{u})
+    (hS0 : Not (Specification.Satisfiable S0))
+    (E : Type r) :
+    Nonempty E ↔
+      forall S : Specification.{u}, Nonempty (ResolutionAnswerWith S E) :=
+  residual_inhabited_iff_uniformStrongTotality S0 hS0 E
+
 /-- Operation-family form: every input of every well-formed dependent
 mathematical operation specification has a Resolution Answer. -/
 theorem strongTotality_master_operation
