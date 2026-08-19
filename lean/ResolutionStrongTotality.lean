@@ -273,25 +273,26 @@ theorem resolutionAnswer_extension_unique
   exact resolutionAnswer_isUniversalTotalization S Y onSolution onResidual
 
 /-- Any other universal pointed totalization of the same specification is
-canonically equivalent to `ResolutionAnswer S`.  Thus the Strong Totality
-completion is unique up to equivalence once its universal property is fixed. -/
+equivalent to `ResolutionAnswer S`.  Because universal totality is stated in
+`Prop`, the equivalence is asserted propositionally as `Nonempty` rather than
+chosen computationally from existential proofs. -/
 theorem universalTotalization_equiv_resolutionAnswer
     (S : Specification.{u})
     (X : Type u)
     (includeSolution : Specification.Solution S -> X)
     (residual : X)
     (hX : IsUniversalTotalization S X includeSolution residual) :
-    Equiv X (ResolutionAnswer S) := by
+    Nonempty (Equiv X (ResolutionAnswer S)) := by
   rcases hX (ResolutionAnswer S) (@realizeSolution S) .residual with
     ⟨toRA, hto, _⟩
   rcases resolutionAnswer_isUniversalTotalization S X includeSolution residual with
     ⟨fromRA, hfrom, _⟩
-  refine {
+  refine ⟨{
     toFun := toRA
     invFun := fromRA
     left_inv := ?_
     right_inv := ?_
-  }
+  }⟩
   · have hcompExt :
         ((forall x : Specification.Solution S,
             (fun z => fromRA (toRA z)) (includeSolution x) = includeSolution x) ∧
