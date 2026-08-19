@@ -243,6 +243,9 @@ theorem minimalResidualAction_unique
   | residual e =>
       have h : q e = ResidualRefinement.toUnit E e :=
         Subsingleton.elim _ _
+      change
+        (ResolutionAnswerWith.residual (q e) : ResolutionAnswerWith T Unit) =
+          ResolutionAnswerWith.residual (ResidualRefinement.toUnit E e)
       rw [h]
 
 /-- For a fixed specification translation, the induced map to minimal Strong
@@ -258,7 +261,7 @@ theorem minimalSemanticTransport_canonical
   cases g with
   | mk specification residual =>
       cases hg
-      exact minimalResidualAction_unique f residual
+      exact minimalResidualAction_unique _ residual
 
 end StrongTotality
 end Resolution
