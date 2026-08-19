@@ -22,6 +22,7 @@ roots = [
   "ResolutionStrongTotalityCompletionCategory",
   "ResolutionStrongTotalityUniversalNaturality",
   "ResolutionStrongTotalityRepresentationInvariant",
+  "ResolutionStrongTotalityKernelBridge",
   "ResolutionModels",
   "ResolutionExternal",
   "ResolutionFiniteTagProof",
