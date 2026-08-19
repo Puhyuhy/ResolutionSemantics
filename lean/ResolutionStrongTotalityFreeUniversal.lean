@@ -31,7 +31,7 @@ def generatedStrongOld
 
 /-- The free algebra operation transported to the Strong Totality
 presentation. -/
-def generatedStrongOp
+noncomputable def generatedStrongOp
     (D : PartialAlg.{u,v} Sigma)
     (f : Sigma.Op)
     (x y : GeneratedStrongAnswer D) : GeneratedStrongAnswer D :=
