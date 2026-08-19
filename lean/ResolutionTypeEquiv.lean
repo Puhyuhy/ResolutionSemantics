@@ -40,6 +40,28 @@ instance
     CoeFun (Equiv A B) (fun _ => A -> B) where
   coe := Equiv.toFun
 
+/-- Two local equivalences are equal when their forward maps are equal.
+The inverse maps are then forced by the inverse laws, while the remaining
+fields are propositions. -/
+theorem ext
+    {A : Sort u} {B : Sort v}
+    {e f : Equiv A B}
+    (h : e.toFun = f.toFun) :
+    e = f := by
+  cases e with
+  | mk eto einv el er =>
+      cases f with
+      | mk fto finv fl fr =>
+          dsimp at h
+          subst fto
+          have hinv : einv = finv := by
+            funext b
+            calc
+              einv b = einv (eto (finv b)) := congrArg einv (fr b).symm
+              _ = finv b := el (finv b)
+          subst finv
+          rfl
+
 @[simp] theorem symm_toFun
     {A : Sort u} {B : Sort v}
     (e : Equiv A B)
