@@ -1,4 +1,4 @@
-import ResolutionStrongTotalityFreeUniversal
+import ResolutionStrongTotalityExactness
 
 /-!
 # Master theorem package for Strong Totality
@@ -13,8 +13,9 @@ ordinary satisfiability.  A false or unsatisfiable specification need not have
 an ordinary solution; it still has a typed residual Resolution Answer.
 
 The surrounding theorems record the properties already established for the
-canonical completion: universality, naturality, representation invariance,
-dependent closure, and agreement with the existing kernel/free-algebra layer.
+canonical completion: exactness with respect to satisfiability, universality,
+naturality, representation invariance, dependent closure, and agreement with
+the existing kernel/free-algebra layer.
 -/
 
 universe u v
@@ -27,6 +28,25 @@ theorem strongTotality_master
     (S : Specification.{u}) :
     Nonempty (ResolutionAnswer S) :=
   strongTotality S
+
+/-- Exactness of the master principle: ordinary satisfiability is precisely the
+existence of a non-residual Resolution Answer.  Strong Totality therefore adds
+total semantics without manufacturing ordinary solutions. -/
+theorem strongTotality_master_exact
+    (S : Specification.{u}) :
+    Specification.Satisfiable S ↔
+      Exists fun a : ResolutionAnswer S =>
+        a ≠ (ResolutionAnswer.residual : ResolutionAnswer S) :=
+  satisfiable_iff_exists_nonresidual S
+
+/-- In the unsatisfiable case the residual answer is not merely available: it
+is the unique Resolution Answer. -/
+theorem strongTotality_master_unsatisfiable_unique
+    (S : Specification.{u}) :
+    Not (Specification.Satisfiable S) ↔
+      forall a : ResolutionAnswer S,
+        a = (ResolutionAnswer.residual : ResolutionAnswer S) :=
+  not_satisfiable_iff_all_residual S
 
 /-- Operation-family form: every input of every well-formed dependent
 mathematical operation specification has a Resolution Answer. -/
@@ -52,6 +72,15 @@ not assert that every specification has an ordinary satisfying solution. -/
 theorem falseSpecification_has_resolutionAnswer :
     Nonempty (ResolutionAnswer (propositionSpecification False)) :=
   propositionStrongTotality False
+
+/-- The false specification has exactly one Resolution Answer: the residual
+point. -/
+theorem falseSpecification_resolutionAnswer_unique :
+    forall a : ResolutionAnswer (propositionSpecification False),
+      a = (ResolutionAnswer.residual :
+        ResolutionAnswer (propositionSpecification False)) :=
+  (not_satisfiable_iff_all_residual (propositionSpecification False)).1
+    falseSpecification_not_satisfiable
 
 /-- The canonical answer construction has the universal free-pointed
 completion property. -/
