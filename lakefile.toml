@@ -25,6 +25,7 @@ roots = [
   "ResolutionStrongTotalityKernelBridge",
   "ResolutionStrongTotalityFreeBridge",
   "ResolutionStrongTotalityFreeUniversal",
+  "ResolutionStrongTotalityExactness",
   "ResolutionStrongTotalityMaster",
   "ResolutionModels",
   "ResolutionExternal",
