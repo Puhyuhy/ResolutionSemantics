@@ -114,10 +114,7 @@ def totalizeDependent
     totalizeDependent S T (some sx) second = .residual := by
   have hcompose :
       dependentPartialCompose S T (some sx) second = none := by
-    change
-      (match second sx with
-       | none => none
-       | some sy => some ⟨⟨sx, sy.1⟩, sy.2⟩) = none
+    unfold dependentPartialCompose
     rw [h]
   unfold totalizeDependent
   rw [hcompose]
@@ -138,12 +135,7 @@ def totalizeDependent
       dependentPartialCompose S T (some sx) second =
         some (⟨⟨sx, sy.1⟩, sy.2⟩ :
           Specification.Solution (dependentSpecification S T)) := by
-    change
-      (match second sx with
-       | none => none
-       | some sy => some ⟨⟨sx, sy.1⟩, sy.2⟩) =
-        some (⟨⟨sx, sy.1⟩, sy.2⟩ :
-          Specification.Solution (dependentSpecification S T))
+    unfold dependentPartialCompose
     rw [h]
   unfold totalizeDependent
   rw [hcompose]
