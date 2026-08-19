@@ -5,7 +5,7 @@ import ResolutionStrongTotalityRepresentationInvariant
 
 Strong Totality for arbitrary specifications should extend the concrete
 Resolution semantics already present in the repository rather than forming a
-parallel theory.  This module supplies the first direct bridge.
+parallel theory.  This module supplies a direct bridge.
 
 For a kernel expression `e`, consider the mathematical specification whose
 ordinary candidates are old carrier values and whose acceptance predicate says
@@ -14,10 +14,10 @@ succeeds with an old value, that value becomes a realized Strong Totality
 answer.  If it produces a suspension, the complete suspension node is retained
 as structured residual provenance.
 
-Hence the existing evaluator `Expr.res` factors through a provenance-preserving
-Strong Totality answer.  Forgetting residual provenance gives the minimal
-Strong Totality semantics, while decoding the structured answer recovers the
-kernel result exactly.
+The raw result and its equality certificate are packaged as one observation.
+This avoids dependent rewrites entirely: transport between equivalent
+observations is ordinary equality of subtypes, while the semantic case split is
+performed only after the observation has been fixed.
 -/
 
 universe u v
@@ -45,52 +45,37 @@ def toRawAns
 
 end KernelResidual
 
-/-- The specification represented by a concrete kernel expression: an ordinary
-candidate `a` is accepted exactly when kernel resolution computes the old value
-`.old a`. -/
+/-- The specification represented by a concrete kernel expression. -/
 def kernelExprSpecification
     (D : PartialAlg.{u,v} Sigma)
     (e : Expr Sigma D.Carrier) : Specification.{v} where
   Candidate := D.Carrier
   accepts := fun a => Expr.res D e = .old a
 
-/-- Interpret one already-exposed raw kernel result as a structured Strong
-Totality answer.  The equality certificate is separated from the case split so
-that downstream reasoning need not eliminate through a dependent `match`. -/
-def kernelExprResolutionFrom
+/-- A raw expression result together with the certificate that it is exactly
+the result of the kernel evaluator. -/
+abbrev KernelExprObservation
     (D : PartialAlg.{u,v} Sigma)
-    (e : Expr Sigma D.Carrier)
-    (r : RawAns Sigma D.Carrier)
-    (h : Expr.res D e = r) :
-    ResolutionAnswerWith
-      (kernelExprSpecification D e)
-      (KernelResidual Sigma D.Carrier) :=
-  match r with
-  | .old a => .realized a h
-  | .susp op x y => .residual ⟨op, x, y⟩
+    (e : Expr Sigma D.Carrier) :=
+  { r : RawAns Sigma D.Carrier // Expr.res D e = r }
 
-@[simp] theorem kernelExprResolutionFrom_old
+/-- The canonical observation of a kernel expression. -/
+def canonicalKernelExprObservation
     (D : PartialAlg.{u,v} Sigma)
-    (e : Expr Sigma D.Carrier)
-    (a : D.Carrier)
-    (h : Expr.res D e = .old a) :
-    kernelExprResolutionFrom D e (.old a) h =
-      (.realized a h : ResolutionAnswerWith
-        (kernelExprSpecification D e)
-        (KernelResidual Sigma D.Carrier)) := by
-  rfl
+    (e : Expr Sigma D.Carrier) : KernelExprObservation D e :=
+  ⟨Expr.res D e, rfl⟩
 
-@[simp] theorem kernelExprResolutionFrom_susp
+/-- Interpret a fixed kernel observation as a structured Strong Totality
+answer. -/
+def kernelExprResolutionFromObservation
     (D : PartialAlg.{u,v} Sigma)
-    (e : Expr Sigma D.Carrier)
-    (op : Sigma.Op)
-    (x y : RawAns Sigma D.Carrier)
-    (h : Expr.res D e = .susp op x y) :
-    kernelExprResolutionFrom D e (.susp op x y) h =
-      (.residual ⟨op, x, y⟩ : ResolutionAnswerWith
+    (e : Expr Sigma D.Carrier) :
+    KernelExprObservation D e ->
+      ResolutionAnswerWith
         (kernelExprSpecification D e)
-        (KernelResidual Sigma D.Carrier)) := by
-  rfl
+        (KernelResidual Sigma D.Carrier)
+  | ⟨.old a, h⟩ => .realized a h
+  | ⟨.susp op x y, _⟩ => .residual ⟨op, x, y⟩
 
 /-- The provenance-preserving Strong Totality answer associated canonically to
 a kernel expression. -/
@@ -100,10 +85,11 @@ def kernelExprResolution
     ResolutionAnswerWith
       (kernelExprSpecification D e)
       (KernelResidual Sigma D.Carrier) :=
-  kernelExprResolutionFrom D e (Expr.res D e) rfl
+  kernelExprResolutionFromObservation D e
+    (canonicalKernelExprObservation D e)
 
-/-- Decode the structured Strong Totality answer back into the native kernel
-answer syntax. -/
+/-- Decode the structured Strong Totality answer back into native kernel
+syntax. -/
 def decodeKernelExprResolution
     {D : PartialAlg.{u,v} Sigma}
     {e : Expr Sigma D.Carrier} :
@@ -114,20 +100,25 @@ def decodeKernelExprResolution
   | .realized a _ => .old a
   | .residual r => r.toRawAns
 
-/-- The Strong Totality bridge is lossless: decoding its structured answer
-recovers exactly the existing kernel evaluator result. -/
+/-- Decoding an answer obtained from any certified observation returns exactly
+the observed raw result. -/
+theorem decode_kernelExprResolutionFromObservation
+    (D : PartialAlg.{u,v} Sigma)
+    (e : Expr Sigma D.Carrier)
+    (o : KernelExprObservation D e) :
+    decodeKernelExprResolution
+        (kernelExprResolutionFromObservation D e o) = o.1 := by
+  cases o with
+  | mk r h =>
+      cases r <;> rfl
+
+/-- The Strong Totality bridge is lossless. -/
 theorem decode_kernelExprResolution
     (D : PartialAlg.{u,v} Sigma)
     (e : Expr Sigma D.Carrier) :
     decodeKernelExprResolution (kernelExprResolution D e) = Expr.res D e := by
-  unfold kernelExprResolution
-  cases h : Expr.res D e with
-  | old a =>
-      have hp : rfl = h := Subsingleton.elim _ _
-      rw [hp]
-      rfl
-  | susp op x y =>
-      rfl
+  exact decode_kernelExprResolutionFromObservation D e
+    (canonicalKernelExprObservation D e)
 
 /-- If kernel resolution computes an old value, the bridge produces exactly the
 corresponding realized Strong Totality solution. -/
@@ -140,10 +131,13 @@ theorem kernelExprResolution_of_old
       (.realized a h : ResolutionAnswerWith
         (kernelExprSpecification D e)
         (KernelResidual Sigma D.Carrier)) := by
+  have ho :
+      canonicalKernelExprObservation D e =
+        (⟨.old a, h⟩ : KernelExprObservation D e) := by
+    apply Subtype.ext
+    exact h
   unfold kernelExprResolution
-  rw [h]
-  have hp : rfl = h := Subsingleton.elim _ _
-  rw [hp]
+  rw [ho]
   rfl
 
 /-- If kernel resolution suspends, the bridge records precisely that suspension
@@ -158,8 +152,13 @@ theorem kernelExprResolution_of_susp
       (.residual ⟨op, x, y⟩ : ResolutionAnswerWith
         (kernelExprSpecification D e)
         (KernelResidual Sigma D.Carrier)) := by
+  have ho :
+      canonicalKernelExprObservation D e =
+        (⟨.susp op x y, h⟩ : KernelExprObservation D e) := by
+    apply Subtype.ext
+    exact h
   unfold kernelExprResolution
-  rw [h]
+  rw [ho]
   rfl
 
 /-- Forgetting suspension provenance yields the minimal Strong Totality answer
@@ -208,23 +207,33 @@ def kernelOperationSpecification
   Candidate := D.Carrier
   accepts := fun c => D.eval op a b = some c
 
-/-- Interpret one already-exposed partial operation result as a structured
-Strong Totality answer. -/
-def kernelOperationResolutionFrom
+/-- An observed partial-operation result together with its kernel certificate. -/
+abbrev KernelOperationObservation
     (D : PartialAlg.{u,v} Sigma)
     (op : Sigma.Op)
-    (a b : D.Carrier)
-    (r : Option D.Carrier)
-    (h : D.eval op a b = r) :
-    ResolutionAnswerWith
-      (kernelOperationSpecification D op a b)
-      (KernelResidual Sigma D.Carrier) :=
-  match r with
-  | some c => .realized c h
-  | none => .residual ⟨op, .old a, .old b⟩
+    (a b : D.Carrier) :=
+  { r : Option D.Carrier // D.eval op a b = r }
 
-/-- A one-step partial operation has a canonical provenance-preserving Strong
-Totality answer. -/
+/-- Canonical observation of a one-step partial operation. -/
+def canonicalKernelOperationObservation
+    (D : PartialAlg.{u,v} Sigma)
+    (op : Sigma.Op)
+    (a b : D.Carrier) : KernelOperationObservation D op a b :=
+  ⟨D.eval op a b, rfl⟩
+
+/-- Interpret a fixed one-step observation as structured Strong Totality data. -/
+def kernelOperationResolutionFromObservation
+    (D : PartialAlg.{u,v} Sigma)
+    (op : Sigma.Op)
+    (a b : D.Carrier) :
+    KernelOperationObservation D op a b ->
+      ResolutionAnswerWith
+        (kernelOperationSpecification D op a b)
+        (KernelResidual Sigma D.Carrier)
+  | ⟨some c, h⟩ => .realized c h
+  | ⟨none, _⟩ => .residual ⟨op, .old a, .old b⟩
+
+/-- Canonical provenance-preserving Strong Totality answer for one operation. -/
 def kernelOperationResolution
     (D : PartialAlg.{u,v} Sigma)
     (op : Sigma.Op)
@@ -232,7 +241,8 @@ def kernelOperationResolution
     ResolutionAnswerWith
       (kernelOperationSpecification D op a b)
       (KernelResidual Sigma D.Carrier) :=
-  kernelOperationResolutionFrom D op a b (D.eval op a b) rfl
+  kernelOperationResolutionFromObservation D op a b
+    (canonicalKernelOperationObservation D op a b)
 
 /-- Successful old operations are conservatively embedded as realized answers. -/
 theorem kernelOperationResolution_some
@@ -244,10 +254,13 @@ theorem kernelOperationResolution_some
       (.realized c h : ResolutionAnswerWith
         (kernelOperationSpecification D op a b)
         (KernelResidual Sigma D.Carrier)) := by
+  have ho :
+      canonicalKernelOperationObservation D op a b =
+        (⟨some c, h⟩ : KernelOperationObservation D op a b) := by
+    apply Subtype.ext
+    exact h
   unfold kernelOperationResolution
-  rw [h]
-  have hp : rfl = h := Subsingleton.elim _ _
-  rw [hp]
+  rw [ho]
   rfl
 
 /-- Undefined old operations retain exactly the native kernel suspension as
@@ -261,9 +274,26 @@ theorem kernelOperationResolution_none
       (.residual ⟨op, .old a, .old b⟩ : ResolutionAnswerWith
         (kernelOperationSpecification D op a b)
         (KernelResidual Sigma D.Carrier)) := by
+  have ho :
+      canonicalKernelOperationObservation D op a b =
+        (⟨none, h⟩ : KernelOperationObservation D op a b) := by
+    apply Subtype.ext
+    exact h
   unfold kernelOperationResolution
-  rw [h]
+  rw [ho]
   rfl
+
+/-- Decode one-step operation semantics into native `RawAns`. -/
+def decodeKernelOperationResolution
+    {D : PartialAlg.{u,v} Sigma}
+    {op : Sigma.Op}
+    {a b : D.Carrier} :
+    ResolutionAnswerWith
+      (kernelOperationSpecification D op a b)
+      (KernelResidual Sigma D.Carrier) ->
+    RawAns Sigma D.Carrier
+  | .realized c _ => .old c
+  | .residual r => r.toRawAns
 
 /-- Decoding the one-step Strong Totality answer agrees exactly with the
 existing lifted kernel operation on old arguments. -/
@@ -271,32 +301,29 @@ theorem decode_kernelOperationResolution
     (D : PartialAlg.{u,v} Sigma)
     (op : Sigma.Op)
     (a b : D.Carrier) :
-    decodeKernelExprResolution
-      (e := Expr.app op (Expr.val a) (Expr.val b))
-      (match h : D.eval op a b with
-       | some c =>
-           (.realized c (by
-             change D.liftOp op (.old a) (.old b) = .old c
-             unfold PartialAlg.liftOp
-             rw [h]) : ResolutionAnswerWith
-             (kernelExprSpecification D
-               (Expr.app op (Expr.val a) (Expr.val b)))
-             (KernelResidual Sigma D.Carrier))
-       | none =>
-           (.residual ⟨op, .old a, .old b⟩ : ResolutionAnswerWith
-             (kernelExprSpecification D
-               (Expr.app op (Expr.val a) (Expr.val b)))
-             (KernelResidual Sigma D.Carrier))) =
+    decodeKernelOperationResolution (kernelOperationResolution D op a b) =
       D.liftOp op (.old a) (.old b) := by
   cases h : D.eval op a b with
   | none =>
+      rw [kernelOperationResolution_none D op a b h]
+      unfold decodeKernelOperationResolution KernelResidual.toRawAns
       unfold PartialAlg.liftOp
+      change
+        (match D.eval op a b with
+         | some c => RawAns.old c
+         | none => RawAns.susp op (.old a) (.old b)) =
+          RawAns.susp op (.old a) (.old b)
       rw [h]
-      rfl
   | some c =>
+      rw [kernelOperationResolution_some D op a b c h]
+      unfold decodeKernelOperationResolution
       unfold PartialAlg.liftOp
+      change
+        (RawAns.old c : RawAns Sigma D.Carrier) =
+          (match D.eval op a b with
+           | some d => RawAns.old d
+           | none => RawAns.susp op (.old a) (.old b))
       rw [h]
-      rfl
 
 /-- Conceptual bridge theorem: the kernel evaluator is already a structured
 Strong Totality semantics for the expression specification, with suspension
