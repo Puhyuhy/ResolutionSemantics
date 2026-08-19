@@ -14,8 +14,9 @@ an ordinary solution; it still has a typed residual Resolution Answer.
 
 The surrounding theorems record the properties already established for the
 canonical completion: exactness with respect to satisfiability, universality,
-rigidity/minimality, naturality, representation invariance, dependent closure,
-and agreement with the existing kernel/free-algebra layer.
+rigidity/minimality, structural canonicity, naturality, representation
+invariance, dependent closure, and agreement with the existing kernel/free-
+algebra layer.
 -/
 
 universe u v
@@ -63,6 +64,28 @@ theorem strongTotality_master_rigid
         (Exists fun x : Specification.Solution S => z = includeSolution x) ∨
         z = residual) :=
   universalTotalization_rigid S X includeSolution residual hX
+
+/-- Structural canonicity: every universal pointed totalization has one
+structure-preserving equivalence to the canonical Resolution Answer space, and
+any other equivalence preserving the same solution and residual generators is
+identical to it. -/
+theorem strongTotality_master_canonical
+    (S : Specification.{u})
+    (X : Type u)
+    (includeSolution : Specification.Solution S -> X)
+    (residual : X)
+    (hX : IsUniversalTotalization S X includeSolution residual) :
+    Exists fun e : Equiv X (ResolutionAnswer S) =>
+      ((forall x : Specification.Solution S,
+          e (includeSolution x) = realizeSolution x) ∧
+        e residual = (ResolutionAnswer.residual : ResolutionAnswer S)) ∧
+      forall g : Equiv X (ResolutionAnswer S),
+        ((forall x : Specification.Solution S,
+            g (includeSolution x) = realizeSolution x) ∧
+          g residual = (ResolutionAnswer.residual : ResolutionAnswer S)) ->
+        g = e :=
+  universalTotalization_unique_structural_equiv
+    S X includeSolution residual hX
 
 /-- Operation-family form: every input of every well-formed dependent
 mathematical operation specification has a Resolution Answer. -/
