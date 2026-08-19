@@ -31,29 +31,6 @@ universe u r
 namespace Resolution
 namespace StrongTotality
 
-/-- Exact inhabitation criterion for a structured Resolution Answer. -/
-theorem resolutionAnswerWith_nonempty_iff
-    (S : Specification.{u})
-    (E : Type r) :
-    Nonempty (ResolutionAnswerWith S E) ↔
-      Specification.Satisfiable S ∨ Nonempty E := by
-  constructor
-  · intro h
-    rcases h with ⟨a⟩
-    cases a with
-    | realized x hx =>
-        exact Or.inl ⟨x, hx⟩
-    | residual e =>
-        exact Or.inr ⟨e⟩
-  · intro h
-    cases h with
-    | inl hs =>
-        rcases hs with ⟨x, hx⟩
-        exact ⟨.realized x hx⟩
-    | inr he =>
-        rcases he with ⟨e⟩
-        exact ⟨.residual e⟩
-
 /-- Every universal residual extension has exactly the same inhabitation
 criterion as the canonical structured answer space.  In particular,
 universality itself prevents hidden states from making an otherwise empty
@@ -205,24 +182,6 @@ theorem universalResidualExtension_unique_structural_equiv
   apply Equiv.ext
   change g.toFun = toCanonical
   exact hgfun
-
-/-- On an unsatisfiable specification, a structured Resolution Answer exists
-exactly when the residual vocabulary itself has an inhabitant. -/
-theorem unsatisfiable_resolutionAnswerWith_nonempty_iff
-    (S : Specification.{u})
-    (E : Type r)
-    (hS : Not (Specification.Satisfiable S)) :
-    Nonempty (ResolutionAnswerWith S E) ↔ Nonempty E := by
-  constructor
-  · intro h
-    have hcases := (resolutionAnswerWith_nonempty_iff S E).1 h
-    cases hcases with
-    | inl hs =>
-        exact False.elim (hS hs)
-    | inr he =>
-        exact he
-  · intro he
-    exact (resolutionAnswerWith_nonempty_iff S E).2 (Or.inr he)
 
 /-- The no-go form of residual minimality: for an unsatisfiable specification,
 every universal residual extension is nonempty exactly when its residual
