@@ -18,6 +18,12 @@ exactly `ResolutionAnswer.map f`.  Hence the functorial action of Resolution
 Answers is forced by the universal property rather than being an independent
 choice.  Identity and composition follow both computationally and by
 uniqueness.
+
+More generally, any universal completion may replace the canonical source.
+It has a unique map over every specification morphism into every pointed target.
+When both source and target are universal, their unique canonical
+isomorphisms make this map commute with the canonical Resolution action.  Thus
+canonicity and naturality are coherent consequences of one universal property.
 -/
 
 universe u
@@ -78,6 +84,39 @@ def comp
     rfl
   map_residual := by
     rw [p.map_residual, q.map_residual]
+
+/-- Precompose a map over `f` by a vertical morphism in the source fiber. -/
+def precompVertical
+    {S T : Specification.{u}}
+    {f : SpecMorphism S T}
+    {A A' : CompletionObject S}
+    {B : CompletionObject T}
+    (p : CompletionHomOver f A B)
+    (g : CompletionHom A' A) :
+    CompletionHomOver f A' B where
+  toFun := fun x => p.toFun (g.toFun x)
+  map_solution := by
+    intro x
+    rw [g.map_solution x, p.map_solution x]
+  map_residual := by
+    rw [g.map_residual, p.map_residual]
+
+/-- Postcompose a map over `f` by a vertical morphism in the target fiber. -/
+def postcompVertical
+    {S T : Specification.{u}}
+    {f : SpecMorphism S T}
+    {A : CompletionObject S}
+    {B B' : CompletionObject T}
+    (g : CompletionHom B B')
+    (p : CompletionHomOver f A B) :
+    CompletionHomOver f A B' where
+  toFun := fun x => g.toFun (p.toFun x)
+  map_solution := by
+    intro x
+    rw [p.map_solution x,
+      g.map_solution (SpecMorphism.mapSolution f x)]
+  map_residual := by
+    rw [p.map_residual, g.map_residual]
 
 /-- Extensionality of completion maps over a fixed specification translation. -/
 theorem ext
@@ -151,6 +190,41 @@ theorem canonicalCompletionMapOver_unique
     huniq (canonicalCompletionMapOver f B)
   exact hq.trans hc.symm
 
+/-- Relative initiality does not depend on choosing the canonical presentation
+of the source.  Every universal pointed completion has exactly one map over
+`f` into every pointed target completion. -/
+theorem universalCompletion_relativeInitial
+    {S T : Specification.{u}}
+    (f : SpecMorphism S T)
+    (A : CompletionObject S)
+    (B : CompletionObject T)
+    (hA : IsUniversalTotalization S A.Carrier A.includeSolution A.residual) :
+    Exists fun p : CompletionHomOver f A B =>
+      forall q : CompletionHomOver f A B, q = p := by
+  rcases hA B.Carrier
+      (fun x : Specification.Solution S =>
+        B.includeSolution (SpecMorphism.mapSolution f x))
+      B.residual with
+    ⟨F, hF, hUnique⟩
+  let p : CompletionHomOver f A B := {
+    toFun := F
+    map_solution := hF.1
+    map_residual := hF.2
+  }
+  refine ⟨p, ?_⟩
+  intro q
+  have hqPreserves :
+      ((forall x : Specification.Solution S,
+          q.toFun (A.includeSolution x) =
+            B.includeSolution (SpecMorphism.mapSolution f x)) ∧
+        q.toFun A.residual = B.residual) :=
+    ⟨q.map_solution, q.map_residual⟩
+  have hqFun : q.toFun = F := hUnique q.toFun hqPreserves
+  apply CompletionHomOver.ext
+  intro x
+  change q.toFun x = F x
+  exact congrFun hqFun x
+
 /-- The already-defined functorial map on Resolution Answers, packaged as a
 completion map over the corresponding specification morphism. -/
 def canonicalCompletionFunctorMap
@@ -223,6 +297,60 @@ theorem canonicalCompletionFunctor_comp_byUniversality
     (CompletionHomOver.comp
       (canonicalCompletionFunctorMap g)
       (canonicalCompletionFunctorMap f))
+
+/-- Any structure-preserving isomorphisms from arbitrary completions to the
+canonical completions force the naturality square to commute whenever the
+source completion is universal. -/
+theorem universalCompletion_naturalitySquare
+    {S T : Specification.{u}}
+    (f : SpecMorphism S T)
+    (A : CompletionObject S)
+    (B : CompletionObject T)
+    (hA : IsUniversalTotalization S A.Carrier A.includeSolution A.residual)
+    (iS : CompletionIso A (canonicalCompletion S))
+    (iT : CompletionIso B (canonicalCompletion T))
+    (p : CompletionHomOver f A B) :
+    CompletionHomOver.postcompVertical iT.hom p =
+      CompletionHomOver.precompVertical
+        (canonicalCompletionFunctorMap f) iS.hom := by
+  rcases universalCompletion_relativeInitial
+      f A (canonicalCompletion T) hA with
+    ⟨q, hUnique⟩
+  have hleft :
+      CompletionHomOver.postcompVertical iT.hom p = q :=
+    hUnique (CompletionHomOver.postcompVertical iT.hom p)
+  have hright :
+      CompletionHomOver.precompVertical
+          (canonicalCompletionFunctorMap f) iS.hom = q :=
+    hUnique (CompletionHomOver.precompVertical
+      (canonicalCompletionFunctorMap f) iS.hom)
+  exact hleft.trans hright.symm
+
+/-- Coherent canonicity and naturality for universal completions.  Given
+universal completions over `S` and `T`, there are unique canonical
+isomorphisms, a unique map over every specification morphism `f`, and these
+three unique pieces necessarily form the canonical naturality square. -/
+theorem universalCompletions_canonicalNatural
+    {S T : Specification.{u}}
+    (f : SpecMorphism S T)
+    (A : CompletionObject S)
+    (B : CompletionObject T)
+    (hA : IsUniversalTotalization S A.Carrier A.includeSolution A.residual)
+    (hB : IsUniversalTotalization T B.Carrier B.includeSolution B.residual) :
+    Exists fun iS : CompletionIso A (canonicalCompletion S) =>
+      (forall jS : CompletionIso A (canonicalCompletion S), jS = iS) ∧
+      Exists fun iT : CompletionIso B (canonicalCompletion T) =>
+        (forall jT : CompletionIso B (canonicalCompletion T), jT = iT) ∧
+        Exists fun p : CompletionHomOver f A B =>
+          (forall q : CompletionHomOver f A B, q = p) ∧
+          CompletionHomOver.postcompVertical iT.hom p =
+            CompletionHomOver.precompVertical
+              (canonicalCompletionFunctorMap f) iS.hom := by
+  rcases universalCompletion_unique_iso S A hA with ⟨iS, hiS⟩
+  rcases universalCompletion_unique_iso T B hB with ⟨iT, hiT⟩
+  rcases universalCompletion_relativeInitial f A B hA with ⟨p, hp⟩
+  refine ⟨iS, hiS, iT, hiT, p, hp, ?_⟩
+  exact universalCompletion_naturalitySquare f A B hA iS iT p
 
 /-- Strong Totality is therefore natural at the level of universal completion
 objects: every specification morphism has a uniquely determined action between
