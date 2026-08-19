@@ -156,7 +156,7 @@ theorem universalTotalization_unique_structural_equiv
     (includeSolution : Specification.Solution S -> X)
     (residual : X)
     (hX : IsUniversalTotalization S X includeSolution residual) :
-    Exists! e : Equiv X (ResolutionAnswer S),
+    ∃! e : Equiv X (ResolutionAnswer S),
       ((forall x : Specification.Solution S,
           e (includeSolution x) = realizeSolution x) ∧
         e residual = (ResolutionAnswer.residual : ResolutionAnswer S)) := by
@@ -216,11 +216,8 @@ theorem universalTotalization_unique_structural_equiv
   refine ⟨e, ?_, ?_⟩
   · exact hto
   · intro g hg
-    have hgfun : g.toFun = toRA := by
-      have hgf : g.toFun = toRA := by
-        have htoSelf : toRA = toRA := rfl
-        exact (htoUnique g.toFun hg).trans (htoUnique toRA hto).symm
-      exact hgf
+    have hgfun : g.toFun = toRA :=
+      (htoUnique g.toFun hg).trans (htoUnique toRA hto).symm
     apply Equiv.ext
     intro z
     exact congrFun hgfun z
