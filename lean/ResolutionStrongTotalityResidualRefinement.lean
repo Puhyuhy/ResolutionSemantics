@@ -8,64 +8,56 @@ how much information residual answers retain.  A map `E -> F` between residual
 vocabularies is read from finer to coarser information: each residual datum in
 `E` is translated into one in `F`.
 
-Such maps lift canonically to Resolution Answers, fix every realized ordinary
-solution, and compose functorially.  The one-point residual vocabulary `Unit`
-is terminal: every residual vocabulary has exactly one map to it.  Consequently
-the original single-residual Strong Totality semantics is the unique coarsest
-semantics obtained by forgetting all residual provenance while preserving every
-ordinary solution.
+Residual vocabularies may inhabit independent universes.  This is essential for
+the terminal map to `Unit`, which lives in `Type 0`, and for kernel provenance,
+whose natural universe need not coincide with that of mathematical candidates.
 -/
 
-universe u
+universe u r s t
 
 namespace Resolution
 namespace StrongTotality
 
-/-- A refinement/coarsening map between residual vocabularies.  The direction
-`E -> F` means that an `E`-residual may retain at least as much provenance as
-its image in `F`. -/
-abbrev ResidualRefinement (E F : Type u) : Type u := E -> F
+/-- A refinement/coarsening map between residual vocabularies. -/
+abbrev ResidualRefinement (E : Type r) (F : Type s) : Type (max r s) := E -> F
 
 namespace ResidualRefinement
 
 /-- Identity residual translation. -/
-def id (E : Type u) : ResidualRefinement E E :=
-  fun e => e
+def id (E : Type r) : ResidualRefinement E E := fun e => e
 
 /-- Composition of residual translations. -/
 def comp
-    {E F G : Type u}
+    {E : Type r} {F : Type s} {G : Type t}
     (g : ResidualRefinement F G)
     (f : ResidualRefinement E F) : ResidualRefinement E G :=
   fun e => g (f e)
 
 @[simp] theorem id_apply
-    (E : Type u) (e : E) :
-    id E e = e := by
+    (E : Type r) (e : E) : id E e = e := by
   rfl
 
 @[simp] theorem comp_apply
-    {E F G : Type u}
+    {E : Type r} {F : Type s} {G : Type t}
     (g : ResidualRefinement F G)
     (f : ResidualRefinement E F)
-    (e : E) :
-    comp g f e = g (f e) := by
+    (e : E) : comp g f e = g (f e) := by
   rfl
 
 @[simp] theorem comp_id
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : ResidualRefinement E F) :
     comp (id F) f = f := by
   rfl
 
 @[simp] theorem id_comp
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : ResidualRefinement E F) :
     comp f (id E) = f := by
   rfl
 
 @[simp] theorem comp_assoc
-    {E F G H : Type u}
+    {E : Type r} {F : Type s} {G : Type t} {H : Type u}
     (h : ResidualRefinement G H)
     (g : ResidualRefinement F G)
     (f : ResidualRefinement E F) :
@@ -74,12 +66,12 @@ def comp
 
 /-- There is a canonical translation from every residual vocabulary to the
 one-point vocabulary. -/
-def toUnit (E : Type u) : ResidualRefinement E Unit :=
+def toUnit (E : Type r) : ResidualRefinement E Unit :=
   fun _ => ()
 
 /-- The translation to the one-point residual vocabulary is unique. -/
 theorem toUnit_unique
-    (E : Type u)
+    (E : Type r)
     (f : ResidualRefinement E Unit) :
     f = toUnit E := by
   funext e
@@ -89,11 +81,10 @@ end ResidualRefinement
 
 namespace ResolutionAnswerWith
 
-/-- Translate only the residual information of a Resolution Answer.  Realized
-ordinary solutions are preserved literally. -/
+/-- Translate only residual information; realized solutions are preserved. -/
 def mapResidual
     {S : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : ResidualRefinement E F) :
     ResolutionAnswerWith S E -> ResolutionAnswerWith S F
   | .realized x hx => .realized x hx
@@ -101,7 +92,7 @@ def mapResidual
 
 @[simp] theorem mapResidual_realized
     {S : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : ResidualRefinement E F)
     (x : S.Candidate)
     (hx : S.accepts x) :
@@ -111,7 +102,7 @@ def mapResidual
 
 @[simp] theorem mapResidual_residual
     {S : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : ResidualRefinement E F)
     (e : E) :
     mapResidual f (.residual e : ResolutionAnswerWith S E) =
@@ -120,7 +111,7 @@ def mapResidual
 
 @[simp] theorem mapResidual_realize
     {S : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : ResidualRefinement E F)
     (x : Specification.Solution S) :
     mapResidual f
@@ -131,14 +122,14 @@ def mapResidual
 
 @[simp] theorem mapResidual_id
     {S : Specification.{u}}
-    {E : Type u}
+    {E : Type r}
     (a : ResolutionAnswerWith S E) :
     mapResidual (ResidualRefinement.id E) a = a := by
   cases a <;> rfl
 
 @[simp] theorem mapResidual_comp
     {S : Specification.{u}}
-    {E F G : Type u}
+    {E : Type r} {F : Type s} {G : Type t}
     (g : ResidualRefinement F G)
     (f : ResidualRefinement E F)
     (a : ResolutionAnswerWith S E) :
@@ -146,11 +137,11 @@ def mapResidual
       mapResidual g (mapResidual f a) := by
   cases a <;> rfl
 
-/-- A bijective change of residual vocabulary induces an equivalence of the
-corresponding Strong Totality answer types. -/
+/-- A bijective change of residual vocabulary induces an equivalence of answer
+spaces. -/
 def mapResidualEquiv
     (S : Specification.{u})
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (e : Equiv E F) :
     Equiv (ResolutionAnswerWith S E) (ResolutionAnswerWith S F) where
   toFun := mapResidual e
@@ -159,20 +150,24 @@ def mapResidualEquiv
     intro a
     cases a with
     | realized x hx => rfl
-    | residual r =>
-        simp [mapResidual]
+    | residual x =>
+        change ResolutionAnswerWith.residual (e.invFun (e.toFun x)) =
+          ResolutionAnswerWith.residual x
+        rw [e.left_inv x]
   right_inv := by
     intro a
     cases a with
     | realized x hx => rfl
-    | residual r =>
-        simp [mapResidual]
+    | residual y =>
+        change ResolutionAnswerWith.residual (e.toFun (e.invFun y)) =
+          ResolutionAnswerWith.residual y
+        rw [e.right_inv y]
 
-/-- `mapResidual` is the unique map that fixes ordinary solutions and translates
-residuals by the specified residual refinement. -/
+/-- `mapResidual` is uniquely determined by its action on solutions and
+residuals. -/
 theorem mapResidual_unique
     (S : Specification.{u})
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : ResidualRefinement E F)
     (g : ResolutionAnswerWith S E -> ResolutionAnswerWith S F)
     (hSolution : forall x : Specification.Solution S,
@@ -183,19 +178,17 @@ theorem mapResidual_unique
   funext a
   cases a with
   | realized x hx =>
-      have h := hSolution (⟨x, hx⟩ : Specification.Solution S)
-      simpa [ResolutionAnswerWith.realize] using h
+      exact hSolution (⟨x, hx⟩ : Specification.Solution S)
   | residual e =>
       exact hResidual e
 
 end ResolutionAnswerWith
 
-/-- Coarsening through the unique residual map `E -> Unit`, followed by the
-canonical equivalence with the original one-residual semantics, is exactly the
-existing provenance-forgetting map `coarsenResidual`. -/
+/-- Terminal coarsening agrees exactly with the original provenance-forgetting
+map. -/
 theorem coarsenResidual_eq_terminalMap
     (S : Specification.{u})
-    {E : Type u}
+    {E : Type r}
     (a : ResolutionAnswerWith S E) :
     unitResidualEquiv S
         (ResolutionAnswerWith.mapResidual
@@ -203,12 +196,11 @@ theorem coarsenResidual_eq_terminalMap
       coarsenResidual a := by
   cases a <;> rfl
 
-/-- The minimal Strong Totality semantics is terminal among residual semantics
-for a fixed specification: there is exactly one map to it that preserves every
-ordinary solution and sends every residual to the unique residual. -/
+/-- The minimal one-residual semantics is terminal for each fixed
+specification. -/
 theorem minimalResidualSemantics_terminal
     (S : Specification.{u})
-    (E : Type u) :
+    (E : Type r) :
     Exists fun f : ResolutionAnswerWith S E -> ResolutionAnswer S =>
       ((forall x : Specification.Solution S,
           f (ResolutionAnswerWith.realize x) = realizeSolution x) ∧
@@ -233,16 +225,15 @@ theorem minimalResidualSemantics_terminal
     funext a
     cases a with
     | realized x hx =>
-        have h := hg.1 (⟨x, hx⟩ : Specification.Solution S)
-        simpa [ResolutionAnswerWith.realize, realizeSolution] using h
+        exact hg.1 (⟨x, hx⟩ : Specification.Solution S)
     | residual e =>
         exact hg.2 e
 
-/-- Equivalent formulation: any two provenance-forgetting maps satisfying the
-minimal Strong Totality equations are equal. -/
+/-- Any two minimal provenance-forgetting maps satisfying the defining
+equations coincide. -/
 theorem minimalResidualCoarsening_unique
     (S : Specification.{u})
-    {E : Type u}
+    {E : Type r}
     (f g : ResolutionAnswerWith S E -> ResolutionAnswer S)
     (hfSolution : forall x : Specification.Solution S,
       f (ResolutionAnswerWith.realize x) = realizeSolution x)
@@ -260,8 +251,8 @@ theorem minimalResidualCoarsening_unique
   have hg : g = terminal := huniq g ⟨hgSolution, hgResidual⟩
   exact hf.trans hg.symm
 
-/-- The provenance-rich dependent semantics therefore has a unique canonical
-map to the earlier single-residual dependent semantics. -/
+/-- The provenance-rich dependent semantics has a unique canonical map to the
+minimal dependent semantics. -/
 theorem structuredDependent_to_minimal_terminal
     (S : Specification.{u})
     (T : Specification.Solution S -> Specification.{u}) :
