@@ -16,6 +16,7 @@ roots = [
   "ResolutionStrongTotalityResidualRefinement",
   "ResolutionStrongTotalityUnifiedMorphisms",
   "ResolutionStrongTotalityResidualFiber",
+  "ResolutionStrongTotalityFibration",
   "ResolutionModels",
   "ResolutionExternal",
   "ResolutionFiniteTagProof",
