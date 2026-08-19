@@ -13,6 +13,10 @@ one.  Its carrier is exhausted by exactly two kinds of points: included
 ordinary solutions and the distinguished residual point.  Moreover the
 inclusion is injective and no included solution equals the residual.
 
+Finally, the equivalence to the canonical completion is itself unique once it
+is required to preserve ordinary solutions and the residual point.  This gives
+a literal canonicity theorem, not merely existence of some abstract bijection.
+
 Thus the canonical construction is minimal in a literal state-space sense: it
 adds exactly one point and nothing else.
 -/
@@ -141,6 +145,85 @@ theorem universalTotalization_rigid
     universalTotalization_solution_ne_residual S X includeSolution residual hX,
     universalTotalization_exhausted S X includeSolution residual hX
   ⟩
+
+/-- Any universal totalization is canonically equivalent to `ResolutionAnswer S`:
+there exists exactly one equivalence whose forward map sends every included
+ordinary solution to its canonical realization and sends the distinguished
+residual to the canonical residual. -/
+theorem universalTotalization_unique_structural_equiv
+    (S : Specification.{u})
+    (X : Type u)
+    (includeSolution : Specification.Solution S -> X)
+    (residual : X)
+    (hX : IsUniversalTotalization S X includeSolution residual) :
+    Exists! e : Equiv X (ResolutionAnswer S),
+      ((forall x : Specification.Solution S,
+          e (includeSolution x) = realizeSolution x) ∧
+        e residual = (ResolutionAnswer.residual : ResolutionAnswer S)) := by
+  rcases hX (ResolutionAnswer S) (@realizeSolution S) .residual with
+    ⟨toRA, hto, htoUnique⟩
+  rcases resolutionAnswer_isUniversalTotalization S X includeSolution residual with
+    ⟨fromRA, hfrom, _⟩
+  have hleft : forall z : X, fromRA (toRA z) = z := by
+    have hcompExt :
+        ((forall x : Specification.Solution S,
+            (fun q => fromRA (toRA q)) (includeSolution x) = includeSolution x) ∧
+          (fun q => fromRA (toRA q)) residual = residual) := by
+      constructor
+      · intro x
+        calc
+          fromRA (toRA (includeSolution x)) = fromRA (realizeSolution x) :=
+            congrArg fromRA (hto.1 x)
+          _ = includeSolution x := hfrom.1 x
+      · calc
+          fromRA (toRA residual) = fromRA
+              (ResolutionAnswer.residual : ResolutionAnswer S) :=
+            congrArg fromRA hto.2
+          _ = residual := hfrom.2
+    have hidExt :
+        ((forall x : Specification.Solution S,
+            (fun q : X => q) (includeSolution x) = includeSolution x) ∧
+          (fun q : X => q) residual = residual) :=
+      ⟨fun _ => rfl, rfl⟩
+    rcases hX X includeSolution residual with ⟨f, _, huniq⟩
+    have hc : (fun q => fromRA (toRA q)) = f := huniq _ hcompExt
+    have hi : (fun q : X => q) = f := huniq _ hidExt
+    intro z
+    exact congrFun (hc.trans hi.symm) z
+  have hright : forall a : ResolutionAnswer S, toRA (fromRA a) = a := by
+    intro a
+    cases a with
+    | realized x hx =>
+        let sx : Specification.Solution S := ⟨x, hx⟩
+        calc
+          toRA (fromRA (.realized x hx)) =
+              toRA (fromRA (realizeSolution sx)) := by rfl
+          _ = toRA (includeSolution sx) := congrArg toRA (hfrom.1 sx)
+          _ = realizeSolution sx := hto.1 sx
+          _ = .realized x hx := by rfl
+    | residual =>
+        calc
+          toRA (fromRA
+              (ResolutionAnswer.residual : ResolutionAnswer S)) =
+              toRA residual := congrArg toRA hfrom.2
+          _ = (ResolutionAnswer.residual : ResolutionAnswer S) := hto.2
+  let e : Equiv X (ResolutionAnswer S) := {
+    toFun := toRA
+    invFun := fromRA
+    left_inv := hleft
+    right_inv := hright
+  }
+  refine ⟨e, ?_, ?_⟩
+  · exact hto
+  · intro g hg
+    have hgfun : g.toFun = toRA := by
+      have hgf : g.toFun = toRA := by
+        have htoSelf : toRA = toRA := rfl
+        exact (htoUnique g.toFun hg).trans (htoUnique toRA hto).symm
+      exact hgf
+    apply Equiv.ext
+    intro z
+    exact congrFun hgfun z
 
 /-- The canonical Strong Totality completion therefore contains no hidden
 states: every answer is either a realized ordinary solution or the residual. -/
