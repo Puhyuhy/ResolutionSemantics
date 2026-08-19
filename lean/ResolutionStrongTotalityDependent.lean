@@ -102,6 +102,19 @@ def dependentPartialCompose
   | none => none
   | some sx => dependentPartialAt S T sx (second sx)
 
+/-- Expose the definitional reduction of dependent composition at a realized
+first-stage solution.  Downstream proofs can rewrite by this equation directly
+instead of relying on tactic transparency through the dependent match. -/
+theorem dependentPartialCompose_some
+    (S : Specification.{u})
+    (T : Specification.Solution S -> Specification.{u})
+    (sx : Specification.Solution S)
+    (second : (s : Specification.Solution S) ->
+      Option (Specification.Solution (T s))) :
+    dependentPartialCompose S T (some sx) second =
+      dependentPartialAt S T sx (second sx) := by
+  rfl
+
 /-- Total dependent resolution.  Failure of either ordinary stage becomes the
 single canonical residual of the composite dependent specification. -/
 def totalizeDependent
@@ -132,8 +145,7 @@ def totalizeDependent
     totalizeDependent S T (some sx) second = .residual := by
   have hcompose :
       dependentPartialCompose S T (some sx) second = none := by
-    unfold dependentPartialCompose
-    rw [h]
+    rw [dependentPartialCompose_some S T sx second, h]
     rfl
   unfold totalizeDependent
   rw [hcompose]
@@ -152,8 +164,7 @@ def totalizeDependent
   have hcompose :
       dependentPartialCompose S T (some sx) second =
         some (dependentPairSolution S T sx sy) := by
-    unfold dependentPartialCompose
-    rw [h]
+    rw [dependentPartialCompose_some S T sx second, h]
     rfl
   unfold totalizeDependent
   rw [hcompose]
