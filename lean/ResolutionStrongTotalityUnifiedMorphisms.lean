@@ -21,16 +21,18 @@ the terminal coarsening is compatible with change of mathematical
 specification.
 -/
 
-universe u
+universe u r s t
 
 namespace Resolution
 namespace StrongTotality
 
 /-- A morphism between structured Strong Totality semantics simultaneously
-translates the mathematical specification and the residual vocabulary. -/
+translates the mathematical specification and the residual vocabulary.
+The residual source and target may live in universes independent of the
+specification universe. -/
 structure SemanticsMorphism
     (S T : Specification.{u})
-    (E F : Type u) where
+    (E : Type r) (F : Type s) where
   specification : SpecMorphism S T
   residual : ResidualRefinement E F
 
@@ -39,14 +41,14 @@ namespace SemanticsMorphism
 /-- Identity semantic translation. -/
 def id
     (S : Specification.{u})
-    (E : Type u) : SemanticsMorphism S S E E where
+    (E : Type r) : SemanticsMorphism S S E E where
   specification := SpecMorphism.id S
   residual := ResidualRefinement.id E
 
 /-- Composition of semantic translations. -/
 def comp
     {S T U : Specification.{u}}
-    {E F G : Type u}
+    {E : Type r} {F : Type s} {G : Type t}
     (g : SemanticsMorphism T U F G)
     (f : SemanticsMorphism S T E F) :
     SemanticsMorphism S U E G where
@@ -57,7 +59,7 @@ def comp
 morphism. -/
 def mapAnswer
     {S T : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : SemanticsMorphism S T E F) :
     ResolutionAnswerWith S E -> ResolutionAnswerWith T F
   | .realized x hx =>
@@ -67,7 +69,7 @@ def mapAnswer
 
 @[simp] theorem mapAnswer_realized
     {S T : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : SemanticsMorphism S T E F)
     (x : S.Candidate)
     (hx : S.accepts x) :
@@ -78,7 +80,7 @@ def mapAnswer
 
 @[simp] theorem mapAnswer_residual
     {S T : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : SemanticsMorphism S T E F)
     (e : E) :
     mapAnswer f (.residual e) =
@@ -88,7 +90,7 @@ def mapAnswer
 /-- Unified transport is conservative on ordinary solutions. -/
 @[simp] theorem mapAnswer_realize
     {S T : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : SemanticsMorphism S T E F)
     (x : Specification.Solution S) :
     mapAnswer f
@@ -102,7 +104,7 @@ def mapAnswer
 /-- Unified semantic transport respects identities. -/
 @[simp] theorem mapAnswer_id
     (S : Specification.{u})
-    (E : Type u)
+    (E : Type r)
     (a : ResolutionAnswerWith S E) :
     mapAnswer (id S E) a = a := by
   cases a <;> rfl
@@ -110,7 +112,7 @@ def mapAnswer
 /-- Unified semantic transport respects composition. -/
 @[simp] theorem mapAnswer_comp
     {S T U : Specification.{u}}
-    {E F G : Type u}
+    {E : Type r} {F : Type s} {G : Type t}
     (g : SemanticsMorphism T U F G)
     (f : SemanticsMorphism S T E F)
     (a : ResolutionAnswerWith S E) :
@@ -125,7 +127,7 @@ end SemanticsMorphism
 residual vocabulary. -/
 def mapSpecificationWith
     {S T : Specification.{u}}
-    {E : Type u}
+    {E : Type r}
     (f : SpecMorphism S T) :
     ResolutionAnswerWith S E -> ResolutionAnswerWith T E :=
   SemanticsMorphism.mapAnswer {
@@ -135,7 +137,7 @@ def mapSpecificationWith
 
 @[simp] theorem mapSpecificationWith_realized
     {S T : Specification.{u}}
-    {E : Type u}
+    {E : Type r}
     (f : SpecMorphism S T)
     (x : S.Candidate)
     (hx : S.accepts x) :
@@ -145,7 +147,7 @@ def mapSpecificationWith
 
 @[simp] theorem mapSpecificationWith_residual
     {S T : Specification.{u}}
-    {E : Type u}
+    {E : Type r}
     (f : SpecMorphism S T)
     (e : E) :
     mapSpecificationWith f (.residual e) =
@@ -155,19 +157,19 @@ def mapSpecificationWith
 /-- Specification transport and residual transport commute strictly. -/
 theorem specification_residual_transport_commute
     {S T : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : SpecMorphism S T)
-    (r : ResidualRefinement E F)
+    (q : ResidualRefinement E F)
     (a : ResolutionAnswerWith S E) :
-    mapSpecificationWith f (ResolutionAnswerWith.mapResidual r a) =
-      ResolutionAnswerWith.mapResidual r (mapSpecificationWith f a) := by
+    mapSpecificationWith f (ResolutionAnswerWith.mapResidual q a) =
+      ResolutionAnswerWith.mapResidual q (mapSpecificationWith f a) := by
   cases a <;> rfl
 
 /-- A unified semantic morphism may equivalently be applied by first changing
 specification and then changing residual vocabulary. -/
 theorem mapAnswer_eq_residual_after_specification
     {S T : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : SemanticsMorphism S T E F)
     (a : ResolutionAnswerWith S E) :
     SemanticsMorphism.mapAnswer f a =
@@ -179,7 +181,7 @@ theorem mapAnswer_eq_residual_after_specification
 mathematical specification. -/
 theorem mapAnswer_eq_specification_after_residual
     {S T : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : SemanticsMorphism S T E F)
     (a : ResolutionAnswerWith S E) :
     SemanticsMorphism.mapAnswer f a =
@@ -194,7 +196,7 @@ arbitrary residual vocabulary to the minimal one-point residual vocabulary. -/
 def toMinimalSemantics
     {S T : Specification.{u}}
     (f : SpecMorphism S T)
-    (E : Type u) : SemanticsMorphism S T E Unit where
+    (E : Type r) : SemanticsMorphism S T E Unit where
   specification := f
   residual := ResidualRefinement.toUnit E
 
@@ -203,7 +205,7 @@ of mathematical specifications.  The square between structured semantics and
 the original minimal `ResolutionAnswer` semantics commutes exactly. -/
 theorem coarsenResidual_natural
     {S T : Specification.{u}}
-    {E F : Type u}
+    {E : Type r} {F : Type s}
     (f : SemanticsMorphism S T E F)
     (a : ResolutionAnswerWith S E) :
     coarsenResidual (SemanticsMorphism.mapAnswer f a) =
@@ -215,7 +217,7 @@ with first forgetting provenance and then using the already-established
 minimal specification functoriality. -/
 theorem toMinimalSemantics_commutes
     {S T : Specification.{u}}
-    {E : Type u}
+    {E : Type r}
     (f : SpecMorphism S T)
     (a : ResolutionAnswerWith S E) :
     unitResidualEquiv T
@@ -228,18 +230,18 @@ residual vocabulary is independent of how its residual function is written:
 there is only one possible residual action. -/
 theorem minimalResidualAction_unique
     {S T : Specification.{u}}
-    {E : Type u}
+    {E : Type r}
     (f : SpecMorphism S T)
-    (r : ResidualRefinement E Unit) :
+    (q : ResidualRefinement E Unit) :
     SemanticsMorphism.mapAnswer
-        ({ specification := f, residual := r } :
+        ({ specification := f, residual := q } :
           SemanticsMorphism S T E Unit) =
       SemanticsMorphism.mapAnswer (toMinimalSemantics f E) := by
   funext a
   cases a with
   | realized x hx => rfl
   | residual e =>
-      have h : r e = ResidualRefinement.toUnit E e :=
+      have h : q e = ResidualRefinement.toUnit E e :=
         Subsingleton.elim _ _
       rw [h]
 
@@ -247,7 +249,7 @@ theorem minimalResidualAction_unique
 Totality semantics is therefore canonical. -/
 theorem minimalSemanticTransport_canonical
     {S T : Specification.{u}}
-    {E : Type u}
+    {E : Type r}
     (f : SpecMorphism S T)
     (g : SemanticsMorphism S T E Unit)
     (hg : g.specification = f) :
@@ -255,7 +257,6 @@ theorem minimalSemanticTransport_canonical
       SemanticsMorphism.mapAnswer (toMinimalSemantics f E) := by
   cases g with
   | mk specification residual =>
-      simp only at hg
       cases hg
       exact minimalResidualAction_unique f residual
 
