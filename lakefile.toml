@@ -19,6 +19,7 @@ roots = [
   "ResolutionStrongTotalityResidualFiber",
   "ResolutionStrongTotalityFibration",
   "ResolutionStrongTotalityMinimalSection",
+  "ResolutionStrongTotalityCompletionCategory",
   "ResolutionModels",
   "ResolutionExternal",
   "ResolutionFiniteTagProof",
