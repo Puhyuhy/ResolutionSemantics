@@ -200,7 +200,7 @@ theorem totalizePartialArrow_comp
         ResolutionAnswer.bind, totalize, h]
   | some y =>
       simp [totalizePartialArrow, PartialArrow.comp, ResolutionArrow.comp,
-        ResolutionAnswer.bind, totalize, h]
+        ResolutionAnswer.bind, totalize, realizeSolution, h]
 
 /-- Strong Totality is therefore closed under any finite two-stage partial
 mathematical computation: compose first in the partial world or totalize each
