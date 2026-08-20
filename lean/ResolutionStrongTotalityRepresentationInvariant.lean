@@ -38,6 +38,19 @@ structure SpecEquiv (S T : Specification.{u}) where
   right_inv : forall y : T.Candidate,
     toMorphism.map (invMorphism.map y) = y
 
+/-- A structural isomorphism between completion objects living over equivalent
+base specifications.  The forward and backward maps lie over the corresponding
+base translations and are inverse on the completion carriers. -/
+structure CompletionIsoOver
+    {S T : Specification.{u}}
+    (e : SpecEquiv S T)
+    (A : CompletionObject S)
+    (B : CompletionObject T) where
+  hom : CompletionHomOver e.toMorphism A B
+  inv : CompletionHomOver e.invMorphism B A
+  left_inv : forall x : A.Carrier, inv.toFun (hom.toFun x) = x
+  right_inv : forall y : B.Carrier, hom.toFun (inv.toFun y) = y
+
 namespace SpecEquiv
 
 /-- Every specification is equivalent to itself. -/
@@ -210,6 +223,28 @@ theorem canonicalCompletionEquiv_right
         ((canonicalCompletionFunctorMap e.invMorphism).toFun a) = a := by
   exact resolution_right_inv e a
 
+/-- A specification equivalence induces a structural completion isomorphism,
+not merely an abstract equivalence of carrier types.  Its forward and backward
+maps are exactly the universally forced maps along the two base translations. -/
+def canonicalCompletionIsoOver
+    {S T : Specification.{u}}
+    (e : SpecEquiv S T) :
+    CompletionIsoOver e (canonicalCompletion S) (canonicalCompletion T) where
+  hom := canonicalCompletionFunctorMap e.toMorphism
+  inv := canonicalCompletionFunctorMap e.invMorphism
+  left_inv := canonicalCompletionEquiv_left e
+  right_inv := canonicalCompletionEquiv_right e
+
+/-- The structural representation isomorphism has the same underlying forward
+function as the previously defined carrier equivalence. -/
+theorem canonicalCompletionIsoOver_toFun
+    {S T : Specification.{u}}
+    (e : SpecEquiv S T)
+    (a : (canonicalCompletion S).Carrier) :
+    (canonicalCompletionIsoOver e).hom.toFun a =
+      (canonicalCompletionEquiv e).toFun a := by
+  rfl
+
 /-- The completion equivalence fixes the distinguished residual answer. -/
 @[simp] theorem canonicalCompletionEquiv_residual
     {S T : Specification.{u}}
@@ -239,6 +274,16 @@ theorem strongTotality_representationInvariant
     (e : SpecEquiv S T) :
     Nonempty (Equiv (ResolutionAnswer S) (ResolutionAnswer T)) :=
   ⟨resolutionEquiv e⟩
+
+/-- Strong Totality is structurally representation invariant: equivalent
+specifications induce an isomorphism of their canonical completion objects over
+the base equivalence itself. -/
+theorem strongTotality_structuralRepresentationInvariant
+    {S T : Specification.{u}}
+    (e : SpecEquiv S T) :
+    Nonempty (CompletionIsoOver e
+      (canonicalCompletion S) (canonicalCompletion T)) :=
+  ⟨canonicalCompletionIsoOver e⟩
 
 end SpecEquiv
 end StrongTotality
