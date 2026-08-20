@@ -46,17 +46,16 @@ theorem universalFamilyCompletion_map_eq_canonicalConjugate
         (eG (eta.index i)).symm
           (ResolutionAnswer.map (eta.mapSpec i) (eF i x)) := by
   intro i x
-  apply (eG (eta.index i)).injective
   calc
-    eG (eta.index i) (p.toFun i x) =
-        ResolutionAnswer.map (eta.mapSpec i) (eF i x) :=
-      universalFamilyCompletion_naturalitySquare
-        eta A B hA eF eG heF heG p i x
-    _ = eG (eta.index i)
-          ((eG (eta.index i)).symm
-            (ResolutionAnswer.map (eta.mapSpec i) (eF i x))) :=
-      ((eG (eta.index i)).right_inv
-        (ResolutionAnswer.map (eta.mapSpec i) (eF i x))).symm
+    p.toFun i x =
+        (eG (eta.index i)).symm
+          (eG (eta.index i) (p.toFun i x)) :=
+      ((eG (eta.index i)).left_inv (p.toFun i x)).symm
+    _ = (eG (eta.index i)).symm
+          (ResolutionAnswer.map (eta.mapSpec i) (eF i x)) :=
+      congrArg (fun a => (eG (eta.index i)).symm a)
+        (universalFamilyCompletion_naturalitySquare
+          eta A B hA eF eG heF heG p i x)
 
 /-- Fully packaged minimal-family classification: unique source and target
 canonical equivalences and the unique map over `eta` exist simultaneously, and
@@ -229,17 +228,16 @@ theorem universalResidualFamilyCompletion_map_eq_canonicalConjugate
         (eG (eta.index i)).symm
           (FamilySemanticsMorphism.mapAnswer eta i (eF i x)) := by
   intro i x
-  apply (eG (eta.index i)).injective
   calc
-    eG (eta.index i) (p.toFun i x) =
-        FamilySemanticsMorphism.mapAnswer eta i (eF i x) :=
-      universalResidualFamilyCompletion_naturalitySquare
-        eta A B hA eF eG heF heG p i x
-    _ = eG (eta.index i)
-          ((eG (eta.index i)).symm
-            (FamilySemanticsMorphism.mapAnswer eta i (eF i x))) :=
-      ((eG (eta.index i)).right_inv
-        (FamilySemanticsMorphism.mapAnswer eta i (eF i x))).symm
+    p.toFun i x =
+        (eG (eta.index i)).symm
+          (eG (eta.index i) (p.toFun i x)) :=
+      ((eG (eta.index i)).left_inv (p.toFun i x)).symm
+    _ = (eG (eta.index i)).symm
+          (FamilySemanticsMorphism.mapAnswer eta i (eF i x)) :=
+      congrArg (fun a => (eG (eta.index i)).symm a)
+        (universalResidualFamilyCompletion_naturalitySquare
+          eta A B hA eF eG heF heG p i x)
 
 /-- Fully packaged provenance-aware classification: the unique structural
 source and target equivalences and unique map over a reindexed semantic
