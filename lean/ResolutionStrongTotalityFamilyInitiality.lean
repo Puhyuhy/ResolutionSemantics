@@ -66,13 +66,8 @@ theorem universalFamilyCompletion_iff_initial
         change p.toFun i (A.includeSolution i x) =
             onSolution i
               (SpecMorphism.mapSolution (SpecMorphism.id (F i)) x) at h
-        calc
-          p.toFun i (A.includeSolution i x) =
-              onSolution i
-                (SpecMorphism.mapSolution (SpecMorphism.id (F i)) x) := h
-          _ = onSolution i x :=
-            congrArg (onSolution i)
-              (SpecMorphism.mapSolution_id (F i) x)
+        rw [SpecMorphism.mapSolution_id] at h
+        exact h
       · intro i
         have h := p.map_residual i
         change p.toFun i (A.residual i) = onResidual i at h
@@ -85,12 +80,8 @@ theorem universalFamilyCompletion_iff_initial
           change g i (A.includeSolution i x) =
             onSolution i
               (SpecMorphism.mapSolution (SpecMorphism.id (F i)) x)
-          calc
-            g i (A.includeSolution i x) = onSolution i x := hg.1 i x
-            _ = onSolution i
-                (SpecMorphism.mapSolution (SpecMorphism.id (F i)) x) :=
-              congrArg (onSolution i)
-                (SpecMorphism.mapSolution_id (F i) x).symm
+          rw [SpecMorphism.mapSolution_id]
+          exact hg.1 i x
         map_residual := by
           intro i
           change g i (A.residual i) = onResidual i
