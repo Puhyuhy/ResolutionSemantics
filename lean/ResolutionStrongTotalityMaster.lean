@@ -2,6 +2,7 @@ import ResolutionStrongTotalityMinimality
 import ResolutionStrongTotalityResidualClassification
 import ResolutionStrongTotalityFamilyUniversal
 import ResolutionStrongTotalityFamilyNaturality
+import ResolutionStrongTotalityFamilyInitiality
 
 /-!
 # Master theorem package for Strong Totality
@@ -130,6 +131,37 @@ theorem strongTotality_master_familyCanonical
         g = e :=
   universalTotalizationFamily_unique_structural_equiv
     F X includeSolution residual hX
+
+/-- Exact family classification: a packaged family completion satisfies Strong
+Totality's simultaneous universal property exactly when it admits one unique
+structural equivalence to the canonical Resolution family. -/
+theorem strongTotality_master_familyClassification
+    {I : Type v}
+    (F : I -> Specification.{u})
+    (A : FamilyCompletionObject F) :
+    IsUniversalFamilyCompletion F A ↔
+      Exists fun e : (i : I) -> Equiv (A.Carrier i) (ResolutionAnswer (F i)) =>
+        IsCanonicalFamilyEquiv F A e ∧
+        forall g : (i : I) -> Equiv (A.Carrier i) (ResolutionAnswer (F i)),
+          IsCanonicalFamilyEquiv F A g -> g = e :=
+  universalFamilyCompletion_iff_uniqueCanonicalEquiv F A
+
+/-- Categorical family classification: Strong Totality's simultaneous universal
+property is exactly initiality among pointed completions of the same
+specification family.  Hence the universal extension formulation and the
+categorical formulation are not merely compatible; they are equivalent. -/
+theorem strongTotality_master_familyInitiality
+    {I : Type v}
+    (F : I -> Specification.{u})
+    (A : FamilyCompletionObject F) :
+    IsUniversalFamilyCompletion F A ↔
+      forall B : FamilyCompletionObject F,
+        Exists fun p : FamilyCompletionHomOver
+            (FamilySpecMorphism.id F) A B =>
+          forall q : FamilyCompletionHomOver
+              (FamilySpecMorphism.id F) A B,
+            q = p :=
+  universalFamilyCompletion_iff_initial F A
 
 /-- Global family naturality with reindexing: universal source and target
 families admit unique structural equivalences to the canonical Resolution
