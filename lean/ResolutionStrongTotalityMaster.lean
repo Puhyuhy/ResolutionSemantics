@@ -1,5 +1,6 @@
 import ResolutionStrongTotalityMinimality
 import ResolutionStrongTotalityResidualClassification
+import ResolutionStrongTotalityFamilyUniversal
 
 /-!
 # Master theorem package for Strong Totality
@@ -87,6 +88,47 @@ theorem strongTotality_master_canonical
         g = e :=
   universalTotalization_unique_structural_equiv
     S X includeSolution residual hX
+
+/-- Global family universality: the canonical Resolution construction satisfies
+one simultaneous universal property over every member of an arbitrary family
+of well-formed specifications. -/
+theorem strongTotality_master_familyUniversal
+    {I : Type v}
+    (F : I -> Specification.{u}) :
+    IsUniversalTotalizationFamily F
+      (fun i => ResolutionAnswer (F i))
+      (fun i => @realizeSolution (F i))
+      (fun i =>
+        (ResolutionAnswer.residual : ResolutionAnswer (F i))) :=
+  resolutionAnswerFamily_isUniversalTotalization F
+
+/-- Global family canonicity: every simultaneous universal totalization of an
+arbitrary specification family is uniquely structurally equivalent to the
+canonical Resolution family.  The equivalences are chosen and characterized as
+one dependent family, rather than by unrelated pointwise existence claims. -/
+theorem strongTotality_master_familyCanonical
+    {I : Type v}
+    (F : I -> Specification.{u})
+    (X : I -> Type u)
+    (includeSolution :
+      (i : I) -> Specification.Solution (F i) -> X i)
+    (residual : (i : I) -> X i)
+    (hX : IsUniversalTotalizationFamily F X includeSolution residual) :
+    Exists fun e : (i : I) -> Equiv (X i) (ResolutionAnswer (F i)) =>
+      ((forall (i : I) (x : Specification.Solution (F i)),
+          e i (includeSolution i x) = realizeSolution x) ∧
+        (forall i : I,
+          e i (residual i) =
+            (ResolutionAnswer.residual : ResolutionAnswer (F i)))) ∧
+      forall g : (i : I) -> Equiv (X i) (ResolutionAnswer (F i)),
+        ((forall (i : I) (x : Specification.Solution (F i)),
+            g i (includeSolution i x) = realizeSolution x) ∧
+          (forall i : I,
+            g i (residual i) =
+              (ResolutionAnswer.residual : ResolutionAnswer (F i)))) ->
+        g = e :=
+  universalTotalizationFamily_unique_structural_equiv
+    F X includeSolution residual hX
 
 /-- Full classification for arbitrary residual provenance: a carrier is a
 universal residual extension exactly when there exists one and only one
