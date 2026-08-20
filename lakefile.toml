@@ -39,6 +39,7 @@ roots = [
   "ResolutionStrongTotalityNormalForm",
   "ResolutionStrongTotalitySingletonFamily",
   "ResolutionStrongTotalityFamilyResidual",
+  "ResolutionStrongTotalityFamilyResidualNaturality",
   "ResolutionStrongTotalityMaster",
   "ResolutionModels",
   "ResolutionExternal",
