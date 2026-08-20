@@ -142,6 +142,110 @@ theorem universalFamilyCompletion_uniqueCanonicalEquiv
     ⟨e, he, huniq⟩
   exact ⟨e, he, huniq⟩
 
+/-- A structural equivalence to the canonical Resolution family transports the
+canonical universal property back to the given family completion.  Thus
+universality is invariant under exactly the structure-preserving equivalences
+used by family canonicity. -/
+theorem canonicalFamilyEquiv_universal
+    {I : Type v}
+    (F : I -> Specification.{u})
+    (A : FamilyCompletionObject F)
+    (e : (i : I) -> Equiv (A.Carrier i) (ResolutionAnswer (F i)))
+    (he : IsCanonicalFamilyEquiv F A e) :
+    IsUniversalFamilyCompletion F A := by
+  intro Y onSolution onResidual
+  rcases resolutionAnswerFamily_isUniversalTotalization F
+      Y onSolution onResidual with
+    ⟨f, hf, huniq⟩
+  let k : (i : I) -> A.Carrier i -> Y i :=
+    fun i x => f i (e i x)
+  refine ⟨k, ?_, ?_⟩
+  · constructor
+    · intro i x
+      change f i (e i (A.includeSolution i x)) = onSolution i x
+      calc
+        f i (e i (A.includeSolution i x)) =
+            f i (realizeSolution x) :=
+          congrArg (f i) (he.1 i x)
+        _ = onSolution i x := hf.1 i x
+    · intro i
+      change f i (e i (A.residual i)) = onResidual i
+      calc
+        f i (e i (A.residual i)) =
+            f i (ResolutionAnswer.residual : ResolutionAnswer (F i)) :=
+          congrArg (f i) (he.2 i)
+        _ = onResidual i := hf.2 i
+  · intro g hg
+    let gCanonical :
+        (i : I) -> ResolutionAnswer (F i) -> Y i :=
+      fun i a => g i ((e i).symm a)
+    have hgCanonicalPreserves :
+        ((forall (i : I) (x : Specification.Solution (F i)),
+            gCanonical i (realizeSolution x) = onSolution i x) ∧
+          (forall i : I,
+            gCanonical i
+              (ResolutionAnswer.residual : ResolutionAnswer (F i)) =
+                onResidual i)) := by
+      constructor
+      · intro i x
+        calc
+          gCanonical i (realizeSolution x) =
+              g i ((e i).symm (realizeSolution x)) := by rfl
+          _ = g i (A.includeSolution i x) := by
+            apply congrArg (g i)
+            calc
+              (e i).symm (realizeSolution x) =
+                  (e i).symm (e i (A.includeSolution i x)) :=
+                congrArg (fun a => (e i).symm a) (he.1 i x).symm
+              _ = A.includeSolution i x := (e i).left_inv _
+          _ = onSolution i x := hg.1 i x
+      · intro i
+        calc
+          gCanonical i
+              (ResolutionAnswer.residual : ResolutionAnswer (F i)) =
+              g i ((e i).symm
+                (ResolutionAnswer.residual : ResolutionAnswer (F i))) := by
+            rfl
+          _ = g i (A.residual i) := by
+            apply congrArg (g i)
+            calc
+              (e i).symm
+                  (ResolutionAnswer.residual : ResolutionAnswer (F i)) =
+                  (e i).symm (e i (A.residual i)) :=
+                congrArg (fun a => (e i).symm a) (he.2 i).symm
+              _ = A.residual i := (e i).left_inv _
+          _ = onResidual i := hg.2 i
+    have hCanonical : gCanonical = f :=
+      huniq gCanonical hgCanonicalPreserves
+    funext i x
+    calc
+      g i x = g i ((e i).symm (e i x)) :=
+        congrArg (g i) ((e i).left_inv x).symm
+      _ = gCanonical i (e i x) := by rfl
+      _ = f i (e i x) :=
+        congrArg (fun q => q i (e i x)) hCanonical
+      _ = k i x := by rfl
+
+/-- Classification of universal family completions.  A family completion is
+universal exactly when it is uniquely structurally equivalent to the canonical
+Resolution family.  This turns family canonicity from a one-way consequence of
+universality into an exact characterization. -/
+theorem universalFamilyCompletion_iff_uniqueCanonicalEquiv
+    {I : Type v}
+    (F : I -> Specification.{u})
+    (A : FamilyCompletionObject F) :
+    IsUniversalFamilyCompletion F A ↔
+      Exists fun e : (i : I) -> Equiv (A.Carrier i) (ResolutionAnswer (F i)) =>
+        IsCanonicalFamilyEquiv F A e ∧
+        forall g : (i : I) -> Equiv (A.Carrier i) (ResolutionAnswer (F i)),
+          IsCanonicalFamilyEquiv F A g -> g = e := by
+  constructor
+  · intro hA
+    exact universalFamilyCompletion_uniqueCanonicalEquiv F A hA
+  · intro h
+    rcases h with ⟨e, he, _⟩
+    exact canonicalFamilyEquiv_universal F A e he
+
 /-- Relative initiality for universal families, allowing arbitrary reindexing of
 the base family.  Universality of the source alone forces one unique map over
 any family specification translation into any pointed target family. -/
