@@ -3,6 +3,10 @@ import ResolutionStrongTotalityResidualClassification
 import ResolutionStrongTotalityFamilyUniversal
 import ResolutionStrongTotalityFamilyNaturality
 import ResolutionStrongTotalityFamilyInitiality
+import ResolutionStrongTotalityFamilyConjugation
+import ResolutionStrongTotalityNormalForm
+import ResolutionStrongTotalitySingletonFamily
+import ResolutionStrongTotalityNoGo
 
 /-!
 # Master theorem package for Strong Totality
@@ -23,7 +27,7 @@ representation invariance, dependent closure, and agreement with the existing
 kernel/free-algebra layer.
 -/
 
-universe u v w r
+universe u v w z r
 
 namespace Resolution
 namespace StrongTotality
@@ -52,6 +56,23 @@ theorem strongTotality_master_unsatisfiable_unique
       forall a : ResolutionAnswer S,
         a = (ResolutionAnswer.residual : ResolutionAnswer S) :=
   not_satisfiable_iff_all_residual S
+
+/-- Canonical normal form: Strong Totality adds exactly one residual point to
+the ordinary solution space. -/
+def strongTotality_master_normalForm
+    (S : Specification.{u}) :
+    Equiv (ResolutionAnswer S)
+      (Sum (Specification.Solution S) Unit) :=
+  resolutionAnswerEquivSum S
+
+/-- Structured normal form: a chosen residual vocabulary is exactly the right
+summand beside the ordinary solution space. -/
+def strongTotality_master_structuredNormalForm
+    (S : Specification.{u})
+    (E : Type r) :
+    Equiv (ResolutionAnswerWith S E)
+      (Sum (Specification.Solution S) E) :=
+  structuredResolutionAnswerEquivSum S E
 
 /-- Any universal pointed totalization is rigid: ordinary solutions remain
 injectively embedded, none can collapse to the residual, and there are no
@@ -90,6 +111,22 @@ theorem strongTotality_master_canonical
         g = e :=
   universalTotalization_unique_structural_equiv
     S X includeSolution residual hX
+
+/-- The original one-specification universal property is exactly the `Unit`
+instance of simultaneous family universality. -/
+theorem strongTotality_master_singletonFamily
+    (S : Specification.{u})
+    (X : Type u)
+    (includeSolution : Specification.Solution S -> X)
+    (residual : X) :
+    IsUniversalTotalization S X includeSolution residual ↔
+      IsUniversalTotalizationFamily
+        (singletonSpecificationFamily S)
+        (fun _ : Unit => X)
+        (fun _ => includeSolution)
+        (fun _ => residual) :=
+  isUniversalTotalization_iff_singletonFamily
+    S X includeSolution residual
 
 /-- Global family universality: the canonical Resolution construction satisfies
 one simultaneous universal property over every member of an arbitrary family
@@ -163,6 +200,33 @@ theorem strongTotality_master_familyInitiality
             q = p :=
   universalFamilyCompletion_iff_initial F A
 
+/-- The canonical family map over an identity translation is forced to be the
+identity completion map. -/
+theorem strongTotality_master_familyCanonicalId
+    {I : Type v}
+    (F : I -> Specification.{u}) :
+    canonicalFamilyCompletionMap (FamilySpecMorphism.id F) =
+      FamilyCompletionHomOver.id (canonicalFamilyCompletion F) :=
+  canonicalFamilyCompletionMap_id F
+
+/-- Canonical family transport is coherently compositional under arbitrary
+reindexing. -/
+theorem strongTotality_master_familyCanonicalComp
+    {I : Type v}
+    {J : Type w}
+    {K : Type z}
+    {F : I -> Specification.{u}}
+    {G : J -> Specification.{u}}
+    {H : K -> Specification.{u}}
+    (eta : FamilySpecMorphism F G)
+    (theta : FamilySpecMorphism G H) :
+    FamilyCompletionHomOver.comp
+        (canonicalFamilyCompletionMap theta)
+        (canonicalFamilyCompletionMap eta) =
+      canonicalFamilyCompletionMap
+        (FamilySpecMorphism.comp theta eta) :=
+  canonicalFamilyCompletionMap_comp eta theta
+
 /-- Global family naturality with reindexing: universal source and target
 families admit unique structural equivalences to the canonical Resolution
 families and one unique map over every reindexed family translation.  These
@@ -192,6 +256,30 @@ theorem strongTotality_master_familyCanonicalNatural
             eG (eta.index i) (p.toFun i x) =
               ResolutionAnswer.map (eta.mapSpec i) (eF i x) :=
   universalFamilies_canonicalNatural eta A B hA hB
+
+/-- Stronger map classification: every reindexed family map from a universal
+source is exactly canonical Resolution transport conjugated by structural
+family equivalences. -/
+theorem strongTotality_master_familyMapConjugate
+    {I : Type v}
+    {J : Type w}
+    {F : I -> Specification.{u}}
+    {G : J -> Specification.{u}}
+    (eta : FamilySpecMorphism F G)
+    (A : FamilyCompletionObject F)
+    (B : FamilyCompletionObject G)
+    (hA : IsUniversalFamilyCompletion F A)
+    (eF : (i : I) -> Equiv (A.Carrier i) (ResolutionAnswer (F i)))
+    (eG : (j : J) -> Equiv (B.Carrier j) (ResolutionAnswer (G j)))
+    (heF : IsCanonicalFamilyEquiv F A eF)
+    (heG : IsCanonicalFamilyEquiv G B eG)
+    (p : FamilyCompletionHomOver eta A B) :
+    forall (i : I) (x : A.Carrier i),
+      p.toFun i x =
+        (eG (eta.index i)).symm
+          (ResolutionAnswer.map (eta.mapSpec i) (eF i x)) :=
+  universalFamilyCompletion_map_eq_canonicalConjugate
+    eta A B hA eF eG heF heG p
 
 /-- Full classification for arbitrary residual provenance: a carrier is a
 universal residual extension exactly when there exists one and only one
@@ -223,6 +311,49 @@ theorem strongTotality_master_residualExistence
     Nonempty (ResolutionAnswerWith S E) ↔
       Specification.Satisfiable S ∨ Nonempty E :=
   resolutionAnswerWith_nonempty_iff S E
+
+/-- Family-level provenance Strong Totality: each fiber may carry its own
+residual vocabulary and the whole dependent family is universally totalizing at
+once. -/
+theorem strongTotality_master_residualFamilyUniversal
+    {I : Type v}
+    (F : I -> Specification.{u})
+    (E : I -> Type r) :
+    IsUniversalResidualExtensionFamily F E
+      (fun i => ResolutionAnswerWith (F i) (E i))
+      (fun i => @ResolutionAnswerWith.realize (F i) (E i))
+      (fun i q =>
+        (ResolutionAnswerWith.residual q :
+          ResolutionAnswerWith (F i) (E i))) :=
+  resolutionAnswerWithFamily_isUniversalResidualExtension F E
+
+/-- Provenance-aware reindexed family maps are themselves classified by
+canonical conjugation.  Both specification translations and residual
+refinements are transported simultaneously. -/
+theorem strongTotality_master_residualFamilyMapConjugate
+    {I : Type v}
+    {J : Type w}
+    {F : I -> Specification.{u}}
+    {E : I -> Type r}
+    {G : J -> Specification.{u}}
+    {R : J -> Type r}
+    (eta : FamilySemanticsMorphism F E G R)
+    (A : ResidualFamilyCompletionObject F E)
+    (B : ResidualFamilyCompletionObject G R)
+    (hA : IsUniversalResidualFamilyCompletion F E A)
+    (eF : (i : I) ->
+      Equiv (A.Carrier i) (ResolutionAnswerWith (F i) (E i)))
+    (eG : (j : J) ->
+      Equiv (B.Carrier j) (ResolutionAnswerWith (G j) (R j)))
+    (heF : IsCanonicalResidualFamilyEquiv F E A eF)
+    (heG : IsCanonicalResidualFamilyEquiv G R B eG)
+    (p : ResidualFamilyCompletionHomOver eta A B) :
+    forall (i : I) (x : A.Carrier i),
+      p.toFun i x =
+        (eG (eta.index i)).symm
+          (FamilySemanticsMorphism.mapAnswer eta i (eF i x)) :=
+  universalResidualFamilyCompletion_map_eq_canonicalConjugate
+    eta A B hA eF eG heF heG p
 
 /-- On an unsatisfiable specification, residual inhabitation is necessary and
 sufficient for Strong Totality.  No residual-free completion can evade this
@@ -286,6 +417,21 @@ theorem falseSpecification_resolutionAnswer_unique :
         ResolutionAnswer (propositionSpecification False)) :=
   (not_satisfiable_iff_all_residual (propositionSpecification False)).1
     falseSpecification_not_satisfiable
+
+/-- Local no-go theorem: whenever ordinary satisfiability fails, there is no
+total function extracting an ordinary solution from every Resolution Answer. -/
+theorem strongTotality_master_unsatisfiableNoCollapse
+    (S : Specification.{u})
+    (hS : Not (Specification.Satisfiable S)) :
+    Not (ResolutionAnswer S -> Specification.Solution S) :=
+  unsatisfiable_no_resolutionAnswer_to_solution S hS
+
+/-- Global no-go theorem: no uniform operation can collapse Strong Totality
+back to ordinary solvability for every well-formed specification. -/
+theorem strongTotality_master_noUniformCollapse :
+    Not ((S : Specification.{0}) ->
+      ResolutionAnswer S -> Specification.Solution S) :=
+  no_uniform_resolutionAnswer_to_solution
 
 /-- The canonical answer construction has the universal free-pointed
 completion property. -/
