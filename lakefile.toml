@@ -31,6 +31,7 @@ roots = [
   "ResolutionStrongTotalityFreeBridge",
   "ResolutionStrongTotalityFreeUniversal",
   "ResolutionStrongTotalityExactness",
+  "ResolutionStrongTotalityNoGo",
   "ResolutionStrongTotalityMinimality",
   "ResolutionStrongTotalityFamilyUniversal",
   "ResolutionStrongTotalityFamilyNaturality",
