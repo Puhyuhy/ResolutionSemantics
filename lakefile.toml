@@ -32,6 +32,7 @@ roots = [
   "ResolutionStrongTotalityFreeUniversal",
   "ResolutionStrongTotalityExactness",
   "ResolutionStrongTotalityMinimality",
+  "ResolutionStrongTotalityFamilyUniversal",
   "ResolutionStrongTotalityMaster",
   "ResolutionModels",
   "ResolutionExternal",
