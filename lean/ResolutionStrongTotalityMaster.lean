@@ -1,6 +1,7 @@
 import ResolutionStrongTotalityMinimality
 import ResolutionStrongTotalityResidualClassification
 import ResolutionStrongTotalityFamilyUniversal
+import ResolutionStrongTotalityFamilyNaturality
 
 /-!
 # Master theorem package for Strong Totality
@@ -21,7 +22,7 @@ representation invariance, dependent closure, and agreement with the existing
 kernel/free-algebra layer.
 -/
 
-universe u v r
+universe u v w r
 
 namespace Resolution
 namespace StrongTotality
@@ -129,6 +130,36 @@ theorem strongTotality_master_familyCanonical
         g = e :=
   universalTotalizationFamily_unique_structural_equiv
     F X includeSolution residual hX
+
+/-- Global family naturality with reindexing: universal source and target
+families admit unique structural equivalences to the canonical Resolution
+families and one unique map over every reindexed family translation.  These
+unique data necessarily commute with the fiberwise `ResolutionAnswer.map`
+action at every source index. -/
+theorem strongTotality_master_familyCanonicalNatural
+    {I : Type v}
+    {J : Type w}
+    {F : I -> Specification.{u}}
+    {G : J -> Specification.{u}}
+    (eta : FamilySpecMorphism F G)
+    (A : FamilyCompletionObject F)
+    (B : FamilyCompletionObject G)
+    (hA : IsUniversalFamilyCompletion F A)
+    (hB : IsUniversalFamilyCompletion G B) :
+    Exists fun eF : (i : I) -> Equiv (A.Carrier i) (ResolutionAnswer (F i)) =>
+      IsCanonicalFamilyEquiv F A eF ∧
+      (forall gF : (i : I) -> Equiv (A.Carrier i) (ResolutionAnswer (F i)),
+        IsCanonicalFamilyEquiv F A gF -> gF = eF) ∧
+      Exists fun eG : (j : J) -> Equiv (B.Carrier j) (ResolutionAnswer (G j)) =>
+        IsCanonicalFamilyEquiv G B eG ∧
+        (forall gG : (j : J) -> Equiv (B.Carrier j) (ResolutionAnswer (G j)),
+          IsCanonicalFamilyEquiv G B gG -> gG = eG) ∧
+        Exists fun p : FamilyCompletionHomOver eta A B =>
+          (forall q : FamilyCompletionHomOver eta A B, q = p) ∧
+          forall (i : I) (x : A.Carrier i),
+            eG (eta.index i) (p.toFun i x) =
+              ResolutionAnswer.map (eta.mapSpec i) (eF i x) :=
+  universalFamilies_canonicalNatural eta A B hA hB
 
 /-- Full classification for arbitrary residual provenance: a carrier is a
 universal residual extension exactly when there exists one and only one
