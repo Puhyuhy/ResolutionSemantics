@@ -42,6 +42,7 @@ roots = [
   "ResolutionStrongTotalityFamilyResidual",
   "ResolutionStrongTotalityFamilyResidualNaturality",
   "ResolutionStrongTotalityFamilyConjugation",
+  "ResolutionStrongTotalityGrandCharacterization",
   "ResolutionStrongTotalityMaster",
   "ResolutionModels",
   "ResolutionExternal",
