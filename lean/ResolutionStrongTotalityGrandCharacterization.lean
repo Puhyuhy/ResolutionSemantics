@@ -296,7 +296,7 @@ structure StrongTotalityGrandCharacterization
   /-- The canonical structured bridge to the existing kernel is lossless. -/
   kernelExact :
     forall {Sigma : Signature.{u}}
-      (D : PartialAlg Sigma)
+      (D : PartialAlg.{u,v} Sigma)
       (e : Expr Sigma D.Carrier),
       decodeKernelExprResolution (kernelExprResolution D e) = Expr.res D e
 
