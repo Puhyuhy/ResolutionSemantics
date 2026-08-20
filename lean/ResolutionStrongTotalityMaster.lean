@@ -423,14 +423,14 @@ total function extracting an ordinary solution from every Resolution Answer. -/
 theorem strongTotality_master_unsatisfiableNoCollapse
     (S : Specification.{u})
     (hS : Not (Specification.Satisfiable S)) :
-    Not (ResolutionAnswer S -> Specification.Solution S) :=
+    Not (Nonempty (ResolutionAnswer S -> Specification.Solution S)) :=
   unsatisfiable_no_resolutionAnswer_to_solution S hS
 
 /-- Global no-go theorem: no uniform operation can collapse Strong Totality
 back to ordinary solvability for every well-formed specification. -/
 theorem strongTotality_master_noUniformCollapse :
-    Not ((S : Specification.{0}) ->
-      ResolutionAnswer S -> Specification.Solution S) :=
+    Not (Nonempty ((S : Specification.{0}) ->
+      ResolutionAnswer S -> Specification.Solution S)) :=
   no_uniform_resolutionAnswer_to_solution
 
 /-- The canonical answer construction has the universal free-pointed
@@ -521,6 +521,15 @@ theorem strongTotality_master_kernel
       (kernelExprSpecification D e)
       (KernelResidual Sigma D.Carrier)) :=
   kernel_isStructuredStrongTotality D e
+
+/-- Kernel exactness: decoding the canonical structured Resolution answer
+recovers exactly the pre-existing evaluator result, with no semantic loss. -/
+theorem strongTotality_master_kernelExact
+    {Sigma : Signature.{u}}
+    (D : PartialAlg Sigma)
+    (e : Expr Sigma D.Carrier) :
+    decodeKernelExprResolution (kernelExprResolution D e) = Expr.res D e :=
+  decode_kernelExprResolution D e
 
 /-- The generated free Resolution algebra is exactly equivalent to the
 structured Strong Totality presentation which separates generated old answers
