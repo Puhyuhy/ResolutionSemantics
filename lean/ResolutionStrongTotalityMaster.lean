@@ -7,6 +7,7 @@ import ResolutionStrongTotalityFamilyConjugation
 import ResolutionStrongTotalityNormalForm
 import ResolutionStrongTotalitySingletonFamily
 import ResolutionStrongTotalityNoGo
+import ResolutionStrongTotalityGrandCharacterization
 
 /-!
 # Master theorem package for Strong Totality
@@ -37,6 +38,14 @@ theorem strongTotality_master
     (S : Specification.{u}) :
     Nonempty (ResolutionAnswer S) :=
   strongTotality S
+
+/-- Final bundled characterization of the canonical Strong Totality semantics:
+free/minimal completion, exactness, unique canonicity, functoriality,
+family/provenance coherence, non-collapse, and kernel exactness. -/
+theorem strongTotality_master_grandCharacterization
+    (S : Specification.{u}) :
+    StrongTotalityGrandCharacterization S :=
+  strongTotality_grandCharacterization S
 
 /-- Exactness of the master principle: ordinary satisfiability is precisely the
 existence of a non-residual Resolution Answer.  Strong Totality therefore adds
