@@ -222,6 +222,28 @@ theorem strongTotality_master_natural
         q = p :=
   strongTotality_universalNatural f
 
+/-- Coherent canonicity and naturality: for any two universal pointed
+completions and any validity-preserving translation `f`, the unique canonical
+isomorphisms and the unique map over `f` exist simultaneously and necessarily
+make the canonical naturality square commute. -/
+theorem strongTotality_master_canonicalNatural
+    {S T : Specification.{u}}
+    (f : SpecMorphism S T)
+    (A : CompletionObject S)
+    (B : CompletionObject T)
+    (hA : IsUniversalTotalization S A.Carrier A.includeSolution A.residual)
+    (hB : IsUniversalTotalization T B.Carrier B.includeSolution B.residual) :
+    Exists fun iS : CompletionIso A (canonicalCompletion S) =>
+      (forall jS : CompletionIso A (canonicalCompletion S), jS = iS) ∧
+      Exists fun iT : CompletionIso B (canonicalCompletion T) =>
+        (forall jT : CompletionIso B (canonicalCompletion T), jT = iT) ∧
+        Exists fun p : CompletionHomOver f A B =>
+          (forall q : CompletionHomOver f A B, q = p) ∧
+          CompletionHomOver.postcompVertical iT.hom p =
+            CompletionHomOver.precompVertical
+              (canonicalCompletionFunctorMap f) iS.hom :=
+  universalCompletions_canonicalNatural f A B hA hB
+
 /-- Equivalent presentations of the same mathematical specification induce
 equivalent Resolution Answer spaces. -/
 theorem strongTotality_master_representationInvariant
