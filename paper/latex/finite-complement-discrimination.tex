@@ -12,13 +12,10 @@ Thus $N_X$ is finite and $S_X$ is closed under taking subterms.
 \begin{lemma}[Finite-complement Rees quotient]
 \label{lem:finite-complement-rees}
 For every finite $X\subseteq F(D)$ there is a congruence $\rho_X$ on $F(D)$
-such that:
-\begin{enumerate}
-  \item every element of $A\cup N_X$ is a singleton $\rho_X$-class;
-  \item all elements of $F(D)\setminus(A\cup N_X)$ form one further class.
-\end{enumerate}
-Consequently $F(D)/\rho_X$ is a finite-complement compatible extension of $D$
-and the quotient map is injective on $X$.
+such that every element of $A\cup N_X$ is a singleton $\rho_X$-class and, if
+nonempty, $F(D)\setminus(A\cup N_X)$ is one additional class.  Consequently
+$F(D)/\rho_X$ is a finite-complement compatible extension of $D$ and the
+quotient map is injective on $X$.
 \end{lemma}
 
 \begin{proof}
@@ -39,11 +36,15 @@ Define
 \[
  \rho_X=\Delta_{F(D)}\cup(I_X\times I_X).
 \]
-Since $I_X$ is absorbing, $\rho_X$ is a congruence; this is the usual Rees
-congruence associated with an ideal \cite{Tichy1981}.  Its only nonsingleton
-class is $I_X$.  Therefore the quotient fixes every base element separately and
-has exactly $|N_X|+1$ elements outside the image of $A$.  Since $X\subseteq
-A\cup N_X$, the quotient map is injective on $X$.
+Since $I_X$ is absorbing, $\rho_X$ is a congruence; when $I_X$ is nonempty this
+is the usual Rees congruence associated with an ideal \cite{Tichy1981}.  Every
+base element remains a singleton class.  Outside the image of $A$ the quotient
+has the singleton classes indexed by $N_X$, together with at most one
+additional class represented by $I_X$.  Hence
+\[
+ |(F(D)/\rho_X)\setminus A|\le |N_X|+1<\infty.
+\]
+Since $X\subseteq A\cup N_X$, the quotient map is injective on $X$.
 \end{proof}
 
 The construction is the algebraic form of the familiar finite-subterm
