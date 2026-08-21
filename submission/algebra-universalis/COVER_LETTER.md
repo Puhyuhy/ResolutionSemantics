@@ -6,7 +6,7 @@ The paper studies a congruence topology on the free compatible total extension o
 
 The manuscript is self-contained. Supplementary Lean 4 developments provide machine-checked verification of several underlying constructions and special cases and are publicly available at https://github.com/Puhyuhy/ResolutionSemantics.
 
-The manuscript is not under consideration elsewhere. I am the sole author and accept full responsibility for the content. Any use of generative-AI tools during the research and writing process is disclosed transparently in the manuscript in accordance with Springer Nature policy.
+I am the sole author and accept full responsibility for the content. The use of generative-AI tools during the research and writing process is disclosed transparently in the manuscript in accordance with Springer Nature policy.
 
 Thank you for considering the submission.
 
