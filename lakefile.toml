@@ -41,6 +41,7 @@ roots = [
   "ResolutionStrongTotalitySingletonFamily",
   "ResolutionStrongTotalityFamilyResidual",
   "ResolutionStrongTotalityFamilyResidualNaturality",
+  "ResolutionStrongTotalityFamilyResidualCoherence",
   "ResolutionStrongTotalityFamilyConjugation",
   "ResolutionStrongTotalityCanonicalObstruction",
   "ResolutionStrongTotalityWellFormed",
