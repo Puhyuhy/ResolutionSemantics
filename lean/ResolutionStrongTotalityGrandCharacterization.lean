@@ -7,6 +7,7 @@ import ResolutionStrongTotalitySingletonFamily
 import ResolutionStrongTotalityFamilyConjugation
 import ResolutionStrongTotalityNoGo
 import ResolutionStrongTotalityKernelBridge
+import ResolutionStrongTotalityWellFormed
 
 /-!
 # Grand characterization of Strong Totality
@@ -26,9 +27,11 @@ For a well-formed specification `S`, `ResolutionAnswer S` is simultaneously:
 * functorial and universally natural under specification morphisms.
 
 The same structure extends coherently to dependent families, reindexing, and
-fiberwise residual-provenance vocabularies.  Finally, the package records both
-the no-go theorem forbidding collapse back to ordinary solvability and the
-lossless bridge to the pre-existing Resolution kernel.
+fiberwise residual-provenance vocabularies.  The package also records the exact
+external domain of the principle for raw syntax, the classical boundary for
+proof-carrying impossibility residuals, the no-go theorem forbidding collapse
+back to ordinary solvability, and the lossless bridge to the pre-existing
+Resolution kernel.
 -/
 
 universe u r v w z
@@ -287,6 +290,19 @@ structure StrongTotalityGrandCharacterization
         (eG (eta.index i)).symm
           (FamilySemanticsMorphism.mapAnswer eta i (eF i x))
 
+  /-- Raw syntax lies in the domain of Resolution semantics exactly when it is
+  well-formed according to its partial semantic decoder. -/
+  wellFormedDomain :
+    forall (L : SpecificationLanguage.{u,v}) (c : L.Code),
+      Nonempty (L.RawResolution c) ↔ L.WellFormed c
+
+  /-- Requiring every residual to carry a proof of ordinary impossibility has
+  exactly the logical strength of propositional excluded middle. -/
+  proofCarryingClassicalBoundary :
+    (forall Q : Specification.{0},
+      Nonempty (ObstructionResolutionAnswer Q)) ↔
+    (forall P : Prop, P ∨ Not P)
+
   /-- Strong Totality cannot be uniformly collapsed back to ordinary
   satisfiability. -/
   noUniformCollapse :
@@ -303,7 +319,8 @@ structure StrongTotalityGrandCharacterization
 /-- **Grand Characterization Theorem.**  The canonical Resolution construction
 satisfies the complete Strong Totality package: free/minimal completion,
 exactness, unique canonicity, functorial and universal naturality, coherent
-family extension, structured residual provenance, the non-collapse theorem,
+family extension, structured residual provenance, exact well-formedness domain,
+the classical boundary for proof-carrying residuals, the non-collapse theorem,
 and exact agreement with the existing kernel semantics. -/
 theorem strongTotality_grandCharacterization
     (S : Specification.{u}) :
@@ -331,6 +348,10 @@ theorem strongTotality_grandCharacterization
     residualFamilyCanonical := ?_
     residualFamilyExact := ?_
     residualFamilyMapConjugation := ?_
+    wellFormedDomain := fun L c =>
+      SpecificationLanguage.rawResolution_nonempty_iff_wellFormed L c
+    proofCarryingClassicalBoundary :=
+      uniformObstructionResolution_iff_excludedMiddle
     noUniformCollapse := no_uniform_resolutionAnswer_to_solution
     kernelExact := ?_
   }
