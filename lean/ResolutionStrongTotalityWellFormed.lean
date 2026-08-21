@@ -59,10 +59,12 @@ theorem wellFormed_iff_nonempty_decoded
     exact ⟨d.specification, d.decodes⟩
 
 /-- Resolution data attached to a raw code consists of a decoded semantic
-specification together with a Resolution Answer for that specification. -/
+specification together with a Resolution Answer for that specification.  The
+universe is raised once because the decoded package itself contains a semantic
+`Specification`, rather than merely a candidate value. -/
 structure RawResolution
     (L : SpecificationLanguage.{u,v})
-    (c : L.Code) : Type (max u v) where
+    (c : L.Code) : Type (max (u + 1) v) where
   decoded : L.Decoded c
   answer : ResolutionAnswer decoded.specification
 
