@@ -18,7 +18,7 @@ Thus $N(X)$ is the finite set of non-base subterms that occur in the chosen
 terms.
 
 \begin{theorem}[Finite-subset discrimination]
-\label{thm:finite-pattern-realization}
+\label{thm:finite-subset-discrimination}
 For every finite subset $X\subseteq\Free D$ there is a finite-complement
 completion $T_X$ such that
 \[
@@ -104,7 +104,7 @@ are disjoint.  In particular $\pi_{T_X}$ is injective on $X$.
 The two-element case gives ordinary separation.
 
 \begin{corollary}[Pairwise separation]
-\label{thm:finite-external-separation}
+\label{thm:pairwise-finite-complement-separation}
 If $x,y\in\Free D$ and $x\ne y$, then some finite-complement completion $T$
 satisfies $\pi_T(x)\ne\pi_T(y)$.
 Moreover one may choose
@@ -126,7 +126,7 @@ finitely many separating homomorphisms.  That argument is not available here
 when the retained base is infinite.
 
 \begin{proposition}[Failure of product closure]
-\label{prop:relative-product-obstruction}
+\label{prop:finite-complement-product-obstruction}
 Let $A$ be infinite.  The class of set embeddings $A\hookrightarrow T$ with
 finite complement $T\setminus A$ is not closed under binary products over the
 diagonal copy of $A$.
@@ -141,14 +141,14 @@ $T^2$ is infinite.
 \end{proof}
 
 This proposition does not by itself establish novelty; it only explains why
-the direct proof of \cref{thm:finite-pattern-realization} is not replaced by
+the direct proof of \cref{thm:finite-subset-discrimination} is not replaced by
 the standard finite-product proof within the same restricted class.
 
 \subsection{Finite bases}
 
 If $A$ is finite, every finite-complement completion is finite.  Hence
-\cref{thm:finite-pattern-realization} implies the familiar residual-finiteness
-consequence.
+\cref{thm:finite-subset-discrimination} implies the familiar
+residual-finiteness consequence.
 
 \begin{corollary}
 If $A$ is finite, then $\Free D$ is residually finite.
