@@ -14,8 +14,9 @@ homomorphisms, and
 \[
  \fceq{m+1}\;\subseteq\;\fceq{m}.
 \]
-By \cref{thm:finite-external-separation}, their intersection is equality.
-Thus the congruences form a separated countable uniformity on $\Free D$.
+By \cref{thm:pairwise-finite-complement-separation}, their intersection is
+equality.  Thus the congruences form a separated countable uniformity on
+$\Free D$.
 
 A sequence $(x_j)$ is Cauchy if for every $m$ there is $N$ such that
 $x_i\fceq{m}x_j$ whenever $i,j\ge N$.  We write
@@ -49,10 +50,9 @@ Choose $f\in\Sigma$ and $a,b\in A$ with $\delta_f(a,b)$ undefined.  Put
 \[
  c_0=f(a,b),\qquad c_{k+1}=f(c_k,b),
 \]
-where the expressions are taken in $\Free D$.  If necessary one may replace
-$f(-,b)$ by any fixed one-hole context whose successive applications remain
-non-base normal terms; the only property used below is strict growth of the
-chosen terms.
+where the expressions are taken in $\Free D$.  Since $c_0$ is non-base, each
+$c_{k+1}$ is again a non-base normal term, and the terms are pairwise distinct
+by their strictly increasing construction depth.
 
 Fix $m$.  Every completion occurring in the definition of $\fceq{m}$ has at
 most $|A|+m$ elements.  Hence the image of the orbit $(c_k)$ in each such
@@ -61,14 +61,13 @@ completion takes at most $|A|+m$ values.  By
 the same image in every completion of that size.  Therefore a suitable
 factorial subsequence is Cauchy for every $m$.
 
-On the other hand, no fixed $x\in\Free D$ can be its limit.  Choose a term
-$c_N$ whose subterm set contains a longer segment of the growing orbit than
-occurs in $x$.  Apply the construction of
-\cref{thm:finite-pattern-realization} to the finite set $\{x,c_N\}$.  The
-resulting finite-complement completion represents all selected subterms
-faithfully, while the next unselected continuation is sent to the sink.  After
-choosing $N$ beyond the size of $x$, this separates $x$ from all sufficiently
-late members of the chosen subsequence.
+On the other hand, no fixed $x\in\Free D$ can be its limit.  Choose $N$ so large
+that $c_N$ has greater construction depth than $x$, and apply the construction
+of \cref{thm:finite-subset-discrimination} to $\{x,c_N\}$.  The resulting
+finite-complement completion represents all selected subterms faithfully, while
+the next unselected continuation is sent to the sink.  The same transition
+continues to send later orbit terms to the sink.  Thus this completion separates
+$x$ from all sufficiently late members of the factorial subsequence.
 
 \begin{theorem}[Finite-base properness]\label{thm:finite-base-properness}
 If $A$ is finite, then
@@ -77,8 +76,8 @@ If $A$ is finite, then
  \quad\Longleftrightarrow\quad
  D\text{ is total}.
 \]
-Equivalently, the finite-complement completion is proper exactly when $D$ is
-genuinely partial.
+Equivalently, the finite-complement uniform completion is proper exactly when
+$D$ is genuinely partial.
 \end{theorem}
 
 \begin{proof}
@@ -120,5 +119,5 @@ Under the preceding hypotheses, $\FCcomp{\Free D}$ is proper.
 \end{theorem}
 
 The condition is sufficient, not necessary.  Its role is simply to exhibit a
-class of infinite-base examples in which finite-complement observations still
+class of infinite-base examples in which finite-complement completions still
 force a new Cauchy point.
