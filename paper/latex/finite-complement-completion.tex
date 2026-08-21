@@ -91,9 +91,10 @@ factorial lies beyond the preperiod and is divisible by the period.
 \end{proof}
 
 A \emph{one-hole unary context} $C[-]$ is a term with exactly one occurrence of
-a distinguished variable, representing the hole, and no other variables.
-Suppose that $C[a]$ is defined in $D$ for every $a\in A$; by the strict
-evaluation convention of \cref{sec:free-completion}, it then induces a map
+a distinguished variable, representing the hole, and no other variables.  We
+call it \emph{nontrivial} if it is not the bare hole $[-]$.  Suppose that
+$C[a]$ is defined in $D$ for every $a\in A$; by the strict evaluation
+convention of \cref{sec:free-completion}, it then induces a map
 $C^D:A\to A$.
 
 \begin{lemma}[Compatibility through contexts]\label{lem:context-compatibility}
@@ -160,6 +161,9 @@ collapsed ideal class.  Because that class is absorbing under every basic
 operation, substitution into the context keeps all later $c_j$ in the same
 class.  The term $x$, however, remains a singleton class.  Thus this one
 finite-complement quotient separates $x$ from every sufficiently late $d_k$.
+If the quotient has complement size $q$, put $M=\max\{q,1\}$.  Its kernel
+belongs to $\mathcal K_M$, so for every sufficiently late $k$ we have
+$(d_k,x)\notin\theta_M$.  Hence $(d_k)$ does not converge to $x$.
 
 Since $x$ was arbitrary, $(d_k)$ has no limit in $F(D)$.  Its limit in the
 Hausdorff completion is therefore outside the image of $F(D)$.
@@ -202,24 +206,26 @@ complement.  It follows that $\theta_1$ is equality, so the induced uniformity
 is discrete and already complete.
 \end{proof}
 
-\begin{remark}[Comparison with prefix-depth agreement]\label{rem:prefix-depth}
-The preceding uniformity is not the usual prefix-depth uniformity on finite
-terms that leads to spaces of infinite trees \cite{ArnoldNivat1980,Courcelle1983}.
-Indeed, suppose $\delta_f(a,z)$ is undefined and put
+\begin{remark}[Contrast with prefix-depth completion]
+\label{rem:prefix-depth-contrast}
+The finite-complement uniformity is not the usual prefix-depth uniformity on
+terms.  Suppose $\delta_f(a,z)$ is undefined and define a left comb by
+$c_0=a$ and $c_{k+1}=f(c_k,z)$.  For each fixed depth, sufficiently long combs
+have the same prefix, so $(c_k)$ is Cauchy for the classical tree ultrametric
+and converges to an infinite comb in the corresponding tree completion
+\cite{ArnoldNivat1980,Courcelle1983}.
+
+By contrast, take a total extension with carrier $A\sqcup\{p,q\}$.  Preserve
+all defined base applications and set
 \[
- c_0=a,\qquad c_{k+1}=f(c_k,z).
+ f_T(a,z)=p,\qquad f_T(p,z)=q,\qquad f_T(q,z)=p.
 \]
-The terms $c_i$ and $c_j$ agree through every fixed finite prefix depth once
-$i$ and $j$ are sufficiently large, so $(c_k)$ is Cauchy for prefix-depth
-agreement.  It is not Cauchy for the finite-complement congruence uniformity.
-To see this, take two new points $p,q$ and a compatible total extension on
-$A\sqcup\{p,q\}$ with
-\[
- f_T(a,z)=p,\qquad f_T(p,z)=q,\qquad f_T(q,z)=p,
-\]
-preserving every operation value already defined on $A$ and assigning arbitrary
-fixed values to the remaining unconstrained cases.  Then the images of the
-$c_k$ alternate between $p$ and $q$ after the first step.  Thus this single
-extension, with complement size $2$, separates $c_k$ from $c_{k+1}$ for every
-$k$, so the sequence is not Cauchy modulo $\theta_2$.
+These prescriptions are compatible because the first displayed base
+application is undefined and the other two involve new points.  Fix
+$a_0\in A$ and assign the value $a_0$ to every operation-table entry not
+already forced either by compatibility or by the displayed prescriptions.
+Then the images of $c_k$ alternate between $p$ and $q$ from $k=1$ onward.
+Thus this single complement-two extension separates every pair
+$c_k,c_{k+1}$ for $k\ge1$, so $(c_k)$ is not Cauchy modulo $\theta_2$.  Hence
+the two uniformities are genuinely different.
 \end{remark}
