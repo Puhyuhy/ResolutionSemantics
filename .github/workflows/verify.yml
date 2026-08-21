@@ -44,12 +44,12 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
             texlive-latex-base texlive-latex-extra texlive-fonts-recommended \
             lmodern poppler-utils
-      - name: Build and inspect committed PDF
-        run: bash scripts/build-paper.sh --check-committed
+      - name: Build and inspect manuscript PDF
+        run: bash scripts/build-paper.sh
       - name: Preserve rebuilt PDF
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: resolution-semantics-paper
-          path: build/paper/Resolution_Semantics_Adrian_Puha.pdf
+          name: finite-complement-congruence-topology-paper
+          path: build/paper/Finite_Complement_Congruence_Topology_Adrian_Puha.pdf
           if-no-files-found: warn
