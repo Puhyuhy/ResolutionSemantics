@@ -1,0 +1,56 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{paper-style}[2026/08/21 Partial algebra manuscript style]
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{lmodern}
+\RequirePackage{microtype}
+\RequirePackage[a4paper,margin=31mm]{geometry}
+\RequirePackage{amsmath,amssymb,amsthm,mathtools}
+\RequirePackage{booktabs}
+\RequirePackage{enumitem}
+\RequirePackage[square,numbers,sort&compress]{natbib}
+\RequirePackage{hyperref}
+\RequirePackage[nameinlink,noabbrev]{cleveref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue,
+  pdftitle={Discrimination by Finite-Complement Completions of Partial Algebras},
+  pdfauthor={Adrian Puha},
+  pdfsubject={Partial algebras, free completions, discrimination, and finite-complement completions},
+  pdfkeywords={partial algebra, free completion, discrimination, residuality, completion}
+}
+
+\setlength{\parindent}{15pt}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{3em}
+\setlist{topsep=0.4em,itemsep=0.2em,parsep=0pt}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\crefname{theorem}{theorem}{theorems}
+\crefname{proposition}{proposition}{propositions}
+\crefname{lemma}{lemma}{lemmas}
+\crefname{corollary}{corollary}{corollaries}
+\crefname{definition}{definition}{definitions}
+\crefname{example}{example}{examples}
+
+\newcommand{\Free}[1]{F(#1)}
+\newcommand{\FCclass}[1]{\mathcal C_{\mathrm{fc}}(#1)}
+\newcommand{\fceq}[1]{\mathrel{\equiv_{#1}}}
+\newcommand{\FCcomp}[1]{\widehat{#1}_{\mathrm{fc}}}
+\newcommand{\defined}{\mathord{\downarrow}}
+\newcommand{\undefined}{\mathord{\uparrow}}
