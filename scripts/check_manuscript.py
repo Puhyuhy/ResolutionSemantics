@@ -28,7 +28,6 @@ EXPECTED_INPUTS = [
     "free-completion",
     "finite-complement-discrimination",
     "finite-complement-completion",
-    "examples",
     "conclusion",
 ]
 
