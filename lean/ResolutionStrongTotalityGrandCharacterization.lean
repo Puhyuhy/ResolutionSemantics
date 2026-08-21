@@ -5,6 +5,7 @@ import ResolutionStrongTotalityRepresentationInvariant
 import ResolutionStrongTotalityDependent
 import ResolutionStrongTotalitySingletonFamily
 import ResolutionStrongTotalityFamilyConjugation
+import ResolutionStrongTotalityFamilyResidualCoherence
 import ResolutionStrongTotalityNoGo
 import ResolutionStrongTotalityKernelBridge
 import ResolutionStrongTotalityWellFormed
@@ -264,6 +265,36 @@ structure StrongTotalityGrandCharacterization
       Nonempty (A.Carrier i) ↔
         Specification.Satisfiable (F i) ∨ Nonempty (E i)
 
+  /-- Canonical provenance-aware family transport preserves identities. -/
+  residualFamilyFunctorIdentity :
+    forall {I : Type v}
+      (F : I -> Specification.{u})
+      (E : I -> Type r),
+      canonicalResidualFamilyCompletionMap
+          (FamilySemanticsMorphism.id F E) =
+        ResidualFamilyCompletionHomOver.id
+          (canonicalResidualFamilyCompletion F E)
+
+  /-- Canonical provenance-aware family transport preserves composition,
+  including simultaneous reindexing and residual refinement. -/
+  residualFamilyFunctorComposition :
+    forall {I : Type v}
+      {J : Type w}
+      {K : Type z}
+      {F : I -> Specification.{u}}
+      {E : I -> Type r}
+      {G : J -> Specification.{u}}
+      {R : J -> Type r}
+      {H : K -> Specification.{u}}
+      {Q : K -> Type r}
+      (eta : FamilySemanticsMorphism F E G R)
+      (theta : FamilySemanticsMorphism G R H Q),
+      ResidualFamilyCompletionHomOver.comp
+          (canonicalResidualFamilyCompletionMap theta)
+          (canonicalResidualFamilyCompletionMap eta) =
+        canonicalResidualFamilyCompletionMap
+          (FamilySemanticsMorphism.comp theta eta)
+
   /-- Every provenance-aware reindexed family map is the canonical unified
   semantic transport conjugated by structural equivalences. -/
   residualFamilyMapConjugation :
@@ -319,9 +350,10 @@ structure StrongTotalityGrandCharacterization
 /-- **Grand Characterization Theorem.**  The canonical Resolution construction
 satisfies the complete Strong Totality package: free/minimal completion,
 exactness, unique canonicity, functorial and universal naturality, coherent
-family extension, structured residual provenance, exact well-formedness domain,
-the classical boundary for proof-carrying residuals, the non-collapse theorem,
-and exact agreement with the existing kernel semantics. -/
+family extension, structured residual provenance and its full coherence, exact
+well-formedness domain, the classical boundary for proof-carrying residuals,
+the non-collapse theorem, and exact agreement with the existing kernel
+semantics. -/
 theorem strongTotality_grandCharacterization
     (S : Specification.{u}) :
     StrongTotalityGrandCharacterization S := by
@@ -347,6 +379,8 @@ theorem strongTotality_grandCharacterization
     residualFamilyUniversal := ?_
     residualFamilyCanonical := ?_
     residualFamilyExact := ?_
+    residualFamilyFunctorIdentity := ?_
+    residualFamilyFunctorComposition := ?_
     residualFamilyMapConjugation := ?_
     wellFormedDomain := fun L c =>
       SpecificationLanguage.rawResolution_nonempty_iff_wellFormed L c
@@ -394,6 +428,10 @@ theorem strongTotality_grandCharacterization
   · intro I F E A hA i
     exact universalResidualExtensionFamily_nonempty_iff
       F E A.Carrier A.includeSolution A.includeResidual hA i
+  · intro I F E
+    exact canonicalResidualFamilyCompletionMap_id F E
+  · intro I J K F E G R H Q eta theta
+    exact canonicalResidualFamilyCompletionMap_comp eta theta
   · intro I J F E G R eta A B hA eF eG heF heG p i x
     exact universalResidualFamilyCompletion_map_eq_canonicalConjugate
       eta A B hA eF eG heF heG p i x
