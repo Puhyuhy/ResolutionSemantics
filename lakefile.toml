@@ -49,6 +49,7 @@ roots = [
   "ResolutionStrongTotalityGrandCharacterization",
   "ResolutionStrongTotalityMaster",
   "ResolutionStrongTotalityV1Closure",
+  "ResolutionStrongTotalityV1AxiomAudit",
   "ResolutionModels",
   "ResolutionExternal",
   "ResolutionFiniteTagProof",
