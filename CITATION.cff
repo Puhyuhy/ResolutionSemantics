@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this work, please cite the paper and this repository."
+message: "If you use this work, please cite the preprint and this repository."
 title: "A Finite-Complement Congruence Topology for Partial Algebras"
 type: software
 authors:
@@ -17,3 +17,5 @@ preferred-citation:
     - family-names: Puha
       given-names: Adrian
   year: 2026
+  doi: "10.5281/zenodo.22049834"
+  url: "https://doi.org/10.5281/zenodo.22049834"
