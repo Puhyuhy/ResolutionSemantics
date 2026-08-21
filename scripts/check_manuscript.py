@@ -1,21 +1,37 @@
 #!/usr/bin/env python3
-"""Check that the public package and promoted manuscript-facing Lean API agree."""
+"""Static consistency checks for the current finite-complement manuscript."""
 
 from __future__ import annotations
 
 import re
 import sys
+from collections import Counter
 from pathlib import Path
-
 
 ROOT = Path(__file__).resolve().parents[1]
 LEAN_DIR = ROOT / "lean"
-LATEX_DIR = ROOT / "paper" / "latex"
-MANUSCRIPT = LATEX_DIR / "revised.tex"
-STYLE = LATEX_DIR / "resolution-paper.sty"
-AUDIT = LEAN_DIR / "AxiomAudit.lean"
+PAPER_DIR = ROOT / "paper"
+LATEX_DIR = PAPER_DIR / "latex"
+MANUSCRIPT = LATEX_DIR / "paper.tex"
+STYLE = LATEX_DIR / "paper-style.sty"
 CITATION = ROOT / "CITATION.cff"
 LAKEFILE = ROOT / "lakefile.toml"
+
+EXPECTED_TITLE = "A Finite-Complement Congruence Topology for Partial Algebras"
+EXPECTED_INPUTS = [
+    "introduction",
+    "free-completion",
+    "finite-complement-discrimination",
+    "finite-complement-completion",
+    "examples",
+    "conclusion",
+]
+BIB_FILES = [
+    PAPER_DIR / "references.bib",
+    PAPER_DIR / "references-completion.bib",
+    PAPER_DIR / "references-separation.bib",
+    PAPER_DIR / "references-standardization.bib",
+]
 
 
 def fail(message: str) -> None:
@@ -25,93 +41,96 @@ def fail(message: str) -> None:
 
 required_files = [
     ROOT / "README.md",
-    ROOT / "REVIEW_GUIDE.md",
-    ROOT / "THEOREM_MAP.md",
-    CITATION,
-    ROOT / "paper" / "Resolution_Semantics_Adrian_Puha.pdf",
     MANUSCRIPT,
     STYLE,
-    ROOT / "paper" / "references.bib",
-    ROOT / "paper" / "references-completion.bib",
-    ROOT / "paper" / "references-separation.bib",
-    AUDIT,
+    CITATION,
+    LAKEFILE,
+    *BIB_FILES,
 ]
 for path in required_files:
     if not path.is_file() or path.stat().st_size == 0:
         fail(f"missing or empty required file: {path.relative_to(ROOT)}")
 
 main_tex = MANUSCRIPT.read_text(encoding="utf-8")
+style = STYLE.read_text(encoding="utf-8")
+citation = CITATION.read_text(encoding="utf-8")
+lakefile = LAKEFILE.read_text(encoding="utf-8")
+
+if f"\\title{{\\textbf{{{EXPECTED_TITLE}}}}}" not in main_tex:
+    fail("manuscript title is stale or unexpected")
+if "\\author{Adrian Puha}" not in main_tex:
+    fail("the LaTeX author is not Adrian Puha")
+if f"pdftitle={{{EXPECTED_TITLE}}}" not in style:
+    fail("PDF title metadata is stale")
+if "pdfauthor={Adrian Puha}" not in style:
+    fail("PDF author metadata is stale")
+if EXPECTED_TITLE not in citation:
+    fail("CITATION.cff does not name the current paper")
+
 input_names = re.findall(r"\\input\{([^}]+)\}", main_tex)
+if input_names != EXPECTED_INPUTS:
+    fail("unexpected manuscript input list: " + ", ".join(input_names))
 input_files = [LATEX_DIR / f"{name}.tex" for name in input_names]
 for path in input_files:
     if not path.is_file() or path.stat().st_size == 0:
         fail(f"missing or empty manuscript input: {path.relative_to(ROOT)}")
 
 tex = "\n".join([main_tex] + [p.read_text(encoding="utf-8") for p in input_files])
-style = STYLE.read_text(encoding="utf-8")
-audit = AUDIT.read_text(encoding="utf-8")
-citation = CITATION.read_text(encoding="utf-8")
-lakefile = LAKEFILE.read_text(encoding="utf-8")
-docs = "\n".join(
-    (ROOT / name).read_text(encoding="utf-8")
-    for name in ("README.md", "REVIEW_GUIDE.md", "THEOREM_MAP.md")
-)
 
-expected_title = (
-    "Resolution Semantics for Partial Algebras: Intrinsic Finite-Complement "
-    "Separation and Observational Completion, with a Lean-Checked Many-Sorted "
-    "Encoding Bridge"
+expected_bibliography = (
+    "\\bibliography{../references,../references-completion,"
+    "../references-separation,../references-standardization}"
 )
-if "\\author{Adrian Puha}" not in main_tex:
-    fail("the LaTeX author is not Adrian Puha")
-if "pdfauthor={Adrian Puha}" not in style:
-    fail("the PDF metadata author is not Adrian Puha")
-if expected_title not in style:
-    fail("the PDF metadata title is stale")
-if "references-phase" in tex:
-    fail("the manuscript still uses an internal phase bibliography name")
+if expected_bibliography not in main_tex:
+    fail("unexpected bibliography list")
+
+bib_keys: list[str] = []
+for bib in BIB_FILES:
+    source = bib.read_text(encoding="utf-8")
+    bib_keys.extend(re.findall(r"@\w+\s*\{\s*([^,\s]+)\s*,", source))
+duplicates = sorted(k for k, count in Counter(bib_keys).items() if count > 1)
+if duplicates:
+    fail("duplicate bibliography keys: " + ", ".join(duplicates))
+known_bib = set(bib_keys)
+
+cited: set[str] = set()
+for group in re.findall(r"\\cite[a-zA-Z]*\s*\{([^}]+)\}", tex):
+    cited.update(k.strip() for k in group.split(",") if k.strip())
+missing_citations = sorted(cited - known_bib)
+if missing_citations:
+    fail("citation keys absent from bibliography: " + ", ".join(missing_citations))
+
+labels = set(re.findall(r"\\label\{([^}]+)\}", tex))
+refs: set[str] = set()
+for group in re.findall(r"\\(?:[cC]ref|ref|eqref)\s*\{([^}]+)\}", tex):
+    refs.update(k.strip() for k in group.split(",") if k.strip())
+missing_labels = sorted(refs - labels)
+if missing_labels:
+    fail("cross-reference labels absent from manuscript: " + ", ".join(missing_labels))
+
+for stale in (
+    "Resolution Semantics for Partial Algebras: Intrinsic Finite-Complement",
+    "finite-pattern realization",
+    "trajectory compression",
+    "Compression--escape properness",
+    r"\leanname{",
+):
+    if stale.lower() in tex.lower():
+        fail(f"stale manuscript language remains: {stale}")
 
 citation_version = re.search(r"^version:\s*([^\s]+)\s*$", citation, re.M)
 lake_version = re.search(r'^version\s*=\s*"([^"]+)"\s*$', lakefile, re.M)
-style_version = re.search(r"\\newcommand\{\\resolutionversion\}\{([^}]+)\}", style)
-if not citation_version or not lake_version or not style_version:
-    fail("could not read a package version from CFF, Lake, and manuscript style")
-versions = {citation_version.group(1), lake_version.group(1), style_version.group(1)}
-if len(versions) != 1:
-    fail("CFF, Lake, and manuscript versions disagree: " + ", ".join(sorted(versions)))
-if "Review version \\resolutionversion" not in style:
-    fail("the running header does not identify the review version")
-
-for stale in (
-    "Anonymous",
-    "NewMath",
-    "namespace Curvature",
-    "namespace Omega",
-    "Relative Finite Separation",
-):
-    if stale in tex or stale in style or stale in docs:
-        fail(f"stale project language remains: {stale}")
-
-for stale_bound in (
-    "(n+2)!/(n+3)!",
-    r"c_{(n+2)!}\stageeq{n}c_{(n+3)!}",
-):
-    if stale_bound in tex:
-        fail(f"superseded old-fixing bound remains in promoted manuscript: {stale_bound}")
-
-for required_phrase in (
-    "finite-pattern realization",
-    "trajectory compression",
-    "finite-pattern escape",
-    "Compression--escape properness",
-):
-    if required_phrase.lower() not in tex.lower():
-        fail(f"promoted manuscript does not foreground: {required_phrase}")
+if not citation_version or not lake_version:
+    fail("could not read package version from CFF and Lake")
+if citation_version.group(1) != lake_version.group(1):
+    fail(
+        "CFF and Lake versions disagree: "
+        f"{citation_version.group(1)} vs {lake_version.group(1)}"
+    )
 
 lean_sources = list(LEAN_DIR.glob("*.lean"))
 if not lean_sources:
     fail("no Lean sources found")
-
 local_modules = {path.stem for path in lean_sources}
 for path in lean_sources:
     source = path.read_text(encoding="utf-8")
@@ -119,35 +138,8 @@ for path in lean_sources:
         if imported.startswith("Resolution") and imported not in local_modules:
             fail(f"{path.name} imports absent local module {imported}")
 
-lean_names = {
-    name.replace(r"\_", "_")
-    for name in re.findall(r"\\leanname\{([^}]+)\}", tex)
-}
-if not lean_names:
-    fail("the manuscript contains no Lean declaration links")
-
-for name in sorted(lean_names):
-    if f"#check {name}" not in audit:
-        fail(f"manuscript declaration is absent from AxiomAudit.lean: {name}")
-
-required_headlines = {
-    "ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization",
-    "ResolutionSemantics.MasterTheorems.relativeFiniteComplementSeparation",
-    "ResolutionSemantics.MasterTheorems.orbitCompressionCauchy",
-    "ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit",
-    "ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective",
-    "ResolutionSemantics.MasterTheorems.finiteBasePropernessCriterion",
-    "ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster",
-    "ResolutionSemantics.MasterTheorems.oldFixingRanksUnbounded",
-    "ResolutionSemantics.equationConservative",
-    "ResolutionSemantics.NatDivision.oldFixingCriterion",
-    "ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective",
-}
-missing = required_headlines - lean_names
-if missing:
-    fail("headline declarations missing from manuscript: " + ", ".join(sorted(missing)))
-
 print(
-    f"manuscript/API check passed: {len(lean_names)} cited Lean declarations, "
-    f"{len(lean_sources)} proof files, {len(input_files)} section inputs"
+    "manuscript consistency check passed: "
+    f"{len(input_files)} sections, {len(cited)} cited bibliography keys, "
+    f"{len(labels)} labels, {len(lean_sources)} supplementary Lean files"
 )

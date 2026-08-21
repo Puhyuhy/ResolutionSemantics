@@ -1,0 +1,116 @@
+\section{Introduction}\label{sec:introduction}
+
+Let $D=(A,\Sigma,\delta)$ be a one-sorted partial algebra with finite binary
+signature.  We write $F(D)$ for the standard free compatible total extension of
+$D$: applications already defined on the base are evaluated, while undefined
+applications remain as normal terms.  Free completion of partial algebras is
+classical and will be used only as background
+\cite{ClimentVidalCosmeLlopez2023,Nesin2011}.
+
+We study compatible total extensions $T$ that retain the whole base $A$
+pointwise and add only finitely many elements.  The restriction measures how
+much genuinely new structure a total extension must introduce: the base is
+kept intact, so the finite complement counts only elements added beyond it.
+Thus
+\[
+ A\subseteq T,
+ \qquad |T\setminus A|<\infty,
+\]
+and every operation value already defined in $D$ has the same value in $T$.
+The universal property of $F(D)$ gives a canonical homomorphism
+\[
+ \pi_T:F(D)\longrightarrow T
+\]
+fixing $A$ pointwise.  We call such a $T$ a \emph{finite-complement compatible
+extension}.  The familiar one-point completion is the simplest example of this
+kind \cite{Nesin2011}; here we use all finite-complement compatible extensions
+rather than a distinguished sink completion.
+
+The first observation is elementary.  If $X\subseteq F(D)$ is finite, then one
+can retain the finite subterm closure of $X$ and collapse everything else into
+one class.  The complement is an ideal of the term algebra, so this is a Rees
+congruence in the usual universal-algebraic sense \cite{Tichy1981}.  The
+resulting quotient is a finite-complement compatible extension and the quotient
+map is injective on $X$.  This is the algebraic version of the standard
+finite-subterm plus sink construction used in finite tree automata
+\cite{ComonEtAl2008}.  We record it because it supplies the separating
+congruences used below.
+
+For $m\ge1$, let $\theta_m$ be the intersection of the kernels arising from
+finite-complement compatible extensions with at most $m$ new elements.  The
+relevant kernels form a set of congruences on $F(D)$, so this intersection is
+set-indexed.  The separation observation implies
+\[
+ \bigcap_{m\ge1}\theta_m=\Delta_{F(D)}.
+\]
+Thus $(\theta_m)$ defines a Hausdorff congruence uniformity on $F(D)$, in the
+standard sense of congruence topologies on universal algebras
+\cite{BulmanFleming1971}.  Because the basis is countable and nested, the
+uniformity is metrizable; consequently Cauchy sequences suffice to describe its
+completion.
+
+The finite-base case is not a new completion theory.  When $A$ is finite, the
+finite-complement quotients that fix $A$ are cofinal among all finite quotients
+of $F(D)$.  Consequently the topology is exactly the ordinary profinite
+topology \cite{DaveyGouveiaHaviarPriestley2011,ChenAdamekMiliusUrbat2016}.
+The genuinely different situation is therefore an infinite retained base,
+where the allowed target algebras may themselves be infinite and the
+congruences $\theta_m$ need not have finite index.
+
+Our main result gives a sufficient condition for the completion to be strictly
+larger than $F(D)$ in this setting.  Suppose $D$ has an undefined base
+application, producing a non-base normal term $c_0$, and suppose there is a
+nontrivial one-hole unary context $C[-]$ whose induced map $C^D:A\to A$ has
+uniformly finite orbits: there is $B$ such that
+\[
+ \bigl|\{(C^D)^n(a):n\ge0\}\bigr|\le B
+ \qquad(a\in A).
+\]
+The pointwise identity case is the simplest example, but the hypothesis also
+covers constant, idempotent, and uniformly bounded periodic behaviour on the
+base.
+
+Iterate the context in the free completion, $c_{n+1}=C[c_n]$.  In every
+extension with at most $m$ new elements, the interpreted orbit either remains
+outside the base, where it has at most $m$ values, or enters the base and then
+follows one of the uniformly bounded base orbits.  Hence the whole interpreted
+orbit has at most $m+B$ values.  Factorially indexed iterates therefore
+synchronize uniformly over all such extensions and form a Cauchy sequence for
+every $\theta_m$.
+
+The sequence does not converge to a term of $F(D)$.  For any proposed term
+$x$, a Rees quotient retaining the subterms of $x$ and a sufficiently late
+iterate sends the next iterate, and hence the whole subsequent tail, into the
+collapsed ideal class while leaving $x$ singleton.  The Hausdorff completion
+therefore contains a new point.
+
+The sufficient hypothesis is not merely a disguised form of partiality.  We
+also give an infinite partial algebra for which $\theta_1$ is equality, so the
+induced topology is discrete and already complete.  Thus genuine partiality
+alone does not force new completion points over an infinite retained base.
+
+The resulting uniformity should also be distinguished from the classical
+prefix-depth ultrametrics on trees and their associated infinite-tree spaces
+\cite{ArnoldNivat1980,Courcelle1983}.  We give an explicit comb sequence that
+is Cauchy for prefix-depth agreement but is not Cauchy for the
+finite-complement congruence uniformity.
+
+The finite-complement condition is formally analogous to finite Rees index for
+subsemigroups \cite{RuskucThomas1998,CainMaltcev2013} and to separability
+conditions studied in \cite{MillerOReillyQuickRuskuc2022}.  The present setting
+is different in that the retained carrier is only a partial base.  More
+precisely, the embedded copy of $A$ is closed under the total operations of
+$F(D)$ if and only if $D$ was already total: any undefined basic application
+produces a non-base normal term immediately outside $A$.
+
+The paper is organized accordingly.  \Cref{sec:free-completion} recalls the free
+compatible extension.  \Cref{sec:finite-separation} gives the Rees-congruence
+separation lemma.  \Cref{sec:completion} defines the congruence topology,
+identifies the finite-base case with the profinite topology, proves the
+infinite-base criterion, gives the discrete counterexample, and compares the
+uniformity with prefix-depth agreement on trees.  \Cref{sec:examples} gives one
+arithmetic instance of the criterion.
+
+The manuscript is self-contained.  Supplementary machine-checked developments
+cover several underlying constructions, special cases, and the prefix-depth
+contrast.

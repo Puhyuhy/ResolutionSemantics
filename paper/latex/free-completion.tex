@@ -1,0 +1,45 @@
+\section{Free compatible completion}\label{sec:free-completion}
+
+Let $D=(A,\Sigma,\delta)$ be a one-sorted partial algebra with binary signature
+$\Sigma$.  For $f\in\Sigma$ and $a,b\in A$, the value $\delta_f(a,b)$ is either
+an element of $A$ or is undefined.
+
+Throughout, evaluation of composite terms in $D$ is \emph{strict}: a term
+$f(s,t)$ is defined only when both $s$ and $t$ are defined and the corresponding
+base application $\delta_f(s^D,t^D)$ is defined.  Thus, whenever a composite
+term is defined in $D$, every subterm occurring in its evaluation is defined as
+well.
+
+A \emph{normal term} over $D$ is defined recursively.  Every $a\in A$ is a
+normal term.  If $s,t$ are normal terms and $f\in\Sigma$, then $f(s,t)$ is a
+normal term unless both $s,t$ lie in $A$ and $\delta_f(s,t)$ is defined; in
+that case the application is replaced by the corresponding base value.  Let
+$F(D)$ denote the set of normal terms.  Each basic operation becomes total on
+$F(D)$ by forming the formal application and applying this normalization rule.
+
+The inclusion $A\hookrightarrow F(D)$ is injective and preserves every value
+already defined in $D$.  A total $\Sigma$-algebra $T$ with a map $i:A\to T$ is
+\emph{compatible with $D$} when
+\[
+ \delta_f(a,b)=c
+ \quad\Longrightarrow\quad
+ f_T(i(a),i(b))=i(c).
+\]
+
+\begin{theorem}[Universal property]\label{thm:free-completion}
+For every compatible pair $(T,i)$ there is a unique homomorphism
+\[
+ \pi_T:F(D)\longrightarrow T
+\]
+satisfying $\pi_T(a)=i(a)$ for every $a\in A$.
+\end{theorem}
+
+\begin{proof}
+Evaluate normal terms recursively in $T$.  A non-base normal term has the form
+$f(s,t)$, and its value is defined to be
+$f_T(\pi_T(s),\pi_T(t))$.  If an application of $f$ to two base elements was
+already defined in $D$, it is not a non-base normal term: it has already been
+reduced to its base value.  Compatibility therefore makes recursive evaluation
+respect the normalization rule.  The homomorphism property and uniqueness
+follow by induction on term formation.
+\end{proof}

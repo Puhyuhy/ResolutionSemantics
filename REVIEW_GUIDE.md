@@ -1,156 +1,17 @@
-# Independent review guide
+# Historical review-guide notice
 
-## Purpose
+The previous contents of this file referred to an earlier, substantially larger
+manuscript architecture. They no longer describe the paper on this branch and
+are retained in Git history only.
 
-This package is intended for critical mathematical review, not endorsement.
-Lean checks the formal derivations; it does not establish novelty, importance,
-or the adequacy of the literature comparison.
+For review of the current work, use:
 
-The review package is version 1.2.0, manuscript revision dated 18 August 2026.
-Please identify the reviewed commit when reporting results so comments remain
-reproducible.
+- `paper/latex/paper.tex` and its six included section files;
+- `README.md` for scope and status;
+- `scripts/check_manuscript.py` for static manuscript/repository consistency;
+- `scripts/build-paper.sh` for the deterministic PDF build;
+- `lean/` as supplementary formal development, not as a claim that every
+  sentence of the current manuscript has a declaration with identical wording.
 
-## Central claims to inspect
-
-1. **Free-completion substrate.** Generated Answers form the stated normalized
-   free compatible total extension of a binary partial algebra and admit the
-   quotient presentation by equality after resolution. This is infrastructure,
-   not a novelty claim.
-2. **Relative observer class.** Intrinsic finite-complement observers preserve
-   the partial base pointwise and budget only genuinely outside states. The base
-   itself may be infinite. The canonical finite-tag presentation is derived
-   from this observer class rather than built into its primitive definition.
-3. **Relative finite-pattern realization.** For any finite family of generated
-   Answers, one compatible finite-complement observer is simultaneously
-   injective on the whole family. Pairwise finite-tag separation should follow
-   as the two-point case, while the explicit pairwise constructor-size bound is
-   retained by the older quantitative separator.
-4. **Product obstruction.** Over an infinite fixed base, finite-relative-
-   complement extensions are not closed under ordinary binary products. Check
-   that this really blocks the usual product-of-pairwise-separators proof from
-   remaining inside the same observer class.
-5. **Observational filtration.** The finite observers induce a separated
-   filtration and complete Cauchy completion with the stated relative extension
-   property and exact constant-bearing equational conservativity.
-6. **Trajectory compression.** The factorial Cauchy theorem should require only
-   a finite code of the single relevant deterministic observer trajectory at
-   each stage, not finiteness of the whole observer carrier. The proof should
-   reduce to standard finite periodicity and factorial synchronization; this
-   component is not claimed as new.
-7. **Finite-pattern escape.** For a growing unary syntax
-   `t_(k+1) = susp(u,t_k,old(e))`, the selected candidate/prefix observer should
-   realize the finite pattern exactly, force the next unseen iterate into
-   overflow, and keep the remaining tail in overflow. This should rule out
-   convergence to every finite generated candidate without using the finite-
-   state periodicity argument.
-8. **Relative escape versus finite targets.** When the retained base is not
-   finitely codable, no finite target can contain it injectively. Check that the
-   actual escape observer is globally non-finite while having finite external
-   complement, and that the same observer separates the candidate from the
-   whole sufficiently late tail.
-9. **Compression--escape properness.** Trajectory compression supplies the
-   Cauchy half and finite-pattern escape supplies the no-generated-limit half;
-   together they force a proper observational completion. Review whether this
-   is a genuine structural unification rather than merely a repackaging of two
-   unrelated proofs.
-10. **Finite-base instance.** For finitely coded base carriers, the completion
-    embedding is surjective exactly when the base evaluator is total.
-11. **Infinite-base old-fixing instance.** An undefined base seed together with
-    a pointwise base-fixing unary context should provide both trajectory
-    compression and finite-pattern escape over an arbitrary, possibly infinite
-    base. The sharp checked witness is `c_(n+1)! ~_n c_(n+2)!`.
-12. **Prefix-depth contrast.** The explicit unresolved comb should be Cauchy
-    for prefix-depth agreement but not for Resolution observation. Check the
-    fixed one-tag `tag ↔ overflow` separator, and the sharper Nat zero-tag
-    separator, as evidence that the two uniformities are genuinely different.
-13. **Arithmetic instances.** Natural and integer arithmetic instantiate the
-    old-fixing criterion using `0/0` and `x ↦ x + 0`, while division by zero
-    remains a structured non-old Answer rather than an ordinary number.
-14. **Diaconescu provenance bridge.** The many-sorted finite-arity formalization
-    should correctly implement the operations-only fragment used by the paper:
-    separate total and partial symbols, `Gamma`, `alpha`, `beta`, the
-    satisfaction condition, `gamma`, recovery up to canonical equivalence,
-    persistent liberality, the hom-set adjunction laws, semantic consequence,
-    fixed-signature initiality transfers, and the singleton-sort binary
-    specialization. This is a verification/continuation claim, not a novelty
-    claim for Diaconescu's results.
-
-## Priority novelty questions
-
-- Is simultaneous finite-pattern realization over a pointwise-preserved,
-  possibly infinite partial base already known under another formulation?
-- Has separation by extensions whose complement over such a fixed partial base
-  is finite been studied as relative residual finiteness, generalized Rees
-  index, or another separability notion?
-- Does an existing framework already combine this observer class with
-  trajectory-level finite compression and candidate-tailored relative escape?
-- Can classical discrimination or recognizable-tree machinery recover the
-  finite-pattern theorem without leaving the finite-relative-complement class?
-- Is the finite-target obstruction over non-finitely-codable bases already
-  standard under another relative-profinite formulation?
-- Is the exact finite-base properness criterion known in a comparable relative
-  completion framework?
-- Is there an existing arbitrary-base theorem subsuming the old-fixing
-  compression--escape instance?
-- Does the combined package contain a publishable contribution, and what
-  literature or terminology is still missing?
-
-## Priority formalization questions
-
-- Does `ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization`
-  state exactly the finite-pattern result described in the manuscript?
-- Does the product-obstruction theorem really exhibit an infinite outside
-  complement for the diagonal product embedding?
-- Does `ObserverOrbitCompression` constrain only the relevant trajectory, as
-  claimed, rather than smuggling in global finiteness?
-- Does `finitePatternEscapeNoGeneratedLimit` genuinely derive nonconvergence
-  from selected-pattern/overflow mechanics rather than restating
-  nonconvergence as an assumption?
-- Does `relativeEscapeBeyondOrdinaryFiniteTargets` combine late-tail separation
-  with non-finite codability of the actual observer carrier?
-- Do the finite-base and old-fixing instances both factor through the combined
-  compression--escape theorem?
-- Is the sharper `(n+1)!/(n+2)!` old-fixing indexing correct at stage `n`,
-  including the `n = 0` case?
-- Does `depthCauchy_not_observationalCauchy` prove a genuine distinction of
-  uniformities rather than only a difference between two ad hoc metrics?
-- Does the Diaconescu binary specialization commute with the data operation,
-  existence equality, and truth constant in both directions?
-- Do the initiality and semantic-consequence results have exactly the
-  fixed-signature, operations-only and universe-bounded scope stated by the
-  manuscript?
-
-## Scope and non-claims
-
-The paper does not claim to invent free compatible completion, operation trees,
-abstract finite-set discrimination, selected-subterm sink constructions in
-isolation, finite-state eventual periodicity, factorial synchronization,
-generic Cauchy completion, nominal/pro-orbit-finite topology, or Diaconescu's
-encoding. It does not assign an ordinary number to division by zero, establish
-optimal separator complexity, give a necessary-and-sufficient arbitrary-
-infinite-base properness criterion, extend the full completion theory to
-arbitrary many-sorted signatures, prove Strong Totality, formalize the full
-institution/comorphism layer, or claim historical priority.
-
-## Verification
-
-Run:
-
-    bash scripts/verify.sh
-    bash scripts/build-paper.sh --check-committed
-
-The public declarations cited by the manuscript are organized in
-[THEOREM_MAP.md](THEOREM_MAP.md). The structural reduction behind the current
-manuscript is summarized in [STRUCTURAL_CORE.md](STRUCTURAL_CORE.md).
-
-The axiom audit rejects proof holes and any dependency beyond `propext`,
-`Classical.choice`, and `Quot.sound` in the principal theorem list.
-
-A concise critical response, including a negative result, counterexample, or
-prior-art pointer, is explicitly welcome.
-
-## Development disclosure
-
-The manuscript and formalization were developed with substantial AI
-assistance. Adrian Puha takes responsibility for the package and is requesting
-independent human scrutiny before making publication claims.
+The current manuscript is **A Finite-Complement Congruence Topology for Partial
+Algebras**.

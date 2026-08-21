@@ -21,13 +21,13 @@ esac
 if grep -REn --include='*.lean' \
     '^[[:space:]]*(sorry|admit|axiom)([[:space:](]|$)|:=[[:space:]]*(sorry|admit)([[:space:]]|$)' \
     lean; then
-  echo "proof hole or local axiom found in paper sources" >&2
+  echo "proof hole or local axiom found in supplementary Lean sources" >&2
   exit 1
 fi
 
 if grep -REn --include='*.lean' \
     'NewMath|UniversalTotality|namespace[[:space:]]+(Curvature|Omega)' lean; then
-  echo "unrelated research namespace found in paper sources" >&2
+  echo "unrelated research namespace found in supplementary Lean sources" >&2
   exit 1
 fi
 
@@ -38,4 +38,4 @@ mkdir -p build
 lake env lean lean/AxiomAudit.lean | tee build/axiom-audit.txt
 python3 scripts/check_axiom_audit.py
 
-echo "Lean build, manuscript/API check, and axiom audit passed."
+echo "Lean build, manuscript consistency check, and axiom audit passed."

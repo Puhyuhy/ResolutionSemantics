@@ -1,188 +1,102 @@
-# Resolution Semantics
-
-**Resolution Semantics for Partial Algebras: Intrinsic Finite-Complement
-Separation and Observational Completion, with a Lean-Checked Many-Sorted
-Encoding Bridge**
+# A Finite-Complement Congruence Topology for Partial Algebras
 
 Author: **Adrian Puha**
 
-[![Verify paper package](https://github.com/Puhyuhy/ResolutionSemantics/actions/workflows/verify.yml/badge.svg)](https://github.com/Puhyuhy/ResolutionSemantics/actions/workflows/verify.yml)
+This branch contains a short manuscript about a congruence topology induced by
+compatible total extensions of a partial algebra that retain the original
+carrier pointwise and add only finitely many elements outside it.
 
-[Read the current paper](paper/Resolution_Semantics_Adrian_Puha.pdf)
+The mathematical paper is under `paper/latex/`, with `paper.tex` as the root.
+The accompanying Lean development is supplementary verification and is not
+needed to read or check the proofs in the manuscript.
 
-This repository is the self-contained paper and Lean formalization package.
-It intentionally excludes exploratory projects, superseded phase reports,
-temporary logs, and future Strong Totality work.
+## Mathematical content
 
-## Status
+Let `D` be a partial algebra with carrier `A`, and let `F(D)` denote its free
+compatible total extension.
 
-Version 1.2.0, manuscript revision dated 18 August 2026, is under specialist
-review. The Lean development checks the stated formal results. The exact
-novelty and priority of the combined mathematical package remain open
-specialist questions; no historical-priority claim is made.
+A **finite-complement compatible extension** is a compatible total algebra `T`
+that contains `A` pointwise and satisfies `|T \ A| < infinity`.
 
-## Structural result architecture
+The manuscript has four main components:
 
-The promoted manuscript is organized around two structural principles and one
-relative anti-limit mechanism.
+1. **Finite separation.** A finite subterm closure is retained and its
+   complement is collapsed by a Rees congruence. This is treated as standard
+   finite-state algebraic machinery.
+2. **Congruence topology.** Intersections of kernels of extensions with bounded
+   complement define a descending Hausdorff countable congruence uniformity on
+   `F(D)`. The paper makes its metrizability explicit. For a finite base this is
+   exactly the ordinary profinite topology.
+3. **Infinite-base criterion and boundary example.** If an undefined base
+   application is iterated by a nontrivial unary context whose induced base
+   orbits have uniformly bounded finite cardinality, then a common factorial
+   subsequence is Cauchy in every bounded-complement stage but has no limit
+   represented by a finite normal term. Conversely, an infinite genuinely
+   partial example is given for which `theta_1` is equality and the topology is
+   discrete and already complete.
+4. **Prefix-depth contrast.** A comb sequence is Cauchy for classical
+   prefix-depth agreement on trees but is separated at a fixed
+   finite-complement stage, showing that the two uniformities are different.
 
-1. **Relative finite-pattern realization.** For every finite family of
-   generated Answers, one compatible finite-complement observer fixes the
-   entire partial base pointwise and is simultaneously injective on that
-   family. Pairwise finite-tag separation is the two-point consequence; the
-   explicit constructor-size pair bound is retained.
-2. **Trajectory compression.** At each finite observation stage it is enough
-   for the single deterministic trajectory relevant to a chosen generated
-   unary family to admit a finite code. The whole observer carrier need not be
-   finite. Standard periodicity and factorial divisibility then make the
-   factorial sample Cauchy.
-3. **Finite-pattern escape.** For a syntactically growing unary orbit, a
-   candidate-tailored finite-pattern observer realizes the candidate and a long
-   orbit prefix exactly, sends the next unseen iterate to absorbing overflow,
-   and thereby rules out every generated candidate as a limit.
-4. **Compression--escape properness.** Trajectory compression plus
-   finite-pattern escape yields a Cauchy sequence with no generated limit,
-   hence a proper observational completion.
+The pointwise identity on the base is only the simplest special case of the
+criterion. Constant, idempotent, and uniformly bounded periodic base dynamics
+are also covered.
 
-The finite-base criterion and the arbitrary-base old-fixing theorem are
-formally checked instances of this same combined mechanism. In the old-fixing
-case the sharp stage-`n` witness is
+## Scope and terminology
 
-`c_(n+1)! ~_n c_(n+2)!`,
+The paper uses standard terminology wherever possible. Free compatible
+completion, Rees congruences, finite-tree-automaton sink constructions,
+congruence topologies, finite-state periodicity, profinite completion, and
+classical prefix-depth tree metrics are background and are cited as such.
 
-which gives unbounded finite separation ranks.
+No claim about a new arithmetic convention for division by zero is made. The
+natural-number example uses partial division only to supply an undefined base
+application and `x -> x + 0` as an elementary special case of the context
+criterion.
 
-The Lean namespace `ResolutionSemantics.MasterTheorems` is retained as a stable
-API name inherited from development. The paper itself does not use "master
-theorem" as mathematical terminology.
+The exact novelty and priority of the infinite-base completion criterion remain
+subject to specialist review.
 
-## Why finite-pattern realization is not just the standard product trick
+## Formal verification
 
-Abstract finite-family discrimination is classical, but the usual proof that
-combines pairwise separators by taking their finite Cartesian product does not
-stay inside the Resolution observer class over an infinite fixed base. This is
-Lean-checked already at carrier level: each embedding
-`Nat -> Nat ⊕ Unit` has one-point relative complement, whereas the diagonal
-embedding of `Nat` into the product of two such one-point extensions has an
-infinite family of mixed outside points `(a, star)`. Therefore the class
-"pointwise-fixed base + finite external complement" is not closed under binary
-products, and the direct finite-pattern construction performs work that cannot
-be replaced by the standard product-of-separators argument inside the same
-observer class.
+The repository retains the existing Lean source tree and historical Lean
+namespace names so that previous verification work remains reproducible. Those
+internal identifiers are not used as mathematical terminology in the paper.
+The formal tree includes underlying constructions, special cases, comparison
+results, and the prefix-depth contrast; the manuscript itself is self-contained
+and does not claim a one-to-one Lean declaration for every current sentence.
 
-## Why finite-pattern escape is not merely ordinary finite-target recognition
-
-The abstract topological pattern "a candidate can be separated while a Cauchy
-family converges to a new completion point" has classical profinite analogues,
-and is not claimed as new. The Resolution distinction is relative to the base.
-A Lean-checked comparison shows that when the pointwise-preserved base is not
-finitely codable, the candidate-tailored escape observer cannot be encoded into
-any finite carrier as a whole, even though its external complement is finite.
-The same globally infinite relative observer still separates the chosen
-generated candidate from every sufficiently late term of the syntactic tail.
-
-This differs both from ordinary finite-target profinite recognition and from
-nominal/pro-orbit-finite approaches to infinite alphabets: Resolution does not
-quotient base elements by renaming symmetry or finite support. Every base point
-is retained individually; only the complement is finitely budgeted.
-
-## Why the completion is not the prefix-depth tree completion
-
-An explicit Lean-checked comb sequence is Cauchy for ordinary prefix-depth
-agreement but is not Cauchy for Resolution observation. A single compatible
-one-tag observer distinguishes every adjacent pair, alternating its external
-state between the tag and overflow at arbitrary syntactic depth. In the natural
-arithmetic instance, a zero-tag observer can separate all distinct combs using
-only the pointwise-retained numerical base. Thus fixed semantic budgets can see
-through unbounded syntactic depth.
-
-## Other main formal results
-
-- normalized free compatible completion of a binary partial algebra and its
-  quotient presentation by equality after resolution;
-- intrinsic finite-complement observers over a pointwise-preserved, possibly
-  infinite partial base, with equivalence to canonical finite-tag models;
-- the induced separated filtration and complete observational completion;
-- exact preservation and reflection of constant-bearing universal equations;
-- for finitely coded bases, properness exactly when some base application is
-  undefined;
-- over arbitrary bases, the old-fixing-context instance of the combined
-  compression--escape theorem;
-- natural- and integer-arithmetic instances using the undefined seed `0/0` and
-  the context `x ↦ x + 0`;
-- a supporting many-sorted, arbitrary-finite-arity formalization of the
-  operations-only fragment of Diaconescu's encoding, including satisfaction,
-  recovery, persistent liberality, adjunction laws, semantic consequence,
-  fixed-signature initiality transfers, and the binary specialization bridge.
-
-The Diaconescu development establishes provenance and exact formal
-compatibility with established partial-to-total infrastructure. It is not a
-separate novelty claim of this paper.
-
-Division by zero is represented by a structured non-old Answer. The paper does
-not assign an ordinary numerical value to `a/0`, and it does not prove Strong
-Totality.
-
-## Novelty discipline
-
-The paper explicitly treats the following as background rather than novelty:
-free compatible completion, abstract finite-family discrimination,
-candidate-specific anti-limit separation in ordinary profinite settings,
-finite selected-subterm/sink constructions in isolation, finite-state eventual
-periodicity, factorial synchronization, generic Cauchy completion,
-nominal/pro-orbit-finite topology, and Diaconescu's encoding itself.
-
-The strongest contribution under review is the interaction of a pointwise-
-preserved possibly infinite partial base, finite complexity only outside that
-base, simultaneous finite-pattern realization, trajectory-level compression,
-and relative finite-pattern escape witnesses that force proper observational
-completions.
-
-## Reproducing the formal verification
-
-Requirements:
-
-- Lean 4.33.0 through Elan;
-- Python 3;
-- a POSIX shell.
-
-The toolchain is pinned in [lean-toolchain](lean-toolchain).
+The toolchain is pinned in `lean-toolchain`. The verification command is:
 
     bash scripts/verify.sh
 
-The command builds every paper-facing Lean module, checks the manuscript/API
-map, rejects proof holes, and requires every audited public theorem to depend
-only on Lean's standard `propext`, `Classical.choice`, and `Quot.sound` axioms.
+The static manuscript checker invoked by that command is aligned with the
+current paper and verifies source structure, bibliography keys, cross-reference
+keys, metadata, package versions, and local Lean imports.
 
-## Building the paper
+## Building the manuscript
 
-The PDF build requires pdfLaTeX, BibTeX, the standard LaTeX extra packages,
-and Poppler utilities.
+The manuscript build uses pdfLaTeX and BibTeX:
 
     bash scripts/build-paper.sh
 
-The rebuilt PDF is written to
-`build/paper/Resolution_Semantics_Adrian_Puha.pdf`.
-After editing the LaTeX source, refresh the checked-in copy with
+The generated PDF is written to:
+
+    build/paper/Finite_Complement_Congruence_Topology_Adrian_Puha.pdf
+
+A checked-in PDF is optional; to create or refresh one locally after the
+manuscript is finalized:
 
     bash scripts/build-paper.sh --update-committed
 
-CI uses `--check-committed` to reject a PDF that does not exactly match the
-deterministic build.
+Continuous integration builds the PDF from source and preserves it as a workflow
+artifact rather than requiring a committed binary to match the source tree.
 
-## Repository structure
+## Current branch
 
-- `paper/` — committed PDF, the single promoted LaTeX root, section sources,
-  and bibliography;
-- `lean/` — proof sources required by the manuscript;
-- [`THEOREM_MAP.md`](THEOREM_MAP.md) — structural claims mapped to Lean declarations;
-- [`REVIEW_GUIDE.md`](REVIEW_GUIDE.md) — focused questions for independent review;
-- [`MASTER_THEOREMS.md`](MASTER_THEOREMS.md) — historical development notes for
-  the structural reduction; the filename is retained for branch history, not as
-  publication terminology;
-- `scripts/` — reproducible verification and paper-build commands;
-- `.github/workflows/verify.yml` — continuous verification.
+The active manuscript branch is:
 
-The manuscript and formalization were developed with substantial AI
-assistance. Adrian Puha is responsible for the claims and is seeking
-independent human mathematical review before making publication claims.
+    rewrite/paper1-standard-terminology
+
+It remains intentionally separate from `main` until an explicit merge is
+authorized.

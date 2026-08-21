@@ -1,0 +1,49 @@
+\documentclass[11pt]{article}
+\usepackage{paper-style}
+
+\title{\textbf{A Finite-Complement Congruence Topology for Partial Algebras}}
+\author{Adrian Puha}
+\date{21 August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $D$ be a partial algebra with carrier $A$, and let $F(D)$ be its free
+compatible total extension.  We consider compatible total extensions that fix
+$A$ pointwise and contain only finitely many elements outside $A$.  Their
+kernels define a descending family of congruences on $F(D)$ and hence a
+Hausdorff congruence topology.
+
+For every finite subset of $F(D)$ there is one such extension on which the
+canonical homomorphism is injective.  This is an elementary Rees-congruence
+construction: retain its finite subterm closure and collapse the complement to
+one class.  When $A$ is finite, the resulting topology is exactly the ordinary
+profinite topology.
+
+The case of interest is therefore an infinite retained base, where the allowed
+target algebras may themselves be infinite.  We prove a sufficient condition
+for the Hausdorff completion to be strictly larger than $F(D)$.  If $D$ has an
+undefined base application and admits a nontrivial unary context whose orbits
+on $A$ have uniformly bounded finite cardinality, then iteration from the
+undefined term yields a Cauchy sequence with no limit in $F(D)$.  The identity
+on the base is the simplest special case.  We also exhibit an infinite partial
+algebra for which the induced topology is discrete, so the hypothesis is not
+implied by partiality alone.
+\end{abstract}
+
+\input{introduction}
+\input{free-completion}
+\input{finite-complement-discrimination}
+\input{finite-complement-completion}
+\input{examples}
+\input{conclusion}
+
+\begingroup
+\small
+\setlength{\bibsep}{0.25em}
+\bibliographystyle{abbrvnat}
+\bibliography{../references,../references-completion,../references-separation,../references-standardization}
+\endgroup
+
+\end{document}
