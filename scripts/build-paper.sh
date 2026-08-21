@@ -43,8 +43,8 @@ if grep -En \
   exit 1
 fi
 
-OUTPUT="$ROOT_DIR/build/paper/Finite_Complement_Discrimination_Adrian_Puha.pdf"
-COMMITTED="$ROOT_DIR/paper/Finite_Complement_Discrimination_Adrian_Puha.pdf"
+OUTPUT="$ROOT_DIR/build/paper/Finite_Complement_Congruence_Topologies_Adrian_Puha.pdf"
+COMMITTED="$ROOT_DIR/paper/Finite_Complement_Congruence_Topologies_Adrian_Puha.pdf"
 cp paper.pdf "$OUTPUT"
 
 PDF_INFO="$(pdfinfo "$OUTPUT")"
@@ -52,7 +52,7 @@ if ! grep -Eq '^Author:[[:space:]]+Adrian Puha[[:space:]]*$' <<<"$PDF_INFO"; the
   echo "built PDF has incorrect author metadata" >&2
   exit 1
 fi
-if ! grep -Fq 'Discrimination by Finite-Complement Completions of Partial Algebras' <<<"$PDF_INFO"; then
+if ! grep -Fq 'Finite-Complement Congruence Topologies for Partial Algebras' <<<"$PDF_INFO"; then
   echo "built PDF has incorrect title metadata" >&2
   exit 1
 fi
