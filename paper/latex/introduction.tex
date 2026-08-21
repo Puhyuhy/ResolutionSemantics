@@ -1,0 +1,82 @@
+\section{Introduction}\label{sec:introduction}
+
+A partial algebra is an algebra in which some applications of the basic
+operations are undefined.  A classical way to compare a partial algebra with
+total algebras is to embed it into, or map it to, compatible total algebras.
+We study a restricted version of this problem in which the original carrier is
+kept pointwise and only finitely many new elements are permitted.
+
+Let $D$ be a one-sorted partial algebra with carrier $A$ and a finite binary
+signature $\Sigma$.  We use the standard free compatible completion $\Free D$
+of $D$: applications already defined in $D$ are reduced to their prescribed
+values, while undefined applications remain as finite formal terms.  The free
+completion is background; the question considered here is how finite subsets
+of $\Free D$ can be distinguished by compatible total completions of $D$.
+
+\begin{definition}
+A \emph{finite-complement completion} of $D$ is a total $\Sigma$-algebra $T$
+containing $A$ as a set, such that
+\begin{enumerate}
+  \item every operation value already defined in $D$ has the same value in
+        $T$, and
+  \item $T\setminus A$ is finite.
+\end{enumerate}
+The universal property of $\Free D$ gives a canonical homomorphism
+$\pi_T:\Free D\to T$ fixing $A$ pointwise.
+\end{definition}
+
+The main result says that the family of all such completions discriminates every
+finite subset of the free completion.
+
+\begin{theorem}[Finite-subset discrimination; informal form]
+\label{thm:intro-discrimination}
+For every finite subset $X\subseteq\Free D$ there exists a finite-complement
+completion $T$ of $D$ such that $\pi_T$ is injective on $X$.
+\end{theorem}
+
+The proof is elementary and constructive.  Take all subterms occurring in the
+chosen finite set.  Keep base elements unchanged, assign one new element to
+each non-base subterm that must be remembered, and send all remaining cases to
+a single sink.  The normal-form property of the free completion guarantees
+that this finite operation table extends the partial operations of $D$.
+
+This statement resembles the standard passage from residual separation to
+finite-set discrimination.  There is, however, a simple obstruction to the
+usual proof by finite products.  If $A$ is infinite, the class of
+finite-complement completions need not be closed under products over the fixed
+copy of $A$.  For example, each inclusion
+\[
+ A\hookrightarrow A\sqcup\{\ast\}
+\]
+has one new element, whereas the diagonal copy of $A$ in
+$(A\sqcup\{\ast\})^2$ has infinitely many elements outside it whenever $A$ is
+infinite.  Thus the direct finite-subterm construction is needed if one wants
+to remain inside the same class of completions.
+
+We then use these completions to define finite-complement congruences on
+$\Free D$.  For $m\ge 1$, write $x\fceq{m}y$ when every finite-complement
+completion with at most $m$ new elements identifies $x$ and $y$.  The
+finite-subset theorem implies
+\[
+ \bigcap_{m\ge1}\fceq{m}\;=\;\Delta_{\Free D}.
+\]
+Hence these congruences define a separated uniform structure, and we consider
+its Cauchy completion.
+
+The second part of the paper gives two criteria ensuring that this completion
+contains new points.  For finite $A$, properness is equivalent to genuine
+partiality of $D$.  For arbitrary $A$, we give a sufficient condition using a
+unary context that fixes every base element.  The proof is again elementary:
+finite-state periodicity produces a Cauchy subsequence, while a finite-subterm
+separator rules out convergence to any element of $\Free D$.
+
+The scope of the contribution is deliberately narrow.  Free completions of
+partial algebras, residuality, discrimination, finite-state periodicity and
+Cauchy completion are established ideas.  The point studied here is their
+interaction under the additional requirement that a possibly infinite base be
+retained pointwise while only its complement is finite.  The literature
+comparison in \cref{sec:related-work} is written accordingly.
+
+All proofs are given in ordinary mathematical language.  A machine-checked
+formalization is mentioned only in an appendix as supplementary verification
+and is not used as a premise in any argument.
