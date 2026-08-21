@@ -1,124 +1,23 @@
-\section{Machine-Checked Companion}\label{app:formalization}
+\section{Supplementary formal verification}\label{app:formalization}
 
-\noindent
-Nothing in this appendix is used by the mathematics above.  Every definition,
-theorem and proof in the body is complete in ordinary mathematical language and
-should be read and judged as such.  The development recorded here is a
-correctness check on the author's own reasoning, not evidence offered to the
-reader, and it establishes neither significance nor priority.  It is reported
-because it exists, and because its trust boundary should be stated explicitly
-rather than left implicit.
+The mathematical arguments in the preceding sections are self-contained and do
+not depend on formal proof software.  A separate Lean 4 development accompanies
+the paper as supplementary verification of the definitions and theorem
+statements.
 
-The repository pins Lean~4.33.0.  The proof package contains a small
-publication-facing facade in \texttt{ResolutionMasterTheorems.lean} that
-exposes the structural results used in the reorganized paper.  In particular,
-the following declarations are checked directly:
-\begin{lstlisting}[style=lean]
-#check ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization
-#check ResolutionSemantics.MasterTheorems.orbitCompressionCauchy
-#check ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit
-#check ResolutionSemantics.MasterTheorems.compressedEscapingOrbitNotComplete
-#check ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective
-#check ResolutionSemantics.MasterTheorems.finiteBasePropernessCriterion
-#check ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster
-#check ResolutionSemantics.MasterTheorems.oldFixingRanksUnbounded
-\end{lstlisting}
-
-The finite-pattern result is implemented in
-\texttt{ResolutionFinitePatternRealization.lean}.  The trajectory-compression
-abstraction is in \texttt{ResolutionOrbitCompressionMaster.lean}; its finite
-code applies only to the relevant deterministic orbit and does not require a
-finite ambient observer carrier.  The anti-limit theorem is implemented in
-\texttt{ResolutionFinitePatternAntiLimit.lean}; it formalizes the selected
-candidate/prefix construction, overflow entry, and overflow absorption.  Both
-the finite-base and old-fixing properness theorems are re-derived as instances
-of the combined theorem.
-
-The command
+The repository uses Lean~4.33.0 and contains machine-checked counterparts of
+the free-completion construction, finite-family separation theorem, completion
+results, arithmetic examples, and the comparison with the many-sorted
+partial-to-total encoding.  The command
 \begin{lstlisting}[style=lean]
 bash scripts/verify.sh
 \end{lstlisting}
-checks the manuscript-linked public API, compiles the proof dependency chain,
-rejects direct proof holes or local axioms in the paper sources, and runs the
-axiom audit.  The accepted theorem dependencies are restricted to
-\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+rebuilds the formal development and checks that the public theorem files contain
+no proof holes.
 
-The formalization uses classical finite indexing and witness selection in
-explicit places.  The resulting trust claim is therefore relative to Lean's
-kernel, the imported standard library, and the ordinary classical principles
-reported by the audit.  No foundation-independent consistency claim is made.
-
-\subsection{Theorem map}
-
-The declarations corresponding to the numbered results of the body are
-listed below, grouped by section.  They are provided for traceability only.
-
-\paragraph{Free completion substrate (\S
-ef{sec:free-completion})}
-\begin{itemize}\setlength{\itemsep}{0pt}
-  \item \leanname{ResolutionSemantics.freeCompletionUniversal}
-  \item \leanname{ResolutionSemantics.expressionKernelQuotientInjective}
-  \item \leanname{ResolutionSemantics.expressionKernelQuotientSurjective}
-\end{itemize}
-
-\paragraph{Observers and finite-pattern realization (\S
-ef{sec:finite-separation})}
-\begin{itemize}\setlength{\itemsep}{0pt}
-  \item \leanname{ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization}
-  \item \leanname{ResolutionSemantics.finiteSeparationBound}
-  \item \leanname{ResolutionSemantics.MasterTheorems.relativeFiniteComplementSeparation}
-  \item \leanname{ResolutionSemantics.RelativeObservers.finiteRelativeComplement_not_closed_under_binary_products}
-\end{itemize}
-
-\paragraph{Completion, compression, escape (\S
-ef{sec:completion})}
-\begin{itemize}\setlength{\itemsep}{0pt}
-  \item \leanname{ResolutionSemantics.MasterTheorems.orbitCompressionCauchy}
-  \item \leanname{ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit}
-  \item \leanname{ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective}
-  \item \leanname{ResolutionSemantics.MasterTheorems.compressedEscapingOrbitNotComplete}
-  \item \leanname{ResolutionSemantics.MasterTheorems.finiteBasePropernessCriterion}
-  \item \leanname{ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster}
-  \item \leanname{ResolutionSemantics.MasterTheorems.oldFixingRanksUnbounded}
-  \item \leanname{ResolutionSemantics.completionComplete}
-  \item \leanname{Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra\_initial}
-  \item \leanname{Resolution.Probe.depthCauchy\_not\_observationalCauchy}
-  \item \leanname{Resolution.Probe.comb\_separatesAt\_one}
-  \item \leanname{Resolution.Probe.NatProbe.natComb\_pairwise\_separated\_at\_zero}
-\end{itemize}
-
-\paragraph{Equational conservativity (\S
-ef{sec:equations})}
-\begin{itemize}\setlength{\itemsep}{0pt}
-  \item \leanname{ResolutionSemantics.equationConservative}
-\end{itemize}
-
-\paragraph{Arithmetic instances (\S
-ef{sec:arithmetic})}
-\begin{itemize}\setlength{\itemsep}{0pt}
-  \item \leanname{ResolutionSemantics.NatDivision.singularFamilyInjective}
-  \item \leanname{ResolutionSemantics.NatDivision.singularFamilyDisjoint}
-  \item \leanname{ResolutionSemantics.NatDivision.oldFixingCriterion}
-  \item \leanname{ResolutionSemantics.NatDivision.separationRanksUnbounded}
-  \item \leanname{ResolutionSemantics.IntDivision.singularFamilyInjective}
-  \item \leanname{ResolutionSemantics.IntDivision.zeroDivZeroNotOld}
-  \item \leanname{ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective}
-  \item \leanname{ResolutionSemantics.IntDivision.separationRanksUnbounded}
-\end{itemize}
-
-\paragraph{Many-sorted localization (\S
-ef{sec:diaconescu-bridge})}
-\begin{itemize}\setlength{\itemsep}{0pt}
-  \item \leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_sound}
-  \item \leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_complete}
-  \item \leanname{Resolution.Diaconescu.ManySorted.alpha\_satisfaction\_condition}
-  \item \leanname{Resolution.Diaconescu.ManySorted.gamma\_satisfiesGamma}
-  \item \leanname{Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv}
-  \item \leanname{Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv}
-  \item \leanname{Resolution.Diaconescu.ManySorted.gamma\_preserves\_initiality}
-  \item \leanname{Resolution.Diaconescu.ManySorted.beta\_of\_initial\_encoded\_is\_initial}
-  \item \leanname{Resolution.Diaconescu.ManySorted.semantic\_consequence\_equivalence}
-  \item \leanname{Resolution.Diaconescu.InitialExistence.quasiTheory\_has\_initial\_partial\_model}
-  \item \leanname{Resolution.Diaconescu.BinarySpecialization.generatedEquiv}
-  \item \leanname{Resolution.Diaconescu.BinarySpecialization.gammaEquiv}
-\end{itemize}
+The formalization is provided for reproducibility and error checking only.  It
+is not used as a substitute for the mathematical proofs in the paper, and no
+claim of mathematical significance or priority is based on the existence of the
+Lean development.  The exact correspondence between numbered results in the
+paper and formal declarations is recorded separately in the repository's
+\texttt{THEOREM\_MAP.md} file.
