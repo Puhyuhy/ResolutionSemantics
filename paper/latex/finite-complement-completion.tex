@@ -201,3 +201,25 @@ Thus every distinct pair is separated by an extension with zero-point
 complement.  It follows that $\theta_1$ is equality, so the induced uniformity
 is discrete and already complete.
 \end{proof}
+
+\begin{remark}[Comparison with prefix-depth agreement]\label{rem:prefix-depth}
+The preceding uniformity is not the usual prefix-depth uniformity on finite
+terms that leads to spaces of infinite trees \cite{ArnoldNivat1980,Courcelle1983}.
+Indeed, suppose $\delta_f(a,z)$ is undefined and put
+\[
+ c_0=a,\qquad c_{k+1}=f(c_k,z).
+\]
+The terms $c_i$ and $c_j$ agree through every fixed finite prefix depth once
+$i$ and $j$ are sufficiently large, so $(c_k)$ is Cauchy for prefix-depth
+agreement.  It is not Cauchy for the finite-complement congruence uniformity.
+To see this, take two new points $p,q$ and a compatible total extension on
+$A\sqcup\{p,q\}$ with
+\[
+ f_T(a,z)=p,\qquad f_T(p,z)=q,\qquad f_T(q,z)=p,
+\]
+preserving every operation value already defined on $A$ and assigning arbitrary
+fixed values to the remaining unconstrained cases.  Then the images of the
+$c_k$ alternate between $p$ and $q$ after the first step.  Thus this single
+extension, with complement size $2$, separates $c_k$ from $c_{k+1}$ for every
+$k$, so the sequence is not Cauchy modulo $\theta_2$.
+\end{remark}
