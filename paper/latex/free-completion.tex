@@ -1,0 +1,62 @@
+\section{Free compatible completion}\label{sec:free-completion}
+
+We recall the concrete free completion used throughout.  Nothing in this
+section is claimed as new.
+
+Let $D=(A,\Sigma,\delta)$ be a one-sorted partial algebra with binary signature
+$\Sigma$.  For $f\in\Sigma$ and $a,b\in A$, the value $\delta_f(a,b)$ is either
+an element of $A$ or is undefined.
+
+A \emph{normal term} over $D$ is defined recursively.  Every $a\in A$ is a
+normal term.  If $s,t$ are normal terms and $f\in\Sigma$, then $f(s,t)$ is a
+normal term unless both $s,t$ lie in $A$ and $\delta_f(s,t)$ is defined; in
+that exceptional case $f(s,t)$ is replaced by the corresponding base value.
+Let $\Free D$ denote the set of normal terms.  Each basic operation is made
+total on $\Free D$ by forming the formal application and then applying this
+single normalization rule.
+
+The inclusion $\eta:A\hookrightarrow\Free D$ is injective, and every operation
+value already defined in $D$ is preserved:
+\[
+ \delta_f(a,b)=c
+ \quad\Longrightarrow\quad
+ f_{\Free D}(a,b)=c.
+\]
+
+A total $\Sigma$-algebra $T$ together with a map $i:A\to T$ is
+\emph{compatible with $D$} when
+\[
+ \delta_f(a,b)=c
+ \quad\Longrightarrow\quad
+ f_T(i(a),i(b))=i(c).
+\]
+Evaluation of normal terms in $T$ gives the standard universal property.
+
+\begin{theorem}[Free compatible completion]\label{thm:free-completion}
+For every compatible pair $(T,i)$ there is a unique homomorphism
+$\pi_T:\Free D\to T$ such that $\pi_T\eta=i$.
+\end{theorem}
+
+\begin{proof}
+Define $\pi_T$ recursively.  On $A$ put $\pi_T(a)=i(a)$.  For a non-base normal
+term $f(s,t)$ put
+\[
+ \pi_T(f(s,t))=f_T(\pi_T(s),\pi_T(t)).
+\]
+The only possible ambiguity would come from an application of $f$ to two base
+values on which $D$ is already defined.  Such an application is not a
+non-base normal term: by definition it has already been reduced to its base
+value.  Compatibility therefore makes the recursive definition agree with all
+reductions carried out in $\Free D$.  The homomorphism property is immediate,
+and uniqueness follows by induction on term formation.
+\end{proof}
+
+We shall repeatedly use the following elementary consequence of normality.
+
+\begin{lemma}[Normality]\label{lem:normality}
+If $f(s,t)\in\Free D\setminus A$, then it is not the case that
+$s,t\in A$ and $\delta_f(s,t)$ is defined.
+\end{lemma}
+
+This is exactly the local fact needed in the finite-complement construction of
+the next section.
