@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
 \usepackage{paper-style}
 
-\title{\textbf{Finite-Complement Congruence Topologies for Partial Algebras}}
+\title{\textbf{A Finite-Complement Congruence Topology for Partial Algebras}}
 \author{Adrian Puha}
 \date{21 August 2026}
 
@@ -15,20 +15,20 @@ $A$ pointwise and contain only finitely many elements outside $A$.  Their
 kernels define a descending family of congruences on $F(D)$ and hence a
 Hausdorff congruence topology.
 
-A preliminary observation is that every finite subset of $F(D)$ is
-discriminated by one such extension.  The proof is a Rees-congruence
-construction: retain the finite subterm closure and collapse its complement to
-a single class.  This is the algebraic form of the standard finite-subterm
-plus sink construction from tree automata.
+Every finite subset of $F(D)$ can be separated by one such extension.  This is
+an elementary Rees-congruence construction: retain its finite subterm closure
+and collapse the complement to one class.  When $A$ is finite, the resulting
+topology is exactly the ordinary profinite topology.
 
-When $A$ is finite, the resulting topology is the ordinary profinite topology.
-The case of interest is therefore an infinite base, where the allowed target
-algebras may themselves be infinite.  We give a sufficient condition for the
-Hausdorff completion to be strictly larger than $F(D)$.  If $D$ has an
-undefined base application and admits a nontrivial unary context acting as the
-identity on every element of $A$, then iterating that context from the
-undefined term yields a Cauchy sequence with no limit in $F(D)$.  Natural
-arithmetic with division undefined at zero gives a simple example.
+The case of interest is therefore an infinite retained base, where the allowed
+target algebras may themselves be infinite.  We prove a sufficient condition
+for the Hausdorff completion to be strictly larger than $F(D)$.  If $D$ has an
+undefined base application and admits a nontrivial unary context whose orbits
+on $A$ have uniformly bounded finite cardinality, then iteration from the
+undefined term yields a Cauchy sequence with no limit in $F(D)$.  The identity
+on the base is the simplest special case.  Conversely, we give an infinite
+partial algebra for which the induced topology is discrete, showing that
+partiality alone does not force new completion points.
 \end{abstract}
 
 \input{introduction}
