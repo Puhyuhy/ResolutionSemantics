@@ -25,7 +25,7 @@ compact mathematical core and records the already-proved detailed audit behind
 it.
 -/
 
-universe u v
+universe u r v w z
 
 namespace Resolution
 namespace StrongTotality
@@ -36,7 +36,7 @@ simultaneously for every semantic specification. -/
 theorem strongTotality_v1_closed
     (S : Specification.{u}) :
     ResolutionFreePointedCharacterization S ∧
-      StrongTotalityGrandCharacterization S := by
+      StrongTotalityGrandCharacterization.{u,r,v,w,z} S := by
   exact ⟨
     resolution_freePointedCharacterization S,
     strongTotality_master_grandCharacterization S
@@ -47,22 +47,22 @@ ordinary solutions. -/
 theorem strongTotality_v1_freePointed
     (S : Specification.{u}) :
     ResolutionFreePointedCharacterization S :=
-  (strongTotality_v1_closed S).1
+  resolution_freePointedCharacterization S
 
 /-- Expanded audit interface: every detailed coherence and boundary property
 proved in the research layer remains available without unpacking the compact
 free-pointed statement. -/
 theorem strongTotality_v1_grand
     (S : Specification.{u}) :
-    StrongTotalityGrandCharacterization S :=
-  (strongTotality_v1_closed S).2
+    StrongTotalityGrandCharacterization.{u,r,v,w,z} S :=
+  strongTotality_master_grandCharacterization S
 
 /-- Totality is constructive in the minimal semantics: every semantic
 specification has an answer without first deciding ordinary satisfiability. -/
 theorem strongTotality_v1_total
     (S : Specification.{u}) :
     Nonempty (ResolutionAnswer S) :=
-  (strongTotality_v1_grand S).total
+  strongTotality S
 
 /-- Exact conservativity boundary: an ordinary solution exists exactly when a
 non-residual Resolution Answer exists. -/
@@ -71,7 +71,7 @@ theorem strongTotality_v1_exact
     Specification.Satisfiable S ↔
       Exists fun a : ResolutionAnswer S =>
         a ≠ (ResolutionAnswer.residual : ResolutionAnswer S) :=
-  (strongTotality_v1_grand S).exact
+  satisfiable_iff_exists_nonresidual S
 
 /-- Raw syntax receives Resolution semantics exactly on the well-formed domain
 of its partial semantic decoder. -/
@@ -101,7 +101,8 @@ theorem strongTotality_v1_noUniformCollapse :
 Characterization remains literally recoverable from it. -/
 theorem strongTotality_v1_recoversGrand
     (S : Specification.{u}) :
-    (strongTotality_v1_closed S).2 = strongTotality_grandCharacterization S := by
+    (strongTotality_v1_closed.{u,r,v,w,z} S).2 =
+      strongTotality_grandCharacterization S := by
   rfl
 
 end StrongTotality
