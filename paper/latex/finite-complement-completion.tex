@@ -56,12 +56,13 @@ finite-index congruence $\beta$ whose restriction to $A$ is equality.  Put
 $\gamma=\alpha\cap\beta$.  Then $\gamma$ has finite index,
 $\gamma\subseteq\alpha$, and $A$ remains pointwise distinct in
 $F(D)/\gamma$.  Identifying the image of $A$ with $A$ itself, the quotient is a
-finite-complement compatible extension.  If its complement has size $m$, then
+finite-complement compatible extension.  If its complement has size $m$, put
+$M=\max\{m,1\}$.  Then
 \[
- \theta_m\subseteq\gamma\subseteq\alpha.
+ \theta_M\subseteq\gamma\subseteq\alpha.
 \]
-Thus $(\theta_m)$ is cofinal among the finite-index congruences and induces the
-ordinary profinite topology.
+Thus $(\theta_m)_{m\ge1}$ is cofinal among the finite-index congruences and
+induces the ordinary profinite topology.
 \end{proof}
 
 For infinite $A$, an allowed target may itself be infinite and the congruences
@@ -84,9 +85,10 @@ periodic, with preperiod and period bounded by $N$.  Every sufficiently large
 factorial lies beyond the preperiod and is divisible by the period.
 \end{proof}
 
-A \emph{one-hole unary context} $C[-]$ is a term with one distinguished
-occurrence of a variable.  Suppose that $C[a]$ is defined in $D$ for every
-$a\in A$; then it induces a map $C^D:A\to A$.
+A \emph{one-hole unary context} $C[-]$ is a ground term with one distinguished
+occurrence of a variable, the hole, and no other variables.  Suppose that
+$C[a]$ is defined in $D$ for every $a\in A$; by the strict evaluation convention
+of \cref{sec:free-completion}, it then induces a map $C^D:A\to A$.
 
 \begin{lemma}[Compatibility through contexts]\label{lem:context-compatibility}
 Let $T$ be compatible with $D$.  If $C[a]$ is defined in $D$, then evaluating
@@ -94,9 +96,9 @@ $C[a]$ in $T$ gives the same base value as evaluating it in $D$.
 \end{lemma}
 
 \begin{proof}
-Induct on the construction of the context.  At each operation node,
-compatibility of $T$ with $D$ preserves the value of the corresponding defined
-base application.
+Induct on the construction of the context.  Since definedness in $D$ is strict,
+every operation node encountered in the evaluation has defined base arguments.
+Compatibility of $T$ with $D$ therefore preserves the value at each node.
 \end{proof}
 
 We say that $C[-]$ has \emph{uniformly finite base orbits} if $C^D$ is defined
@@ -177,12 +179,12 @@ $F(D)$ is discrete and its Hausdorff completion adds no new points.
 \begin{proof}
 Fix distinct $x,y\in F(D)$ and let $S$ be the finite subterm closure of
 $\{x,y\}$.  Since $A$ is infinite, choose an injective map
-$\lambda:S\to A$ that fixes every element of $S\cap A$.  Define a total binary
-operation on $A$ by
+$\lambda:S\to A$ that fixes every element of $S\cap A$.  Fix $a_0\in A$ and
+define a total binary operation on $A$ by
 \[
  f_A(\lambda(s),\lambda(t))=\lambda(f(s,t))
 \]
-whenever $f(s,t)\in S$, and define it arbitrarily on all remaining pairs.
+whenever $f(s,t)\in S$, and put $f_A(r,s)=a_0$ on every remaining pair.
 These prescriptions are consistent because $\lambda$ is injective.  As the
 partial operation of $D$ is nowhere defined, there are no compatibility
 constraints to violate.  Induction on subterms gives that the canonical map
