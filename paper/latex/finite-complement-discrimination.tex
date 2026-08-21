@@ -23,24 +23,24 @@ Put
 \[
  I_X=F(D)\setminus(A\cup N_X).
 \]
-We first observe that $I_X$ is an ideal in the elementary absorbing sense: if
-one argument of a basic operation lies in $I_X$, then so does the result.
-Indeed, let $f(s,t)$ be the result of applying a basic operation and suppose,
-for example, that $s\in I_X$.  The result cannot lie in $A$, because reduction
-to a base value is possible only when both arguments lie in $A$.  Nor can it
-lie in $N_X$: if the normal term $f(s,t)$ were a selected subterm, then its
-subterm $s$ would belong to $S_X$, contrary to $s\in I_X$.  The same argument
-applies when $t\in I_X$.
+We first observe that $I_X$ is absorbing in every coordinate: if one argument
+of a basic operation lies in $I_X$, then so does the result.  Indeed, let
+$f(s,t)$ be the result of applying a basic operation and suppose, for example,
+that $s\in I_X$.  The result cannot lie in $A$, because reduction to a base
+value is possible only when both arguments lie in $A$.  Nor can it lie in
+$N_X$: if the normal term $f(s,t)$ were a selected subterm, then its subterm
+$s$ would belong to $S_X$, contrary to $s\in I_X$.  The same argument applies
+when $t\in I_X$.
 
 Define
 \[
  \rho_X=\Delta_{F(D)}\cup(I_X\times I_X).
 \]
-Since $I_X$ is absorbing, $\rho_X$ is a congruence; when $I_X$ is nonempty this
-is the usual Rees congruence associated with an ideal \cite{Tichy1981}.  Every
-base element remains a singleton class.  Outside the image of $A$ the quotient
-has the singleton classes indexed by $N_X$, together with at most one
-additional class represented by $I_X$.  Hence
+The absorption property makes $\rho_X$ a congruence; when $I_X$ is nonempty,
+this is the Rees congruence determined by the absorbing subalgebra $I_X$
+\cite{Tichy1981}.  Every base element remains a singleton class.  Outside the
+image of $A$ the quotient has the singleton classes indexed by $N_X$, together
+with at most one additional class represented by $I_X$.  Hence
 \[
  |(F(D)/\rho_X)\setminus A|\le |N_X|+1<\infty.
 \]
