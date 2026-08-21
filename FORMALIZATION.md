@@ -15,7 +15,9 @@ That module deliberately exposes a small interface with terminology close to
 the manuscript.  The larger `lean/` directory contains the earlier development
 from which these results were extracted; historical module and declaration
 names are retained so that existing proofs and their provenance remain
-reproducible.
+reproducible.  The full retained module graph is still compiled in CI, while
+`FiniteComplementTopology.lean` is the interface intended for readers of the
+current paper.
 
 ## What is checked
 
@@ -79,8 +81,9 @@ The command:
 
 1. rejects `sorry`, `admit`, and local `axiom` declarations in the Lean tree;
 2. runs the static manuscript/repository consistency checker;
-3. builds the publication-facing Lean target and its imported dependencies;
-4. evaluates `lean/AxiomAudit.lean`;
+3. builds the full retained Lean library, including the publication-facing
+   facade;
+4. evaluates `lean/AxiomAudit.lean` on the facade declarations;
 5. rejects axiom dependencies outside `propext`, `Classical.choice`, and
    `Quot.sound`.
 
