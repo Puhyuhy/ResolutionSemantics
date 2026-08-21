@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
-\usepackage{resolution-paper}
+\usepackage{paper-style}
 
-\title{\textbf{Finite-Complement Separation in Partial Algebras}}
+\title{\textbf{Discrimination by Finite-Complement Completions of Partial Algebras}}
 \author{Adrian Puha}
 \date{21 August 2026}
 
@@ -9,42 +9,39 @@
 \maketitle
 
 \begin{abstract}
-Let $D$ be a partial algebra with carrier $A$.  We consider compatible total
-extensions in which the copy of $A$ is preserved pointwise and only finitely
-many elements are added outside it.  The carrier $A$ itself may be infinite.
+Let $D$ be a partial algebra with carrier $A$, where $A$ may be infinite.  We
+consider compatible total completions that contain $A$ pointwise and add only
+finitely many new elements.  The main result is a finite-subset discrimination
+theorem: for every finite subset of the free compatible completion of $D$,
+there is one such finite-complement completion whose canonical homomorphism is
+injective on that subset.
 
-The main result is a finite-family separation theorem.  Given finitely many
-distinct elements of the free compatible completion of $D$, there is one such
-total extension whose interpretation is injective on that finite set.  The
-construction uses only finitely many elements outside $A$.  For an infinite
-base this does not follow from the usual product-of-separators argument,
-because the class of pointwise-base-preserving finite-complement extensions is
-not closed under binary products.
+For an infinite base this statement is not obtained by the usual
+product-of-separators argument, because finite complement over the diagonal
+copy of the base is not preserved by binary products.  We therefore give a
+direct construction using the finite subterm closure of the elements to be
+distinguished.
 
-We use these extensions to define a descending family of finite-complement
-indistinguishability relations and study the associated completion.  For
-finitely coded bases, the completion is proper exactly when the original
-algebra is genuinely partial.  We also give a sufficient criterion for
-properness over arbitrary bases and illustrate it on natural and integer
-arithmetic with division undefined at zero.
-
-All proofs in the paper are given in ordinary mathematical form.  A separate
-Lean development is provided only as supplementary machine verification.
+The same class of completions defines a separated countable uniformity on the
+free completion.  For finite bases, its Cauchy completion is proper exactly
+when the original algebra is genuinely partial.  For arbitrary bases we give a
+simple sufficient condition for properness using a unary context that fixes all
+base elements.  All proofs are given in ordinary mathematical form; a separate
+machine-checked development is supplementary only.
 \end{abstract}
 
-\input{restructured-introduction}
-\input{restructured-substrate}
-\input{restructured-observers}
-\input{restructured-completion}
-\input{restructured-equations}
-\input{restructured-arithmetic}
-\input{restructured-diaconescu}
-\input{restructured-related}
-\input{restructured-limitations}
-\input{restructured-conclusion}
+\input{introduction}
+\input{free-completion}
+\input{finite-complement-discrimination}
+\input{finite-complement-completion}
+\input{equations}
+\input{examples}
+\input{related-work}
+\input{limitations}
+\input{conclusion}
 
 \appendix
-\input{restructured-formalization}
+\input{formal-verification}
 
 \begingroup
 \small
