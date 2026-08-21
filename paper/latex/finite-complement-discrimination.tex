@@ -1,158 +1,65 @@
-\section{Discrimination by finite-complement completions}
-\label{sec:finite-separation}
+\section{Finite-complement separation}\label{sec:finite-separation}
 
-We now prove the main theorem.  Throughout this section, a
-\emph{finite-complement completion} means a compatible total algebra $T$
-containing the base $A$ pointwise and satisfying $|T\setminus A|<\infty$.
-The associated homomorphism $\pi_T:\Free D\to T$ is the map from
-\cref{thm:free-completion}.
-
-For a normal term $x\in\Free D$, let $\operatorname{Sub}(x)$ be its finite set
-of normal subterms.  For a finite set $X\subseteq\Free D$, put
+For a normal term $x\in F(D)$, let $\operatorname{Sub}(x)$ denote its finite
+set of normal subterms.  If $X\subseteq F(D)$ is finite, set
 \[
- S(X)=\bigcup_{x\in X}\operatorname{Sub}(x),
+ S_X=\bigcup_{x\in X}\operatorname{Sub}(x),
  \qquad
- N(X)=S(X)\setminus A.
+ N_X=S_X\setminus A.
 \]
-Thus $N(X)$ is the finite set of non-base subterms that occur in the chosen
-terms.
+Thus $N_X$ is finite and $S_X$ is closed under taking subterms.
 
-\begin{theorem}[Finite-subset discrimination]
-\label{thm:finite-subset-discrimination}
-For every finite subset $X\subseteq\Free D$ there is a finite-complement
-completion $T_X$ such that
-\[
- \pi_{T_X}|_X:X\longrightarrow T_X
-\]
-is injective.
-\end{theorem}
+\begin{lemma}[Finite-complement Rees quotient]
+\label{lem:finite-complement-rees}
+For every finite $X\subseteq F(D)$ there is a congruence $\rho_X$ on $F(D)$
+such that:
+\begin{enumerate}
+  \item every element of $A\cup N_X$ is a singleton $\rho_X$-class;
+  \item all elements of $F(D)\setminus(A\cup N_X)$ form one further class.
+\end{enumerate}
+Consequently $F(D)/\rho_X$ is a finite-complement compatible extension of $D$
+and the quotient map is injective on $X$.
+\end{lemma}
 
 \begin{proof}
-Choose a set of new elements
+Put
 \[
- Q_X=\{q_u:u\in N(X)\}\sqcup\{\ast\},
+ I_X=F(D)\setminus(A\cup N_X).
 \]
-all distinct and disjoint from $A$, and put
-\[
- T_X=A\sqcup Q_X.
-\]
-We define each basic binary operation $f\in\Sigma$ on all of $T_X^2$.
+We first observe that $I_X$ is an ideal in the elementary absorbing sense: if
+one argument of a basic operation lies in $I_X$, then so does the result.
+Indeed, let $f(s,t)$ be the result of applying a basic operation and suppose,
+for example, that $s\in I_X$.  The result cannot lie in $A$, because reduction
+to a base value is possible only when both arguments lie in $A$.  Nor can it
+lie in $N_X$: if the normal term $f(s,t)$ were a selected subterm, then its
+subterm $s$ would belong to $S_X$, contrary to $s\in I_X$.  The same argument
+applies when $t\in I_X$.
 
-First, if $a,b\in A$ and $\delta_f(a,b)=c$ is defined in $D$, set
+Define
 \[
- f_{T_X}(a,b)=c.
+ \rho_X=\Delta_{F(D)}\cup(I_X\times I_X).
 \]
-This is forced by compatibility.
-
-Second, suppose $u=f(s,t)$ belongs to $N(X)$.  Define
-\[
- \widehat{s}=
- \begin{cases}
- s,&s\in A,\\
- q_s,&s\in N(X),
- \end{cases}
- \qquad
- \widehat{t}=
- \begin{cases}
- t,&t\in A,\\
- q_t,&t\in N(X).
- \end{cases}
-\]
-Since $S(X)$ is closed under subterms, both $\widehat s$ and $\widehat t$ are
-available in $T_X$.  Set
-\[
- f_{T_X}(\widehat s,\widehat t)=q_u.
-\]
-
-These prescriptions are consistent.  The first and second clauses cannot
-conflict: if $\widehat s=s\in A$ and $\widehat t=t\in A$ and
-$\delta_f(s,t)$ were defined, then $f(s,t)$ would reduce to a base element and
-would not belong to $N(X)$, by \cref{lem:normality}.  Two prescriptions from
-the second clause cannot conflict either, because equality of the input pair
-$(\widehat s,\widehat t)$ recovers $s$ and $t$, and hence recovers the normal
-term $u=f(s,t)$.
-
-For every pair not covered by the first two clauses, define
-\[
- f_{T_X}(r,s)=\ast.
-\]
-This makes $T_X$ a total algebra.  By the first clause it is compatible with
-$D$, it contains $A$ pointwise, and
-\[
- |T_X\setminus A|=|N(X)|+1<\infty.
-\]
-
-It remains to see what the canonical homomorphism does on $S(X)$.  We claim
-that
-\[
- \pi_{T_X}(u)=
- \begin{cases}
- u,&u\in A,\\
- q_u,&u\in N(X).
- \end{cases}
-\]
-This follows by induction on the construction of $u$.  The base case is clear.
-If $u=f(s,t)\in N(X)$, the induction hypothesis identifies the values of $s$
-and $t$ with $\widehat s$ and $\widehat t$, and the second clause in the
-definition of $f_{T_X}$ gives $\pi_{T_X}(u)=q_u$.
-
-Distinct elements of $S(X)$ therefore have distinct images: base elements stay
-distinct, distinct non-base terms receive distinct labels, and the two classes
-are disjoint.  In particular $\pi_{T_X}$ is injective on $X$.
+Since $I_X$ is absorbing, $\rho_X$ is a congruence; this is the usual Rees
+congruence associated with an ideal \cite{Tichy1981}.  Its only nonsingleton
+class is $I_X$.  Therefore the quotient fixes every base element separately and
+has exactly $|N_X|+1$ elements outside the image of $A$.  Since $X\subseteq
+A\cup N_X$, the quotient map is injective on $X$.
 \end{proof}
 
-The two-element case gives ordinary separation.
+The construction is the algebraic form of the familiar finite-subterm
+construction with one sink state in tree automata \cite{ComonEtAl2008}.  We use
+it only to obtain a convenient separating family of congruences.
 
-\begin{corollary}[Pairwise separation]
-\label{thm:pairwise-finite-complement-separation}
-If $x,y\in\Free D$ and $x\ne y$, then some finite-complement completion $T$
-satisfies $\pi_T(x)\ne\pi_T(y)$.
-Moreover one may choose
-\[
- |T\setminus A|\le |N(\{x,y\})|+1.
-\]
+\begin{corollary}[Separation]
+\label{cor:finite-complement-separation}
+If $x\ne y$ in $F(D)$, then there is a finite-complement compatible extension
+$T$ for which the canonical map $F(D)\to T$ separates $x$ and $y$.
 \end{corollary}
 
-The theorem is a discrimination statement in the usual universal-algebraic
-sense: one homomorphism is required to be injective on a prescribed finite
-subset.  The qualification \emph{finite-complement} refers to the restricted
-class of codomains, not to a new notion of discrimination.
-
-\subsection{Why the usual product argument leaves the class}
-
-For classes of algebras closed under finite products, finite-set discrimination
-can often be obtained from pairwise separation by taking the product of
-finitely many separating homomorphisms.  That argument is not available here
-when the retained base is infinite.
-
-\begin{proposition}[Failure of product closure]
-\label{prop:finite-complement-product-obstruction}
-Let $A$ be infinite.  The class of set embeddings $A\hookrightarrow T$ with
-finite complement $T\setminus A$ is not closed under binary products over the
-diagonal copy of $A$.
-\end{proposition}
-
-\begin{proof}
-Take $T=A\sqcup\{\ast\}$.  The inclusion $A\hookrightarrow T$ has one-element
-complement.  In $T^2$, embed $A$ diagonally by $a\mapsto(a,a)$.  For every
-$a\in A$, the point $(a,\ast)$ lies outside the diagonal image, and these points
-are pairwise distinct.  Hence the complement of the diagonal copy of $A$ in
-$T^2$ is infinite.
-\end{proof}
-
-This proposition does not by itself establish novelty; it only explains why
-the direct proof of \cref{thm:finite-subset-discrimination} is not replaced by
-the standard finite-product proof within the same restricted class.
-
-\subsection{Finite bases}
-
-If $A$ is finite, every finite-complement completion is finite.  Hence
-\cref{thm:finite-subset-discrimination} implies the familiar
-residual-finiteness consequence.
-
-\begin{corollary}
-If $A$ is finite, then $\Free D$ is residually finite.
-\end{corollary}
-
-For infinite $A$, the completions constructed above are generally infinite;
-what remains finite is only the number of elements added beyond the fixed base.
+\begin{remark}
+When $A$ is infinite, finite-complement extensions are not in general closed
+under ordinary products over the diagonal copy of $A$: already the diagonal
+copy of $A$ in $(A\sqcup\{\ast\})^2$ has infinitely many points outside it.
+This observation is not needed in the proof above; it merely explains why the
+usual product-of-separators argument does not stay inside the same class.
+\end{remark}
