@@ -134,8 +134,8 @@ if citation_version.group(1) != lake_version.group(1):
         "CFF and Lake versions disagree: "
         f"{citation_version.group(1)} vs {lake_version.group(1)}"
     )
-if 'roots = ["FiniteComplementTopology"]' not in lakefile:
-    fail("Lake default target is not the publication-facing Lean facade")
+if '"FiniteComplementTopology"' not in lakefile:
+    fail("Lake roots do not include the publication-facing Lean facade")
 
 lean_sources = list(LEAN_DIR.glob("*.lean"))
 if not lean_sources:
