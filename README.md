@@ -1,4 +1,4 @@
-# Finite-Complement Congruence Topologies for Partial Algebras
+# A Finite-Complement Congruence Topology for Partial Algebras
 
 Author: **Adrian Puha**
 
@@ -20,21 +20,26 @@ that contains `A` pointwise and satisfies `|T \ A| < infinity`.
 
 The manuscript uses these extensions in three steps:
 
-1. **Finite separation.** For a finite set of normal terms, retain its finite
-   subterm closure and collapse the complement by a Rees congruence. The
-   resulting quotient fixes the base and separates the selected terms. This is
-   treated as standard finite-state algebraic machinery.
+1. **Finite separation.** A finite subterm closure is retained and its
+   complement is collapsed by a Rees congruence. This is treated as standard
+   finite-state algebraic machinery.
 2. **Congruence topology.** Intersections of kernels of extensions with bounded
-   complement define a descending Hausdorff family of congruences on `F(D)`.
-3. **Infinite-base criterion.** When the retained base may be infinite, a
-   nontrivial unary context that acts as the identity on every base element can
-   constrain an iterated non-base term to finitely many effective states in
-   every bounded-complement extension. A common factorial subsequence is then
-   Cauchy, while a Rees quotient excludes every finite normal term as its limit.
+   complement define a descending Hausdorff countable congruence uniformity on
+   `F(D)`. The paper makes its metrizability explicit.
+3. **Infinite-base criterion.** If an undefined base application is iterated by
+   a nontrivial unary context whose induced base orbits have uniformly bounded
+   finite cardinality, then a common factorial subsequence is Cauchy in every
+   bounded-complement stage but has no limit represented by a finite normal
+   term.
 
-For a finite base, the resulting topology is shown to be exactly the ordinary
-profinite topology. The manuscript therefore treats the infinite-base case as
-the part requiring separate analysis.
+The pointwise identity on the base is only the simplest special case of the
+criterion. Constant, idempotent, and uniformly bounded periodic base dynamics
+are also covered.
+
+For a finite base, the resulting topology is exactly the ordinary profinite
+topology. For an infinite base, the manuscript also gives a genuinely partial
+example for which `theta_1` is equality, hence the topology is discrete and
+already complete. Thus partiality alone does not force new completion points.
 
 ## Scope and terminology
 
@@ -45,7 +50,8 @@ background and are cited as such.
 
 No claim about a new arithmetic convention for division by zero is made. The
 natural-number example uses partial division only to supply an undefined base
-application, and uses `x -> x + 0` as a base-fixing context.
+application and `x -> x + 0` as an elementary special case of the context
+criterion.
 
 The exact novelty and priority of the infinite-base completion criterion remain
 subject to specialist review.
@@ -69,7 +75,7 @@ The manuscript build uses pdfLaTeX and BibTeX:
 
 The generated PDF is written to:
 
-    build/paper/Finite_Complement_Congruence_Topologies_Adrian_Puha.pdf
+    build/paper/Finite_Complement_Congruence_Topology_Adrian_Puha.pdf
 
 To refresh the checked-in copy after the manuscript is finalized:
 
