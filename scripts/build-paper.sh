@@ -31,21 +31,21 @@ cp "$ROOT_DIR"/paper/latex/* "$WORK_DIR/latex/"
 cp "$ROOT_DIR"/paper/*.bib "$WORK_DIR/"
 
 cd "$WORK_DIR/latex"
-pdflatex -interaction=nonstopmode -halt-on-error revised.tex
-bibtex revised
-pdflatex -interaction=nonstopmode -halt-on-error revised.tex
-pdflatex -interaction=nonstopmode -halt-on-error revised.tex
+pdflatex -interaction=nonstopmode -halt-on-error paper.tex
+bibtex paper
+pdflatex -interaction=nonstopmode -halt-on-error paper.tex
+pdflatex -interaction=nonstopmode -halt-on-error paper.tex
 
 if grep -En \
     'LaTeX Warning: (Citation|Reference).*undefined|There were undefined (references|citations)|multiply defined' \
-    revised.log; then
+    paper.log; then
   echo "unresolved or duplicate manuscript references found" >&2
   exit 1
 fi
 
 OUTPUT="$ROOT_DIR/build/paper/Finite_Complement_Discrimination_Adrian_Puha.pdf"
 COMMITTED="$ROOT_DIR/paper/Finite_Complement_Discrimination_Adrian_Puha.pdf"
-cp revised.pdf "$OUTPUT"
+cp paper.pdf "$OUTPUT"
 
 PDF_INFO="$(pdfinfo "$OUTPUT")"
 if ! grep -Eq '^Author:[[:space:]]+Adrian Puha[[:space:]]*$' <<<"$PDF_INFO"; then
