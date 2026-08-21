@@ -1,0 +1,86 @@
+--- manuscript.uploaded.tex
++++ manuscript.tex
+@@ -1,7 +1,9 @@
+ \documentclass{birkau}
+ \usepackage{amsmath,amssymb,url}
+ \usepackage{hyperref}
++\setlength{\emergencystretch}{3em}
+ 
++\theoremstyle{plain}
+ \newtheorem{theorem}{Theorem}[section]
+ \newtheorem{proposition}[theorem]{Proposition}
+ \newtheorem{lemma}[theorem]{Lemma}
+@@ -9,16 +11,18 @@
+ \theoremstyle{definition}
+ \newtheorem{definition}[theorem]{Definition}
+ \newtheorem{example}[theorem]{Example}
+-\theoremstyle{remark}
+ \newtheorem{remark}[theorem]{Remark}
+ 
+ \begin{document}
+ 
+-\title[Finite-complement congruence topology]{A Finite-Complement Congruence Topology for Partial Algebras}
+-\author{Adrian Puha}
++\title[Finite-complement congruence topology]{A finite-complement congruence topology for partial algebras}
++\author[A. Puha]{Adrian Puha}
+ \address{Independent researcher}
+-\subjclass[2020]{Primary 08A55; Secondary 08A30, 08B20}
+-\keywords{partial algebra, free completion, Rees congruence, congruence topology, profinite topology}
++%% AU requests a postal address and e-mail address for each author.
++%% Add the preferred public details before final upload.
++%% \email{your-email@example.com}
++\subjclass{08A55, 08A30, 08B20}
++\keywords{Partial algebra, Free completion, Rees congruence, Congruence topology, Profinite topology}
+@@ -271,8 +275,8 @@
+ \begin{corollary}[Separation]
+ \label{cor:finite-complement-separation}
+-If $x\ne y$ in $F(D)$, then there is a finite-complement compatible extension
+-$T$ for which the canonical map $F(D)\to T$ separates $x$ and $y$.
++If $x\ne y$ in $F(D)$, some finite-complement compatible extension $T$ has
++a canonical map $F(D)\to T$ that separates $x$ and $y$.
+ \end{corollary}
+@@ -340,12 +344,12 @@
+-Conversely, let $\alpha$ be any finite-index congruence on $F(D)$.  Apply
+-Lemma~\ref{lem:finite-complement-rees} to the finite set $X=A$.  This gives a
+-finite-index congruence $\beta$ whose restriction to $A$ is equality.  Put
+-$\gamma=\alpha\cap\beta$.  Then $\gamma$ has finite index,
+-$\gamma\subseteq\alpha$, and $A$ remains pointwise distinct in
+-$F(D)/\gamma$.  Identifying the image of $A$ with $A$ itself, the quotient is a
++Conversely, let $\alpha$ be a finite-index congruence on $F(D)$.  Applying
++Lemma~\ref{lem:finite-complement-rees} to $X=A$ gives a finite-index congruence
++$\beta$ whose restriction to $A$ is equality.  Put
++$\gamma=\alpha\cap\beta$.  Then $\gamma$ has finite index and
++$\gamma\subseteq\alpha$, while $A$ remains pointwise distinct in
++$F(D)/\gamma$.  After identifying its image with $A$, this quotient is a
+ finite-complement compatible extension.  If its complement has size $m$, put
+ $M=\max\{m,1\}$.  Then
+@@ -568,7 +572,7 @@
+-\section*{Acknowledgements}
++\subsection*{Acknowledgments}
+@@ -578,23 +582,21 @@
+ \section*{Declarations}
+ 
+-\paragraph{Ethical approval.}
++\subsection*{Ethical approval}
+ Not applicable.
+ 
+-\paragraph{Competing interests.}
++\subsection*{Competing interests}
+ The author has no relevant financial or non-financial interests to disclose.
+ 
+-\paragraph{Authors' contributions.}
+-Adrian Puha is the sole author and accepts responsibility for the conception,
+-mathematical claims, interpretation, literature review, supplementary
+-formalization, and preparation of the manuscript.
++\subsection*{Authors' contributions}
++Not applicable.
+ 
+-\paragraph{Availability of data and materials.}
++\subsection*{Availability of data and materials}
+ No datasets were generated or analysed for this study.  The Lean~4
+ formalization and supporting source files are publicly available at
+ \url{https://github.com/Puhyuhy/ResolutionSemantics}.
+ 
+-\paragraph{Funding.}
++\subsection*{Funding}
+ No funds, grants, or other support was received.
