@@ -6,6 +6,12 @@ $D$: applications already defined on the base are evaluated, while undefined
 applications remain as normal terms.  Free completion of partial algebras is
 classical and will be used only as background
 \cite{ClimentVidalCosmeLlopez2023,Nesin2011}.
+Related total-algebraic approaches encode partial algebras inside suitable total
+algebraic structures rather than freely adjoining normal terms.  In particular,
+Diaconescu gives a Horn encoding based on existence equality, with a satisfaction
+condition and persistent-liberality properties \cite{Diaconescu2009}.  That
+viewpoint is conceptually related to, but distinct from, the finite-complement
+compatible extensions considered here.
 
 We study compatible total extensions $T$ that retain the whole base $A$
 pointwise and add only finitely many elements.  The restriction measures how
@@ -22,9 +28,9 @@ The universal property of $F(D)$ gives a canonical homomorphism
  \pi_T:F(D)\longrightarrow T
 \]
 fixing $A$ pointwise.  We call such a $T$ a \emph{finite-complement compatible
-extension}.  The familiar one-point completion is the simplest example of this
-kind \cite{Nesin2011}; here we use all finite-complement compatible extensions
-rather than a distinguished sink completion.
+extension}.  A one-point completion is the simplest example of this kind
+\cite{Nesin2011}; here we use all finite-complement compatible extensions rather
+than a distinguished sink completion.
 
 The first observation is elementary.  If $X\subseteq F(D)$ is finite, then one
 can retain the finite subterm closure of $X$ and collapse everything else into
@@ -107,9 +113,9 @@ The paper is organized accordingly.  \Cref{sec:free-completion} recalls the free
 compatible extension.  \Cref{sec:finite-separation} gives the Rees-congruence
 separation lemma.  \Cref{sec:completion} defines the congruence topology,
 identifies the finite-base case with the profinite topology, proves the
-infinite-base criterion, gives the discrete counterexample, and compares the
-uniformity with prefix-depth agreement on trees.  \Cref{sec:examples} gives one
-arithmetic instance of the criterion.
+infinite-base criterion, gives an arithmetic instance, gives the discrete
+counterexample, and compares the uniformity with prefix-depth agreement on
+trees.
 
 The manuscript is self-contained.  Supplementary machine-checked developments
 cover several underlying constructions, special cases, and the prefix-depth
