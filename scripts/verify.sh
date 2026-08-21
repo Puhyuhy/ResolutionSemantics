@@ -37,5 +37,7 @@ lake build Paper
 mkdir -p build
 lake env lean lean/AxiomAudit.lean | tee build/axiom-audit.txt
 python3 scripts/check_axiom_audit.py
+lake env lean lean/ResolutionStrongTotalityV1AxiomAudit.lean | tee build/v1-axiom-audit.txt
+python3 scripts/check_v1_axiom_audit.py
 
-echo "Lean build, manuscript/API check, and axiom audit passed."
+echo "Lean build, manuscript/API check, paper axiom audit, and Strong Totality v1 axiom audit passed."
