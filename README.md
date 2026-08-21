@@ -2,6 +2,9 @@
 
 Author: **Adrian Puha**
 
+**Preprint DOI:** https://doi.org/10.5281/zenodo.22049834  
+**All-version DOI:** https://doi.org/10.5281/zenodo.22049833
+
 This repository contains a short manuscript on the congruence topology induced
 by compatible total extensions of a partial algebra that retain the base
 carrier pointwise and add only finitely many elements outside it.
