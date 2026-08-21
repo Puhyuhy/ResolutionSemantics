@@ -4,6 +4,12 @@ Let $D=(A,\Sigma,\delta)$ be a one-sorted partial algebra with binary signature
 $\Sigma$.  For $f\in\Sigma$ and $a,b\in A$, the value $\delta_f(a,b)$ is either
 an element of $A$ or is undefined.
 
+Throughout, evaluation of composite terms in $D$ is \emph{strict}: a term
+$f(s,t)$ is defined only when both $s$ and $t$ are defined and the corresponding
+base application $\delta_f(s^D,t^D)$ is defined.  Thus, whenever a composite
+term is defined in $D$, every subterm occurring in its evaluation is defined as
+well.
+
 A \emph{normal term} over $D$ is defined recursively.  Every $a\in A$ is a
 normal term.  If $s,t$ are normal terms and $f\in\Sigma$, then $f(s,t)$ is a
 normal term unless both $s,t$ lie in $A$ and $\delta_f(s,t)$ is defined; in
