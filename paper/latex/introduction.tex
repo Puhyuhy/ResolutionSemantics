@@ -31,62 +31,73 @@ finite-subterm plus sink construction used in finite tree automata
 \cite{ComonEtAl2008}.  We record it because it supplies the separating
 congruences used below, not because the construction itself is new.
 
-For $m\ge1$, let $\theta_m$ be the intersection of the kernels of all canonical
-maps into finite-complement compatible extensions satisfying
-$|T\setminus A|\le m$.  The preceding separation observation implies
+For $m\ge1$, let $\theta_m$ be the intersection of the kernels arising from
+finite-complement compatible extensions with at most $m$ new elements.  The
+relevant kernels form a set of congruences on $F(D)$, so this intersection is
+set-indexed.  The separation observation implies
 \[
  \bigcap_{m\ge1}\theta_m=\Delta_{F(D)}.
 \]
-Thus $(\theta_m)$ defines a Hausdorff congruence topology on $F(D)$, in the
+Thus $(\theta_m)$ defines a Hausdorff congruence uniformity on $F(D)$, in the
 standard sense of congruence topologies on universal algebras
-\cite{BulmanFleming1971}.  We consider its Hausdorff completion.
+\cite{BulmanFleming1971}.  Because the basis is countable and nested, the
+uniformity is metrizable; consequently Cauchy sequences suffice to describe its
+completion.
 
 The finite-base case is not a new completion theory.  When $A$ is finite, the
 finite-complement quotients that fix $A$ are cofinal among all finite quotients
-of $F(D)$.  Consequently the topology above is exactly the ordinary profinite
-topology; we use standard profinite terminology in that case
-\cite{DaveyGouveiaHaviarPriestley2011,ChenAdamekMiliusUrbat2016}.  This reduces
-the genuinely different case to an infinite retained base, where the allowed
-target algebras may themselves be infinite and the congruences $\theta_m$ need
-not have finite index.
+of $F(D)$.  Consequently the topology is exactly the ordinary profinite
+topology \cite{DaveyGouveiaHaviarPriestley2011,ChenAdamekMiliusUrbat2016}.
+The genuinely different situation is therefore an infinite retained base,
+where the allowed target algebras may themselves be infinite and the
+congruences $\theta_m$ need not have finite index.
 
 Our main result gives a sufficient condition for the completion to be strictly
-larger than $F(D)$ in that infinite-base setting.  Suppose $D$ has an undefined
-base application, producing a non-base normal term $c_0$, and suppose there is
-a nontrivial one-hole unary context $C[-]$ such that
+larger than $F(D)$ in this setting.  Suppose $D$ has an undefined base
+application, producing a non-base normal term $c_0$, and suppose there is a
+nontrivial one-hole unary context $C[-]$ whose induced map $C^D:A\to A$ has
+uniformly finite orbits: there is $B$ such that
 \[
- C^D(a)=a\qquad(a\in A).
+ \bigl|\{(C^D)^n(a):n\ge0\}\bigr|\le B
+ \qquad(a\in A).
 \]
-Iterate the context in the free completion:
-\[
- c_{n+1}=C[c_n].
-\]
-In every extension with at most $m$ new elements, this orbit either enters the
-base and then stays fixed, or remains among at most $m$ non-base elements.
-Hence its factorially indexed subsequence is eventually constant in every such
-extension, uniformly in the choice of extension, and is therefore Cauchy for
-all $\theta_m$.
+The pointwise identity case is the simplest example, but the hypothesis also
+covers constant, idempotent, and uniformly bounded periodic behaviour on the
+base.
 
-It does not converge to a term of $F(D)$.  For any proposed term $x$, retain the
-finite subterm closure of $x$ together with a sufficiently long initial orbit
-segment and collapse the complement.  The next iterate lies in the collapsed
-ideal, and all later iterates remain there, while $x$ is retained as a
-singleton class.  Hence the same quotient separates $x$ from the entire late
-tail.  The Hausdorff completion therefore contains a new point.
+Iterate the context in the free completion, $c_{n+1}=C[c_n]$.  In every
+extension with at most $m$ new elements, the interpreted orbit either remains
+outside the base, where it has at most $m$ values, or enters the base and then
+follows one of the uniformly bounded base orbits.  Hence the whole interpreted
+orbit has at most $m+B$ values.  Factorially indexed iterates therefore
+synchronize uniformly over all such extensions and form a Cauchy sequence for
+every $\theta_m$.
+
+The sequence does not converge to a term of $F(D)$.  For any proposed term
+$x$, a Rees quotient retaining the subterms of $x$ and a sufficiently late
+iterate sends the next iterate, and hence the whole subsequent tail, into the
+collapsed ideal class while leaving $x$ singleton.  The Hausdorff completion
+therefore contains a new point.
+
+The sufficient hypothesis is not merely a disguised form of partiality.  We
+also give an infinite partial algebra for which $\theta_1$ is equality, so the
+induced topology is discrete and already complete.  Thus genuine partiality
+alone does not force new completion points over an infinite retained base.
 
 The finite-complement condition is related in spirit to finite-index and
 separability conditions studied elsewhere, for example in semigroup theory
 \cite{RuskucThomas1998,CainMaltcev2013,MillerOReillyQuickRuskuc2022}.  The
 present setting is different in that the retained carrier is only a partial
-base and need not be a subalgebra of $F(D)$.  The paper therefore makes no
-claim that the finite-complement condition itself is a new finiteness notion.
+base and need not be a subalgebra of $F(D)$.  No claim is made that
+finite-complement finiteness, congruence topologies, or factorial finite-state
+synchronization are themselves new.
 
 The paper is organized accordingly.  \Cref{sec:free-completion} recalls the free
-compatible extension.  \Cref{sec:finite-separation} gives the short Rees
-congruence separation lemma.  \Cref{sec:completion} defines the congruence
-topology, identifies the finite-base case with the profinite topology, and
-proves the infinite-base criterion.  \Cref{sec:examples} gives one arithmetic
-example.
+compatible extension.  \Cref{sec:finite-separation} gives the Rees-congruence
+separation lemma.  \Cref{sec:completion} defines the congruence topology,
+identifies the finite-base case with the profinite topology, proves the
+infinite-base criterion, and gives the discrete counterexample.
+\Cref{sec:examples} gives one arithmetic instance of the criterion.
 
 A machine-checked development of the underlying results is available separately
 from the paper; none of the arguments below depends on it.
