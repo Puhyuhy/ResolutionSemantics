@@ -1,82 +1,83 @@
 \section{Introduction}\label{sec:introduction}
 
-A partial algebra is an algebra in which some applications of the basic
-operations are undefined.  A classical way to compare a partial algebra with
-total algebras is to embed it into, or map it to, compatible total algebras.
-We study a restricted version of this problem in which the original carrier is
-kept pointwise and only finitely many new elements are permitted.
+Let $D=(A,\Sigma,\delta)$ be a one-sorted partial algebra with finite binary
+signature.  We write $F(D)$ for the standard free compatible total extension of
+$D$: applications already defined on the base are evaluated, while undefined
+applications remain as normal terms.  Free completion of partial algebras is
+classical and will be used only as background
+\cite{ClimentVidalCosmeLlopez2023,Diaconescu2009}.
 
-Let $D$ be a one-sorted partial algebra with carrier $A$ and a finite binary
-signature $\Sigma$.  We use the standard free compatible completion $\Free D$
-of $D$: applications already defined in $D$ are reduced to their prescribed
-values, while undefined applications remain as finite formal terms.  The free
-completion is background; the question considered here is how finite subsets
-of $\Free D$ can be distinguished by compatible total completions of $D$.
-
-\begin{definition}
-A \emph{finite-complement completion} of $D$ is a total $\Sigma$-algebra $T$
-containing $A$ as a set, such that
-\begin{enumerate}
-  \item every operation value already defined in $D$ has the same value in
-        $T$, and
-  \item $T\setminus A$ is finite.
-\end{enumerate}
-The universal property of $\Free D$ gives a canonical homomorphism
-$\pi_T:\Free D\to T$ fixing $A$ pointwise.
-\end{definition}
-
-The main result says that the family of all such completions discriminates every
-finite subset of the free completion.
-
-\begin{theorem}[Finite-subset discrimination; informal form]
-\label{thm:intro-discrimination}
-For every finite subset $X\subseteq\Free D$ there exists a finite-complement
-completion $T$ of $D$ such that $\pi_T$ is injective on $X$.
-\end{theorem}
-
-The proof is elementary and constructive.  Take all subterms occurring in the
-chosen finite set.  Keep base elements unchanged, assign one new element to
-each non-base subterm that must be remembered, and send all remaining cases to
-a single sink.  The normal-form property of the free completion guarantees
-that this finite operation table extends the partial operations of $D$.
-
-This statement resembles the standard passage from residual separation to
-finite-set discrimination.  There is, however, a simple obstruction to the
-usual proof by finite products.  If $A$ is infinite, the class of
-finite-complement completions need not be closed under products over the fixed
-copy of $A$.  For example, each inclusion
+We study compatible total extensions $T$ that retain the whole base $A$
+pointwise and add only finitely many elements.  Thus
 \[
- A\hookrightarrow A\sqcup\{\ast\}
+ A\subseteq T,
+ \qquad |T\setminus A|<\infty,
 \]
-has one new element, whereas the diagonal copy of $A$ in
-$(A\sqcup\{\ast\})^2$ has infinitely many elements outside it whenever $A$ is
-infinite.  Thus the direct finite-subterm construction is needed if one wants
-to remain inside the same class of completions.
-
-We then use these completions to define finite-complement congruences on
-$\Free D$.  For $m\ge 1$, write $x\fceq{m}y$ when every finite-complement
-completion with at most $m$ new elements identifies $x$ and $y$.  The
-finite-subset theorem implies
+and every operation value already defined in $D$ has the same value in $T$.
+The universal property of $F(D)$ gives a canonical homomorphism
 \[
- \bigcap_{m\ge1}\fceq{m}\;=\;\Delta_{\Free D}.
+ \pi_T:F(D)\longrightarrow T
 \]
-Hence these congruences define a separated uniform structure, and we consider
-its Cauchy completion.
+fixing $A$ pointwise.  We call such a $T$ a \emph{finite-complement compatible
+extension}.
 
-The second part of the paper gives two criteria ensuring that this completion
-contains new points.  For finite $A$, properness is equivalent to genuine
-partiality of $D$.  For arbitrary $A$, we give a sufficient condition using a
-unary context that fixes every base element.  The proof is again elementary:
-finite-state periodicity produces a Cauchy subsequence, while a finite-subterm
-separator rules out convergence to any element of $\Free D$.
+The first observation is elementary.  If $X\subseteq F(D)$ is finite, then one
+can retain the finite subterm closure of $X$ and collapse everything else into
+one class.  The complement is an ideal of the term algebra, so this is a Rees
+congruence in the usual universal-algebraic sense \cite{Tichy1981}.  The
+resulting quotient is a finite-complement compatible extension and the quotient
+map is injective on $X$.  This is the algebraic version of the standard
+finite-subterm plus sink construction used in finite tree automata
+\cite{ComonEtAl2008}.  We record it because it supplies the separating
+congruences used below, not because the construction itself is new.
 
-The scope of the contribution is deliberately narrow.  Free completions of
-partial algebras, residuality, discrimination, finite-state periodicity and
-Cauchy completion are established ideas.  The point studied here is their
-interaction under the additional requirement that a possibly infinite base be
-retained pointwise while only its complement is finite.  The literature
-comparison in \cref{sec:related-work} is written accordingly.
+For $m\ge1$, let $\theta_m$ be the intersection of the kernels of all canonical
+maps into finite-complement compatible extensions satisfying
+$|T\setminus A|\le m$.  The preceding separation observation implies
+\[
+ \bigcap_{m\ge1}\theta_m=\Delta_{F(D)}.
+\]
+Thus $(\theta_m)$ defines a Hausdorff congruence topology on $F(D)$, in the
+standard sense of congruence topologies on universal algebras
+\cite{BulmanFleming1971}.  We consider its Hausdorff completion.
 
-All proofs are given in ordinary mathematical language.  A machine-checked
-formalization is mentioned only in an appendix as supplementary verification
-and is not used as a premise in any argument.
+The finite-base case is not a new completion theory.  When $A$ is finite, the
+finite-complement quotients that fix $A$ are cofinal among all finite quotients
+of $F(D)$.  Consequently the topology above is exactly the ordinary profinite
+topology.  This reduces the genuinely different case to an infinite retained
+base, where the allowed target algebras may themselves be infinite and the
+congruences $\theta_m$ need not have finite index.
+
+Our main result gives a sufficient condition for the completion to be strictly
+larger than $F(D)$ in that infinite-base setting.  Suppose $D$ has an undefined
+base application, producing a non-base normal term $c_0$, and suppose there is
+a nontrivial one-hole unary context $C[-]$ such that
+\[
+ C^D(a)=a\qquad(a\in A).
+\]
+Iterate the context in the free completion:
+\[
+ c_{n+1}=C[c_n].
+\]
+In every extension with at most $m$ new elements, this orbit either enters the
+base and then stays fixed, or remains among at most $m$ non-base elements.
+Hence its factorially indexed subsequence is eventually constant in every such
+extension, uniformly in the choice of extension, and is therefore Cauchy for
+all $\theta_m$.
+
+It does not converge to a term of $F(D)$.  For any proposed term $x$, retain the
+finite subterm closure of $x$ together with a sufficiently long initial orbit
+segment and collapse the complement.  The next iterate lies in the collapsed
+ideal, and all later iterates remain there, while $x$ is retained as a
+singleton class.  Hence the same quotient separates $x$ from the entire late
+tail.  The Hausdorff completion therefore contains a new point.
+
+The paper is organized accordingly.  \Cref{sec:free-completion} recalls the free
+compatible extension.  \Cref{sec:finite-separation} gives the short Rees
+congruence separation lemma.  \Cref{sec:completion} defines the congruence
+topology, identifies the finite-base case with the profinite topology, and
+proves the infinite-base criterion.  \Cref{sec:examples} gives one arithmetic
+example and summarizes the relation to standard surrounding theory.
+
+A machine-checked development of the underlying results is available separately
+from the paper; none of the arguments below depends on it.
