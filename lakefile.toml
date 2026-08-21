@@ -38,6 +38,7 @@ roots = [
   "ResolutionStrongTotalityFamilyInitiality",
   "ResolutionStrongTotalityFamilyCoherence",
   "ResolutionStrongTotalityNormalForm",
+  "ResolutionStrongTotalityFreePointedAdjunction",
   "ResolutionStrongTotalitySingletonFamily",
   "ResolutionStrongTotalityFamilyResidual",
   "ResolutionStrongTotalityFamilyResidualNaturality",
