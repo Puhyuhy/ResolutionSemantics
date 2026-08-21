@@ -19,7 +19,6 @@ if [[ $# -eq 1 ]]; then
   esac
 fi
 
-# Keep the review PDF byte-reproducible across local and CI builds.
 export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1786924800}"
 export FORCE_SOURCE_DATE=1
 export TZ=UTC
@@ -44,8 +43,8 @@ if grep -En \
   exit 1
 fi
 
-OUTPUT="$ROOT_DIR/build/paper/Resolution_Semantics_Adrian_Puha.pdf"
-COMMITTED="$ROOT_DIR/paper/Resolution_Semantics_Adrian_Puha.pdf"
+OUTPUT="$ROOT_DIR/build/paper/Finite_Complement_Discrimination_Adrian_Puha.pdf"
+COMMITTED="$ROOT_DIR/paper/Finite_Complement_Discrimination_Adrian_Puha.pdf"
 cp revised.pdf "$OUTPUT"
 
 PDF_INFO="$(pdfinfo "$OUTPUT")"
@@ -53,7 +52,7 @@ if ! grep -Eq '^Author:[[:space:]]+Adrian Puha[[:space:]]*$' <<<"$PDF_INFO"; the
   echo "built PDF has incorrect author metadata" >&2
   exit 1
 fi
-if ! grep -Fq 'Resolution Semantics for Partial Algebras' <<<"$PDF_INFO"; then
+if ! grep -Fq 'Discrimination by Finite-Complement Completions of Partial Algebras' <<<"$PDF_INFO"; then
   echo "built PDF has incorrect title metadata" >&2
   exit 1
 fi
