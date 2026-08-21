@@ -46,8 +46,6 @@ interpretation
 is injective on $\{x_1,\ldots,x_k\}$.
 \end{theorem}
 
-Lean checks the theorem as
-\leanname{ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization}.
 The construction fixes the entire base carrier pointwise; only the selected
 suspended pattern consumes finite tags.
 
@@ -61,10 +59,6 @@ different interpretations.  Equivalently,
 \]
 \end{corollary}
 
-The quantitative pair bound remains exposed by
-\leanname{ResolutionSemantics.finiteSeparationBound}; the intrinsic
-observer-class statement is
-\leanname{ResolutionSemantics.MasterTheorems.relativeFiniteComplementSeparation}.
 The finite-pattern theorem is structurally stronger than the pairwise bound,
 while the pairwise implementation retains the sharper explicit estimate
 $n=|x|+|y|$.
@@ -84,13 +78,11 @@ mixed points $(a,\star)$, for $a\in\mathbb N$, form an injective copy of
 $\mathbb N$ outside the diagonal old image.
 \end{proposition}
 
-Lean checks the explicit carrier-level counterexample as
-\leanname{ResolutionSemantics.RelativeObservers.finiteRelativeComplement_not_closed_under_binary_products}.
 Thus the usual residual argument that combines finitely many pairwise
-separators by taking their Cartesian product does not stay inside the present
-observer class when the preserved base is infinite.  The direct finite-pattern
-construction in \cref{thm:finite-pattern-realization} is therefore not replaced
-by that standard product trick.
+separators by taking their Cartesian product does not stay inside the
+present observer class when the preserved base is infinite. The direct
+finite-pattern construction in \cref{thm:finite-pattern-realization} is
+therefore not replaced by that standard product trick.
 
 \begin{remark}[What is and is not being claimed]
 The selected-subterm plus sink construction has standard automata-theoretic

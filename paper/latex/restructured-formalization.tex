@@ -1,4 +1,13 @@
-\section{Formalization and Trust Boundary}\label{sec:formalization}
+\section{Machine-Checked Companion}\label{app:formalization}
+
+\noindent
+Nothing in this appendix is used by the mathematics above.  Every definition,
+theorem and proof in the body is complete in ordinary mathematical language and
+should be read and judged as such.  The development recorded here is a
+correctness check on the author's own reasoning, not evidence offered to the
+reader, and it establishes neither significance nor priority.  It is reported
+because it exists, and because its trust boundary should be stated explicitly
+rather than left implicit.
 
 The repository pins Lean~4.33.0.  The proof package contains a small
 publication-facing facade in \texttt{ResolutionMasterTheorems.lean} that
@@ -38,3 +47,78 @@ The formalization uses classical finite indexing and witness selection in
 explicit places.  The resulting trust claim is therefore relative to Lean's
 kernel, the imported standard library, and the ordinary classical principles
 reported by the audit.  No foundation-independent consistency claim is made.
+
+\subsection{Theorem map}
+
+The declarations corresponding to the numbered results of the body are
+listed below, grouped by section.  They are provided for traceability only.
+
+\paragraph{Free completion substrate (\S
+ef{sec:free-completion})}
+\begin{itemize}\setlength{\itemsep}{0pt}
+  \item \leanname{ResolutionSemantics.freeCompletionUniversal}
+  \item \leanname{ResolutionSemantics.expressionKernelQuotientInjective}
+  \item \leanname{ResolutionSemantics.expressionKernelQuotientSurjective}
+\end{itemize}
+
+\paragraph{Observers and finite-pattern realization (\S
+ef{sec:finite-separation})}
+\begin{itemize}\setlength{\itemsep}{0pt}
+  \item \leanname{ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization}
+  \item \leanname{ResolutionSemantics.finiteSeparationBound}
+  \item \leanname{ResolutionSemantics.MasterTheorems.relativeFiniteComplementSeparation}
+  \item \leanname{ResolutionSemantics.RelativeObservers.finiteRelativeComplement_not_closed_under_binary_products}
+\end{itemize}
+
+\paragraph{Completion, compression, escape (\S
+ef{sec:completion})}
+\begin{itemize}\setlength{\itemsep}{0pt}
+  \item \leanname{ResolutionSemantics.MasterTheorems.orbitCompressionCauchy}
+  \item \leanname{ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit}
+  \item \leanname{ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective}
+  \item \leanname{ResolutionSemantics.MasterTheorems.compressedEscapingOrbitNotComplete}
+  \item \leanname{ResolutionSemantics.MasterTheorems.finiteBasePropernessCriterion}
+  \item \leanname{ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster}
+  \item \leanname{ResolutionSemantics.MasterTheorems.oldFixingRanksUnbounded}
+  \item \leanname{ResolutionSemantics.completionComplete}
+  \item \leanname{Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra\_initial}
+  \item \leanname{Resolution.Probe.depthCauchy\_not\_observationalCauchy}
+  \item \leanname{Resolution.Probe.comb\_separatesAt\_one}
+  \item \leanname{Resolution.Probe.NatProbe.natComb\_pairwise\_separated\_at\_zero}
+\end{itemize}
+
+\paragraph{Equational conservativity (\S
+ef{sec:equations})}
+\begin{itemize}\setlength{\itemsep}{0pt}
+  \item \leanname{ResolutionSemantics.equationConservative}
+\end{itemize}
+
+\paragraph{Arithmetic instances (\S
+ef{sec:arithmetic})}
+\begin{itemize}\setlength{\itemsep}{0pt}
+  \item \leanname{ResolutionSemantics.NatDivision.singularFamilyInjective}
+  \item \leanname{ResolutionSemantics.NatDivision.singularFamilyDisjoint}
+  \item \leanname{ResolutionSemantics.NatDivision.oldFixingCriterion}
+  \item \leanname{ResolutionSemantics.NatDivision.separationRanksUnbounded}
+  \item \leanname{ResolutionSemantics.IntDivision.singularFamilyInjective}
+  \item \leanname{ResolutionSemantics.IntDivision.zeroDivZeroNotOld}
+  \item \leanname{ResolutionSemantics.IntDivision.completionEmbeddingNotSurjective}
+  \item \leanname{ResolutionSemantics.IntDivision.separationRanksUnbounded}
+\end{itemize}
+
+\paragraph{Many-sorted localization (\S
+ef{sec:diaconescu-bridge})}
+\begin{itemize}\setlength{\itemsep}{0pt}
+  \item \leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_sound}
+  \item \leanname{Resolution.Diaconescu.ManySorted.term\_evalPartial\_complete}
+  \item \leanname{Resolution.Diaconescu.ManySorted.alpha\_satisfaction\_condition}
+  \item \leanname{Resolution.Diaconescu.ManySorted.gamma\_satisfiesGamma}
+  \item \leanname{Resolution.Diaconescu.ManySorted.betaGammaPartialAlgEquiv}
+  \item \leanname{Resolution.Diaconescu.ManySorted.gammaBetaHomEquiv}
+  \item \leanname{Resolution.Diaconescu.ManySorted.gamma\_preserves\_initiality}
+  \item \leanname{Resolution.Diaconescu.ManySorted.beta\_of\_initial\_encoded\_is\_initial}
+  \item \leanname{Resolution.Diaconescu.ManySorted.semantic\_consequence\_equivalence}
+  \item \leanname{Resolution.Diaconescu.InitialExistence.quasiTheory\_has\_initial\_partial\_model}
+  \item \leanname{Resolution.Diaconescu.BinarySpecialization.generatedEquiv}
+  \item \leanname{Resolution.Diaconescu.BinarySpecialization.gammaEquiv}
+\end{itemize}

@@ -1,134 +1,167 @@
 \section{Introduction}\label{sec:introduction}
 
-Partial algebras distinguish defined applications from undefined ones.  A
-standard way to totalize such a structure is to pass to a free compatible
-completion, retaining enough syntax to represent unresolved applications.  In
-the one-sorted binary setting used here, an expression is resolved bottom-up:
-applications already defined in the base algebra reduce to embedded base
-values, while unresolved applications remain finite suspended trees.  The
-resulting generated Answer algebra is a concrete presentation of a free
-compatible extension.  Free completion itself is established theory, and we do
-not claim novelty for that substrate; see the Schmidt-construction literature
-and the many-sorted partial-to-total encoding of Diaconescu
-\cite{ClimentVidalCosmeLlopez2023,Diaconescu2009}.
+\subsection{A first example}
 
-The paper studies a more specific relative observation problem.  Let $D$ be a
-binary partial algebra with carrier $A$.  We consider compatible total
-extensions whose embedding of $A$ is injective and whose complement over that
-pointwise-preserved copy of $A$ is finite.  Crucially, $A$ itself need not be
-finite.  Thus the observation budget measures only genuinely new semantic
-states beyond the original partial base.
+Take the natural numbers with $+$, $\cdot$ and $/$, where division is undefined
+exactly when the denominator is zero.  We want to total\-ize this partial
+algebra without deciding what $0/0$ is.
 
-This relative observer class gives rise to two structural mechanisms.
+The standard move is to keep the failed application as syntax.  Applications
+that the base algebra can evaluate reduce to base values; the others remain
+suspended terms.  So $6/2$ becomes the embedded natural $3$, while
+\[
+  0/0 \;=\; \susp(\mathsf{div},\old(0),\old(0))
+\]
+stays a term.  Nothing here is new: this is the free compatible completion, and
+we use it only as a substrate.
 
-\paragraph{Finite-pattern realization.}
-For every finite list of generated Answers there is one compatible
-finite-complement observer that is simultaneously injective on the whole list.
-The observer retains the full base pointwise, assigns finite tags to the
-selected suspended subterms, and sends unselected behavior to one overflow
-state.  Pairwise separation is therefore not the primitive phenomenon: it is
-the two-point instance of a finite-pattern theorem.  This is the first
-structural principle used in the paper.
+Now ask a different question.  How much new structure must an observer add in
+order to \emph{tell such terms apart}?
 
-\paragraph{Compression and escape.}
-The finite observers induce a separated filtration and a Cauchy completion.
-To understand when that completion adds new points, we separate two independent
-mechanisms.  First, if a chosen generated unary family is interpreted at every
-finite stage as a deterministic trajectory with uniformly finite trajectory
-complexity, then the factorially sampled family is Cauchy.  This uses only
-pigeonhole periodicity and factorial divisibility; it is standard finite-state
-dynamics and is not claimed as new.  Second, a syntactically growing unary
-orbit has a Resolution-specific anti-limit property.  Given a proposed finite
-Answer $x$, the finite-pattern construction can retain $x$ and a sufficiently
-long orbit prefix exactly.  The next unseen iterate cannot belong to the
-selected finite pattern, so it is sent to overflow; overflow is absorbing along
-the continuation.  Hence every sufficiently late iterate is separated from
-$x$.  This is the finite-pattern escape mechanism.
+Fix a total algebra $T$ together with an injection of the base $\mathbb N$ into
+it that fixes every natural pointwise, and require that $T$ add only
+\emph{finitely many} states outside that copy of $\mathbb N$.  The base is
+infinite, so $T$ is infinite; the budget counts only genuinely new semantic
+states.  Call such a $T$ an \emph{observer}.
 
-The combination is the conceptual center of the paper:
+Two things happen, and they pull in opposite directions.
+
+\begin{itemize}
+  \item Given any finite list of terms, one observer separates all of them at
+        once.  It keeps $\mathbb N$ pointwise, gives a distinct tag to each
+        selected suspended subterm, and sends everything else to a single
+        overflow state $\overflow$.
+  \item Yet some sequences cannot be followed to a limit.  Start from $0/0$ and
+        iterate the context $x\mapsto x+0$:
+        \[
+          0/0,\qquad 0/0+0,\qquad (0/0+0)+0,\qquad\ldots
+        \]
+        Because $a+0=a$ holds for every natural, this context fixes the entire
+        base pointwise, so no observer can use base elements as memory for it.
+        The terms grow syntactically forever, while each observer has only
+        finitely many tags.  Given any candidate limit $x$, an observer can
+        retain $x$ and a long prefix of the orbit exactly --- and then the next
+        iterate must fall into $\overflow$, which is absorbing.  So $x$ is
+        separated from every sufficiently late term of the sequence.
+\end{itemize}
+
+The sequence is therefore Cauchy for the separation these observers induce, and
+it converges to nothing in the algebra.  The completion is \emph{proper}: it
+has points that are not terms.  That is the phenomenon this paper is about.
+
+\subsection{The general setting}
+
+Let $D$ be a one-sorted binary partial algebra with carrier $A$.  We consider
+compatible total extensions $T$ whose embedding of $A$ is injective, which fix
+every element of $A$, and for which $|T\setminus A|$ is finite.  We write
+$\overflow$ for the overflow state and $\stageeq{n}$ for indistinguishability
+under all observers of budget $n$.
+
+\begin{remark}[On the word \emph{observational}]
+We use \emph{observational} in the metric sense: observers induce a separated
+filtration and hence a completion.  This is not the observational
+(behavioural) satisfaction of algebraic specification, where an observational
+equivalence between algebras is induced by a distinguished set of observable
+sorts \cite{BidoitHennicker2006,SannellaTarlecki2012}.  No quotient by an
+equivalence is taken here; every base element is retained individually.
+\end{remark}
+
+The two mechanisms of the example are the two theorems of the paper.
+
+\paragraph{Finite-pattern realization (\cref{thm:finite-pattern-realization}).}
+For every finite family of generated Answers there is a single observer
+injective on the whole family.  Pairwise separation is the two-point case, not
+the primitive one.
+
+\paragraph{Compression and escape (\cref{thm:compression-escape-properness}).}
+Two independent facts combine:
 \[
   \boxed{
   \text{finite trajectory compression}
-  +\text{ finite-pattern escape}
-  \Longrightarrow
+  \;+\;
+  \text{finite-pattern escape}
+  \;\Longrightarrow\;
   \text{proper observational completion}.}
 \]
-The two halves play opposite roles.  Compression makes the factorial sample
-indistinguishable at every fixed finite stage, while escape prevents it from
-converging to any finite generated Answer.  Their interaction forces a new
-completion point.
+Compression says that if the orbit relevant to a chosen unary family has a
+uniformly finite code at each stage, then its factorial sample is Cauchy; this
+is pigeonhole periodicity and factorial divisibility.  Escape says that no
+generated Answer is a limit of a syntactically growing orbit, by the
+candidate-tailored construction of the example.  Compression makes the sample
+indistinguishable at every fixed stage; escape stops it converging.  Neither
+alone gives properness.
 
-This organization unifies results that can otherwise look unrelated.  When the
-base is finitely coded, the whole stage observer is finite, so trajectory
-compression is automatic and one obtains an exact criterion: the completion is
-proper exactly when the base evaluator is not total.  For an arbitrary, possibly
-infinite base, a unary context that fixes every base element pointwise still
-compresses the relevant orbit even though the ambient observer carrier may be
-infinite.  The same finite-pattern escape argument supplies nonconvergence.
-Thus finite-base and old-fixing properness are instances of one combined
-mechanism, not two independent completion tricks.
+\subsection{Why the observer class is the point}
 
-The old-fixing analysis also yields quantitative information.  At stage $n$
-there are only $n+1$ external states---the $n$ tags plus overflow---unless the
-orbit enters the pointwise-fixed base, after which it stabilizes.  Consequently
+The reader may expect the finite-family theorem to follow from the pairwise
+case by taking products of separators, as in ordinary residual arguments.  It
+does not, and the obstruction is visible already at the level of carriers.
+
+Each one-point extension $\mathbb N\hookrightarrow\mathbb N\sqcup\{\overflow\}$
+has a one-element complement.  But the diagonal copy of $\mathbb N$ inside the
+product of two such extensions has infinitely many points $(a,\overflow)$
+outside it.  The class ``fixes the base pointwise, finite complement'' is thus
+\emph{not closed under binary products} over an infinite base
+(\cref{prop:relative-product-obstruction}).  The finite-family theorem is
+therefore proved by direct construction inside the class.
+
+The same restriction is what makes escape non-trivial.  When the base is not
+finitely codable, the candidate-tailored observer cannot itself be encoded into
+any finite carrier, even though its external complement is finite.  It still
+separates the candidate from the whole late tail.
+
+\subsection{Quantitative consequence}
+
+At stage $n$ the old-fixing orbit sees only $n+1$ external states --- the $n$
+tags plus $\overflow$ --- unless it enters the pointwise-fixed base, after
+which it stabilizes.  Hence for a distinct pair of iterates
 \[
   c_{(n+1)!}\stageeq{n}c_{(n+2)!},
 \]
-for a distinct pair of iterates, and the least finite-tag separation ranks are
-unbounded.  The factorial indices are only a synchronization device for finite
-periods; the mathematical content lies in the relative observer structure that
-makes such finite compression coexist with finite-pattern escape.
+and the least separation ranks are unbounded.  The factorial indices only
+synchronize finite periods; the content is that finite compression and
+finite-pattern escape coexist in the same observer class.
 
-The completion also preserves exactly the universal equations in the language
-with named base constants.  Natural and integer arithmetic provide concrete
-infinite-base examples: division by zero remains a structured unresolved
-Answer, while the context $x\mapsto x+0$ produces the compressed escaping orbit
-that witnesses a proper completion.
+\subsection{Notation}
 
-To locate the construction precisely within established partial-algebra theory,
-we additionally give a Lean-checked many-sorted implementation of the
-operations-only fragment of Diaconescu's encoding.  It supports arbitrary
-finite arities and separate total and partial operation families, proves the
-$\Gamma$--$\alpha$--$\beta$--$\gamma$ satisfaction and adjunction results used
-here, and canonically identifies its singleton-sort binary specialization with
-the original Resolution implementation.  This bridge is supporting provenance,
-not a third novelty claim.
+\begin{center}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+$D$, $A$ & partial algebra and its carrier; $A$ may be infinite\\
+$\old(a)$ & the embedded copy of a base element $a\in A$\\
+$\susp(f,s,t)$ & a suspended application: $f$ was undefined on $s,t$\\
+$\RAlg{D}$ & the generated Answer algebra (free compatible completion)\\
+observer & compatible total extension fixing $A$ pointwise, finite complement\\
+$\overflow$ & the single overflow state of an observer\\
+$\stageeq{n}$ & indistinguishable by every observer of budget $n$\\
+$\Comp{\RAlg{D}}$ & the completion of the induced filtration\\
+proper & the completion has points outside the image of $\RAlg{D}$\\
+\bottomrule
+\end{tabular}
+\end{center}
 
-The formal development is checked in Lean~4.33.0.  The publication-facing
-structural declarations are
-\leanname{ResolutionSemantics.MasterTheorems.relativeFinitePatternRealization},
-\leanname{ResolutionSemantics.MasterTheorems.orbitCompressionCauchy},
-\leanname{ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit},
-and
-\leanname{ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective}.
-The namespace name \texttt{MasterTheorems} is retained only as a stable Lean API
-identifier; no special mathematical meaning is attached to the word
-``master'' in the exposition.
+\subsection{Organization and scope}
 
-\subsection{Main results and paper organization}
+\Cref{sec:free-completion} records the substrate.
+\Cref{sec:finite-separation} develops the observer class and proves
+finite-pattern realization.
+\Cref{sec:completion} builds the filtration and proves compression, escape and
+their combination; the finite-base and old-fixing criteria follow as instances.
+\Cref{sec:equations,sec:arithmetic} give exact equational conservativity and
+the arithmetic examples.
+\Cref{sec:diaconescu-bridge} locates the construction inside the standard
+many-sorted partial-to-total encoding.
+\Cref{sec:related-work,sec:limitations} position the work and list what is
+open.
 
-The logical dependency of the paper is as follows.
-\begin{enumerate}
-  \item \Cref{sec:free-completion} records the normalized free compatible
-        completion used as the substrate.
-  \item \Cref{sec:finite-separation} develops intrinsic finite-complement
-        observers and proves relative finite-pattern realization.
-  \item \Cref{sec:completion} constructs the observational filtration and
-        isolates trajectory compression, finite-pattern escape, and their
-        combined properness theorem.  The finite-base and old-fixing criteria
-        follow as instances.
-  \item \Cref{sec:equations,sec:arithmetic} give exact equational
-        conservativity and arithmetic examples.
-  \item \Cref{sec:diaconescu-bridge} verifies the many-sorted encoding bridge.
-  \item \Cref{sec:related-work,sec:limitations} delimit the contribution and
-        remaining open problems.
-\end{enumerate}
-
-The paper deliberately distinguishes standard machinery from the
-Resolution-specific statements.  Free compatible completion, ordinary
-finite-state periodicity, factorial synchronization, and generic Cauchy
-completion are background mechanisms.  The contribution claimed here is the
-relative observer framework over a pointwise-preserved partial base, its
-finite-pattern realization theorem, and the way finite-pattern escape interacts
-with trajectory-level compression to force proper observational completions,
-including over infinite bases.
+\paragraph{Scope.}
+Free compatible completion, finite-state periodicity, factorial
+synchronization, generic Cauchy completion, and abstract finite-set
+discrimination are background.  What is offered here is the relative observer
+class over a pointwise-fixed and possibly infinite base, the finite-pattern
+realization theorem inside a class that is not product-closed, and the way
+escape interacts with trajectory compression to force properness over infinite
+bases.  Proofs are given in full in ordinary mathematical language; the
+accompanying machine-checked development is described in
+\cref{app:formalization} and is not relied on anywhere in the argument.

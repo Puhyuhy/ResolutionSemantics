@@ -6,8 +6,7 @@
   {\end{minipage}\end{center}}
 
 \title{\textbf{Resolution Semantics for Partial Algebras}\\
-Intrinsic Finite-Complement Separation and Observational Completion,\\
-with a Lean-Checked Many-Sorted Encoding Bridge}
+Finite-Complement Observers and Proper Observational Completion}
 \author{Adrian Puha}
 \date{18 August 2026}
 
@@ -15,47 +14,27 @@ with a Lean-Checked Many-Sorted Encoding Bridge}
 \maketitle
 
 \begin{abstract}
-We study one-sorted binary partial algebras through compatible total extensions
-that preserve the partial base pointwise while allowing only finitely many new
-states outside it.  The underlying normalized Answer algebra is a concrete free
-compatible completion; that substrate is classical in character and is not the
-novelty claim of the paper.  The main results concern the relative observation
-system built over it.
+Let $D$ be a partial algebra with carrier $A$, where $A$ may be infinite.  We
+study total extensions of $D$ that keep every element of $A$ fixed pointwise
+and add only finitely many states outside it.  The budget counts new semantic
+states, not the size of the model, so the extensions are typically infinite.
 
-The first structural principle is \emph{relative finite-pattern realization}:
-for every finite family of generated Answers there is one compatible
-finite-complement observer that is simultaneously injective on that family.
-Pairwise finite-tag separation is the two-point consequence, with the explicit
-constructor-size bound from the original separator.  These observers induce a
-separated filtration and hence a Cauchy completion.
+Two theorems drive the paper.  \emph{Finite-pattern realization}: every finite
+family of terms is separated by a single such observer.  \emph{Finite-pattern
+escape}: along a syntactically growing orbit, each proposed limit is refuted by
+an observer tailored to it.  Combined with a compression argument, these force
+the induced completion to be \emph{proper} --- to contain Cauchy points that
+are not terms.  The observer class is not closed under binary products over an
+infinite base, so the finite-family theorem cannot be obtained by the usual
+product-of-separators argument and is proved by direct construction.
 
-The second structural principle isolates the source of new completion points.
-If, at each observation stage, a generated unary family is interpreted as a
-deterministic trajectory admitting a uniformly finite trajectory code, then
-factorial sampling is Cauchy.  This finite-dynamics step is standard and is not
-claimed as new.  The Resolution-specific anti-limit mechanism is complementary:
-for a syntactically growing unary orbit, a candidate-tailored finite-pattern
-observer realizes the candidate and a long orbit prefix exactly, sends the next
-unseen iterate to an absorbing overflow state, and therefore separates every
-sufficiently late iterate from the candidate.  Thus trajectory compression plus
-finite-pattern escape forces the observational completion to be proper.
-
-Both the exact finite-base properness criterion and the arbitrary-base
-base-fixing-context theorem factor through this combined mechanism.  In the
-old-fixing case the stage-$n$ indistinguishable factorial pair sharpens to
-$c_{(n+1)!}\equiv_n c_{(n+2)!}$, giving unbounded separation ranks.  Natural and
-integer arithmetic instantiate the arbitrary-base criterion while retaining
-zero-denominator applications as structured Answers rather than ordinary
-numbers.  The completed algebra preserves exactly the universal equations in
-the language with named base constants.
-
-Finally, a separate Lean-checked many-sorted development formalizes the
-operations-only fragment of Diaconescu's $\Gamma$--$\alpha$--$\beta$--$\gamma$
-encoding for arbitrary finite arities, including the satisfaction condition,
-adjunction laws, semantic consequence, and the fixed-signature initiality
-results used here.  Its singleton-sort, no-$TF$, binary-$PF$ specialization is
-canonically equivalent to the binary Resolution implementation.  Lean~4.33.0
-checks the complete formal package.
+The mechanism is concrete on $\mathbb N$ with division undefined at zero: the
+term $0/0$ never becomes a number, and iterating $x\mapsto x+0$ --- a context
+fixing every natural --- yields a sequence no finite budget can follow to a
+limit.  Separation ranks along it are unbounded.  We also determine exactly
+which universal equations survive completion, and locate the construction as
+the singleton-sort binary case of the standard many-sorted partial-to-total
+encoding.
 \end{abstract}
 
 \tableofcontents
@@ -68,9 +47,11 @@ checks the complete formal package.
 \input{restructured-arithmetic}
 \input{restructured-diaconescu}
 \input{restructured-related}
-\input{restructured-formalization}
 \input{restructured-limitations}
 \input{restructured-conclusion}
+
+\appendix
+\input{restructured-formalization}
 
 \begingroup
 \small

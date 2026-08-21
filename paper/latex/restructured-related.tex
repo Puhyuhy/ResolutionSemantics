@@ -4,8 +4,8 @@
 The free compatible completion underlying \cref{sec:free-completion} belongs to
 an established line of work on partial algebras and Schmidt-type completions
 \cite{ClimentVidalCosmeLlopez2023}.  Diaconescu's many-sorted encoding provides
-a closely related partial-to-total perspective \cite{Diaconescu2009}.  These
-results motivate the substrate but are not novelty claims of the present paper.
+a closely related partial-to-total perspective \cite{Diaconescu2009}.  The substrate used here is that theory, specialized to the one-sorted binary
+case; \cref{sec:diaconescu-bridge} makes the specialization explicit.
 
 \subsection{Recognizable trees, discrimination, and finite separators}
 For finite bases and finite signatures, the normalized ground-equational
@@ -27,8 +27,8 @@ $\mathbb N\hookrightarrow\mathbb N\sqcup\{\star\}$ has finite outside
 complement, whereas the diagonal copy of $\mathbb N$ in the product of two such
 extensions has infinitely many mixed outside points $(a,\star)$.  Consequently,
 the finite-family theorem here is obtained by a direct relative finite-pattern
-construction rather than by product closure of pairwise separators.  We do not
-claim abstract finite-set discrimination itself as new.
+construction rather than by product closure of pairwise separators.  Abstract finite-set discrimination is classical; what changes here is the
+hypothesis class in which it is achieved.
 
 \subsection{Filtered, profinite, and nominal-profinite completions}
 Cauchy completion of separated filtrations and factorial synchronization of
@@ -37,8 +37,11 @@ observations by finite quotients or finite recognizing algebras
 \cite{DaveyGouveiaHaviarPriestley2011,ChenAdamekMiliusUrbat2016,Moreau2024}.
 In such settings it is also standard that finite candidates can be separated by
 finite recognizers while a Cauchy family converges to a genuinely profinite
-point.  We therefore do not claim the abstract topological pattern
-``candidate-specific separation plus a new completion point'' as new.
+point.  The abstract topological pattern --- candidate-specific separation together
+with a new completion point --- is classical.  The difference is where the
+finiteness sits: profinite stages take finite quotients, whereas here the
+quotient is trivial and only the complement over a retained infinite base is
+bounded.
 
 There are also established extensions of profinite methods to infinite data
 alphabets.  In particular, nominal topology replaces ordinary finiteness by
@@ -97,8 +100,7 @@ package:
   \item the exact finite-base criterion, infinite-base old-fixing instance,
         sharper unbounded-rank witnesses, and exact equational conservativity.
 \end{enumerate}
-The factorial-periodicity argument itself is treated as standard machinery.
-Likewise, abstract finite-set discrimination, candidate-specific anti-limit
-separation in ordinary profinite settings, selected-subterm sink constructions
-in isolation, and the many-sorted Diaconescu development are background or
-compatibility layers rather than independent novelty claims.
+Factorial periodicity, abstract finite-set discrimination, candidate-specific
+anti-limit separation in profinite settings, selected-subterm sink
+constructions, and the many-sorted encoding are all classical, and are used
+here as such.

@@ -35,10 +35,6 @@ factorially sampled generated sequence
 is Cauchy for the finite-tag filtration.
 \end{theorem}
 
-The formal statement is:
-\begin{leandisplay}
-\leanname{ResolutionSemantics.MasterTheorems.orbitCompressionCauchy}.
-\end{leandisplay}
 The proof is standard finite dynamics.  Among the first $N(n)+1$ coded orbit
 positions some state repeats.  The resulting eventual period is at most
 $N(n)$ and therefore divides $N(n)!$.  Sufficiently late factorial indices are
@@ -82,10 +78,6 @@ growing unary orbit.  Consequently the factorial sample has no generated
 limit.
 \end{theorem}
 
-Lean checks this as:
-\begin{leandisplay}
-\leanname{ResolutionSemantics.MasterTheorems.finitePatternEscapeNoGeneratedLimit}.
-\end{leandisplay}
 Unlike \cref{thm:trajectory-compression}, this proof does not use finite-state
 periodicity.  Its input is the finite-pattern observer together with syntactic
 growth and absorbing overflow.
@@ -109,14 +101,6 @@ generated filtered space is incomplete and the canonical embedding
 is not surjective.
 \end{theorem}
 
-The publication-facing Lean theorem is:
-\begin{leandisplay}
-\leanname{ResolutionSemantics.MasterTheorems.compressedEscapingOrbitEmbeddingNotSurjective}.
-\end{leandisplay}
-The incompleteness form is:
-\begin{leandisplay}
-\leanname{ResolutionSemantics.MasterTheorems.compressedEscapingOrbitNotComplete}.
-\end{leandisplay}
 
 This is the structural center of the properness theory.  Compression and escape
 are complementary rather than redundant: the first makes late terms
@@ -138,10 +122,6 @@ and only if the evaluator of $D$ is total.  Equivalently, the completion is
 proper exactly when some base application is undefined.
 \end{theorem}
 
-This is exposed through:
-\begin{leandisplay}
-\leanname{ResolutionSemantics.MasterTheorems.finiteBasePropernessCriterion}.
-\end{leandisplay}
 The reverse direction is elementary: if the evaluator is total, every generated
 Answer reduces to an embedded base value and every Cauchy sequence is eventually
 constant at a separating finite stage.
@@ -176,14 +156,6 @@ for every $n$ the pair $c_{(n+1)!},c_{(n+2)!}$ is distinct but agrees at stage
 $n$, so its least finite-tag separation rank is greater than $n$.
 \end{theorem}
 
-The factorization through the combined structural theorem is:
-\begin{leandisplay}
-\leanname{ResolutionSemantics.MasterTheorems.oldFixingPropernessViaCombinedMaster}.
-\end{leandisplay}
-The sharpened rank theorem is:
-\begin{leandisplay}
-\leanname{ResolutionSemantics.MasterTheorems.oldFixingRanksUnbounded}.
-\end{leandisplay}
 
 The finite-base and old-fixing hypotheses are incomparable.  A one-point
 partial algebra can be finitely coded while admitting no base-fixing unary
@@ -198,14 +170,6 @@ pointwise to the Cauchy completion.  The completed algebra is a compatible
 total extension with injective base embedding.  Relative to complete separated
 filtered compatible targets with jointly nonexpansive primitive operations,
 the completion satisfies the expected extension property.  Lean exposes
-completeness as:
-\begin{leandisplay}
-\leanname{ResolutionSemantics.completionComplete}.
-\end{leandisplay}
-The relative initiality package is:
-\begin{leandisplay}
-\leanname{Resolution.External.FilteredTotalAlg.completedResolutionFilteredAlgebra\_initial}.
-\end{leandisplay}
 
 \subsection{Why the filtration is not prefix-depth observation}
 
@@ -238,20 +202,8 @@ but not Cauchy for the finite-tag observational filtration.  Hence the two
 uniformities are distinct.
 \end{proposition}
 
-The kernel-checked statement is
-\begin{leandisplay}
-\leanname{Resolution.Probe.depthCauchy\_not\_observationalCauchy}.
-\end{leandisplay}
-The fixed-budget separator itself is
-\begin{leandisplay}
-\leanname{Resolution.Probe.comb\_separatesAt\_one}.
-\end{leandisplay}
 In natural arithmetic the contrast is sharper: a tag-free observer can
 separate every two distinct combs by using the pointwise-retained numerical
-base as semantic memory.  This is checked by
-\begin{leandisplay}
-\leanname{Resolution.Probe.NatProbe.natComb\_pairwise\_separated\_at\_zero}.
-\end{leandisplay}
 Thus the observational completion is not the classical infinite-tree
 completion under another notation: fixed finite semantic budgets can see
 through arbitrarily large syntactic depth.
