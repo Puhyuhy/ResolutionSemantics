@@ -1,30 +1,18 @@
-\section{Examples}\label{sec:examples}
-
-The preceding criterion has elementary infinite-base examples.  They are
-included only to illustrate the construction; no claim about a new arithmetic
-system is intended.
+\section{Example}\label{sec:examples}
 
 \begin{example}[Natural numbers]
-Let $D$ have carrier $\mathbb N$ with the usual addition and multiplication and
-with division undefined when the denominator is zero.  In the free completion,
-$a/0$ is therefore a non-base normal term rather than a natural number.
-Addition satisfies
+Let $D$ have carrier $\mathbb N$, with the usual addition and multiplication
+and with division undefined when the denominator is zero.  In $F(D)$ the
+expression $0/0$ is therefore a non-base normal term.  The one-hole context
 \[
- n+0=n\qquad(n\in\mathbb N).
+ C[-]=[-]+0
 \]
-Taking the undefined term $0/0$ as $c_0$ and the context $x\mapsto x+0$ in
-\cref{thm:base-fixing-properness} shows that
-$\FCcomp{\Free D}$ is proper.
+is nontrivial and satisfies $C^D(n)=n$ for every $n\in\mathbb N$.  Hence
+\cref{thm:infinite-base-criterion} applies: the completion of $F(D)$ for the
+finite-complement congruence topology is strictly larger than $F(D)$.
 \end{example}
 
-\begin{example}[Integers]
-The same argument applies to $\mathbb Z$ with the usual ring operations and
-partial division.  Again $x\mapsto x+0$ fixes the whole base, so the
-finite-complement uniform completion is proper.
-\end{example}
-
-These examples should not be confused with totalized fields, meadows, common
-meadows, or wheels, which impose algebraic conventions for singular division
-\cite{BergstraHirshfeldTucker2009,BergstraPonseCommonMeadows,Carlstrom2004}.
-Here no numerical value is assigned to $a/0$; the undefined application is
-retained as a formal element of the free completion.
+The example uses partial division only to provide an undefined base
+application; no numerical value is assigned to $0/0$.  This should be
+distinguished from totalized approaches such as meadows and wheels
+\cite{BergstraHirshfeldTucker2009,Carlstrom2004}.
