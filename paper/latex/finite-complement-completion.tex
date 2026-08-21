@@ -1,0 +1,124 @@
+\section{The finite-complement uniformity and its completion}
+\label{sec:completion}
+
+For $m\ge1$, define a relation on $\Free D$ by
+\[
+ x\fceq{m}y
+ \quad\Longleftrightarrow\quad
+ \pi_T(x)=\pi_T(y)
+ \text{ for every finite-complement completion }T
+ \text{ with }|T\setminus A|\le m.
+\]
+Each $\fceq{m}$ is a congruence, being an intersection of kernels of
+homomorphisms, and
+\[
+ \fceq{m+1}\;\subseteq\;\fceq{m}.
+\]
+By \cref{thm:finite-external-separation}, their intersection is equality.
+Thus the congruences form a separated countable uniformity on $\Free D$.
+
+A sequence $(x_j)$ is Cauchy if for every $m$ there is $N$ such that
+$x_i\fceq{m}x_j$ whenever $i,j\ge N$.  We write
+$\FCcomp{\Free D}$ for the corresponding Cauchy completion.  The canonical map
+$\Free D\to\FCcomp{\Free D}$ is injective because the uniformity is separated.
+We call the completion \emph{proper} when this map is not surjective.
+
+The proofs of properness below use one elementary finite-dynamics lemma.
+
+\begin{lemma}[Factorial synchronization]\label{lem:factorial-synchronization}
+Let $s_0,s_1,\ldots$ be an orbit of a self-map on a set.  If the orbit takes at
+most $N$ distinct values, then the subsequence
+\[
+ s_{0!},s_{1!},s_{2!},\ldots
+\]
+is eventually constant.
+\end{lemma}
+
+\begin{proof}
+Among $s_0,\ldots,s_N$ two values coincide, say $s_i=s_j$ with $i<j$.
+Determinism implies that the orbit is periodic from time $i$ onward with period
+$p=j-i\le N$.  Every sufficiently large factorial is divisible by $p$, so all
+sufficiently late factorial indices are congruent modulo $p$ after the
+preperiod.  Their orbit values are therefore equal.
+\end{proof}
+
+\subsection{Finite base}
+
+Assume first that $A$ is finite and that some application is undefined in $D$.
+Choose $f\in\Sigma$ and $a,b\in A$ with $\delta_f(a,b)$ undefined.  Put
+\[
+ c_0=f(a,b),\qquad c_{k+1}=f(c_k,b),
+\]
+where the expressions are taken in $\Free D$.  If necessary one may replace
+$f(-,b)$ by any fixed one-hole context whose successive applications remain
+non-base normal terms; the only property used below is strict growth of the
+chosen terms.
+
+Fix $m$.  Every completion occurring in the definition of $\fceq{m}$ has at
+most $|A|+m$ elements.  Hence the image of the orbit $(c_k)$ in each such
+completion takes at most $|A|+m$ values.  By
+\cref{lem:factorial-synchronization}, sufficiently late factorial samples have
+the same image in every completion of that size.  Therefore a suitable
+factorial subsequence is Cauchy for every $m$.
+
+On the other hand, no fixed $x\in\Free D$ can be its limit.  Choose a term
+$c_N$ whose subterm set contains a longer segment of the growing orbit than
+occurs in $x$.  Apply the construction of
+\cref{thm:finite-pattern-realization} to the finite set $\{x,c_N\}$.  The
+resulting finite-complement completion represents all selected subterms
+faithfully, while the next unselected continuation is sent to the sink.  After
+choosing $N$ beyond the size of $x$, this separates $x$ from all sufficiently
+late members of the chosen subsequence.
+
+\begin{theorem}[Finite-base properness]\label{thm:finite-base-properness}
+If $A$ is finite, then
+\[
+ \FCcomp{\Free D}=\Free D
+ \quad\Longleftrightarrow\quad
+ D\text{ is total}.
+\]
+Equivalently, the finite-complement completion is proper exactly when $D$ is
+genuinely partial.
+\end{theorem}
+
+\begin{proof}
+If $D$ is partial, the preceding construction gives a Cauchy sequence with no
+limit in $\Free D$, so the completion is proper.  If $D$ is total, every normal
+term reduces to an element of $A$, hence $\Free D=A$.  Since $A$ is finite and
+the uniformity is separated, every Cauchy sequence is eventually constant.
+Thus no new completion point is added.
+\end{proof}
+
+\subsection{A sufficient criterion for an arbitrary base}
+
+When $A$ is infinite, a finite-complement completion need not be finite, so the
+preceding cardinality argument no longer applies.  It is enough, however, that
+the particular orbit under consideration cannot use the base as additional
+memory.
+
+Suppose there are $g,u\in\Sigma$ and $a,b,e\in A$ such that
+\[
+ \delta_g(a,b)\text{ is undefined},
+ \qquad
+ \delta_u(x,e)=x\quad\text{for every }x\in A.
+\]
+Let
+\[
+ c_0=g(a,b),\qquad c_{k+1}=u(c_k,e)
+\]
+in $\Free D$.  In any finite-complement completion with at most $m$ new
+elements, if the interpreted orbit ever enters $A$ then the identity
+$u(x,e)=x$ makes it constant.  Otherwise it remains among at most $m$ new
+elements.  Hence its nonconstant part has at most $m$ states, and
+\cref{lem:factorial-synchronization} again gives a Cauchy factorial subsequence.
+The same finite-subterm construction as above excludes every element of
+$\Free D$ as a possible limit.
+
+\begin{theorem}[Base-fixing context criterion]
+\label{thm:base-fixing-properness}
+Under the preceding hypotheses, $\FCcomp{\Free D}$ is proper.
+\end{theorem}
+
+The condition is sufficient, not necessary.  Its role is simply to exhibit a
+class of infinite-base examples in which finite-complement observations still
+force a new Cauchy point.
