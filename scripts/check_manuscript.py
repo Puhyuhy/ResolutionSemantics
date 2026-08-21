@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static consistency checks for the current finite-complement manuscript."""
+"""Static consistency checks for the submission-facing manuscript package."""
 
 from __future__ import annotations
 
@@ -14,8 +14,13 @@ PAPER_DIR = ROOT / "paper"
 LATEX_DIR = PAPER_DIR / "latex"
 MANUSCRIPT = LATEX_DIR / "paper.tex"
 STYLE = LATEX_DIR / "paper-style.sty"
+BIBLIOGRAPHY = PAPER_DIR / "references.bib"
 CITATION = ROOT / "CITATION.cff"
 LAKEFILE = ROOT / "lakefile.toml"
+README = ROOT / "README.md"
+FORMALIZATION = ROOT / "FORMALIZATION.md"
+LEAN_FACADE = LEAN_DIR / "FiniteComplementTopology.lean"
+AUDIT = LEAN_DIR / "AxiomAudit.lean"
 
 EXPECTED_TITLE = "A Finite-Complement Congruence Topology for Partial Algebras"
 EXPECTED_INPUTS = [
@@ -23,14 +28,7 @@ EXPECTED_INPUTS = [
     "free-completion",
     "finite-complement-discrimination",
     "finite-complement-completion",
-    "examples",
     "conclusion",
-]
-BIB_FILES = [
-    PAPER_DIR / "references.bib",
-    PAPER_DIR / "references-completion.bib",
-    PAPER_DIR / "references-separation.bib",
-    PAPER_DIR / "references-standardization.bib",
 ]
 
 
@@ -40,12 +38,15 @@ def fail(message: str) -> None:
 
 
 required_files = [
-    ROOT / "README.md",
+    README,
+    FORMALIZATION,
     MANUSCRIPT,
     STYLE,
+    BIBLIOGRAPHY,
     CITATION,
     LAKEFILE,
-    *BIB_FILES,
+    LEAN_FACADE,
+    AUDIT,
 ]
 for path in required_files:
     if not path.is_file() or path.stat().st_size == 0:
@@ -55,6 +56,8 @@ main_tex = MANUSCRIPT.read_text(encoding="utf-8")
 style = STYLE.read_text(encoding="utf-8")
 citation = CITATION.read_text(encoding="utf-8")
 lakefile = LAKEFILE.read_text(encoding="utf-8")
+readme = README.read_text(encoding="utf-8")
+formalization = FORMALIZATION.read_text(encoding="utf-8")
 
 if f"\\title{{\\textbf{{{EXPECTED_TITLE}}}}}" not in main_tex:
     fail("manuscript title is stale or unexpected")
@@ -66,6 +69,12 @@ if "pdfauthor={Adrian Puha}" not in style:
     fail("PDF author metadata is stale")
 if EXPECTED_TITLE not in citation:
     fail("CITATION.cff does not name the current paper")
+if EXPECTED_TITLE not in readme:
+    fail("README does not name the current paper")
+if "rewrite/paper1-standard-terminology" in readme or "## Current branch" in readme:
+    fail("README still describes the pre-merge branch state")
+if "lean/FiniteComplementTopology.lean" not in formalization:
+    fail("formalization guide does not identify the public Lean entry point")
 
 input_names = re.findall(r"\\input\{([^}]+)\}", main_tex)
 if input_names != EXPECTED_INPUTS:
@@ -77,17 +86,11 @@ for path in input_files:
 
 tex = "\n".join([main_tex] + [p.read_text(encoding="utf-8") for p in input_files])
 
-expected_bibliography = (
-    "\\bibliography{../references,../references-completion,"
-    "../references-separation,../references-standardization}"
-)
-if expected_bibliography not in main_tex:
-    fail("unexpected bibliography list")
+if "\\bibliography{../references}" not in main_tex:
+    fail("manuscript does not use the consolidated bibliography")
 
-bib_keys: list[str] = []
-for bib in BIB_FILES:
-    source = bib.read_text(encoding="utf-8")
-    bib_keys.extend(re.findall(r"@\w+\s*\{\s*([^,\s]+)\s*,", source))
+bib_source = BIBLIOGRAPHY.read_text(encoding="utf-8")
+bib_keys = re.findall(r"@\w+\s*\{\s*([^,\s]+)\s*,", bib_source)
 duplicates = sorted(k for k, count in Counter(bib_keys).items() if count > 1)
 if duplicates:
     fail("duplicate bibliography keys: " + ", ".join(duplicates))
@@ -99,6 +102,9 @@ for group in re.findall(r"\\cite[a-zA-Z]*\s*\{([^}]+)\}", tex):
 missing_citations = sorted(cited - known_bib)
 if missing_citations:
     fail("citation keys absent from bibliography: " + ", ".join(missing_citations))
+unused_bib = sorted(known_bib - cited)
+if unused_bib:
+    fail("uncited bibliography entries remain: " + ", ".join(unused_bib))
 
 labels = set(re.findall(r"\\label\{([^}]+)\}", tex))
 refs: set[str] = set()
@@ -127,6 +133,8 @@ if citation_version.group(1) != lake_version.group(1):
         "CFF and Lake versions disagree: "
         f"{citation_version.group(1)} vs {lake_version.group(1)}"
     )
+if '"FiniteComplementTopology"' not in lakefile:
+    fail("Lake roots do not include the publication-facing Lean facade")
 
 lean_sources = list(LEAN_DIR.glob("*.lean"))
 if not lean_sources:

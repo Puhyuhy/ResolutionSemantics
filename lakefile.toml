@@ -6,6 +6,7 @@ defaultTargets = ["Paper"]
 name = "Paper"
 srcDir = "lean"
 roots = [
+  "FiniteComplementTopology",
   "ResolutionKernel",
   "ResolutionFree",
   "ResolutionModels",

@@ -17,8 +17,8 @@ $\theta_{m+1}\subseteq\theta_m$.  By
 \[
  \bigcap_{m\ge1}\theta_m=\Delta_{F(D)}.
 \]
-Hence the cosets of the $\theta_m$ form a countable Hausdorff congruence
-uniformity on $F(D)$, a standard construction for universal algebras
+Hence $(\theta_m)_{m\ge1}$ is a countable base of congruence entourages for a
+separated uniformity on $F(D)$, a standard construction for universal algebras
 \cite{BulmanFleming1971}.  We denote its Hausdorff completion by
 $\widehat{F(D)}_{\mathrm{fc}}$.  Since the uniformity is separated, the
 canonical map
@@ -98,8 +98,8 @@ convention of \cref{sec:free-completion}, it then induces a map
 $C^D:A\to A$.
 
 \begin{lemma}[Compatibility through contexts]\label{lem:context-compatibility}
-Let $T$ be compatible with $D$.  If $C[a]$ is defined in $D$, then evaluating
-$C[a]$ in $T$ gives the same base value as evaluating it in $D$.
+Let $(T,i)$ be compatible with $D$.  If $C[a]$ is defined in $D$, then
+evaluating $C[a]$ in $T$ gives $i(C^D(a))$.
 \end{lemma}
 
 \begin{proof}
@@ -157,9 +157,9 @@ $x\in F(D)$.  Choose $N$ so large that the construction depth of $c_N$ exceeds
 that of $x$, and apply \cref{lem:finite-complement-rees} to
 $X=\{x,c_N\}$.  The term $c_{N+1}=C[c_N]$ has greater depth than both selected
 roots and hence is not among their selected subterms, so it lies in the
-collapsed ideal class.  Because that class is absorbing under every basic
-operation, substitution into the context keeps all later $c_j$ in the same
-class.  The term $x$, however, remains a singleton class.  Thus this one
+collapsed class.  Because that class is absorbing under every basic operation,
+substitution into the context keeps all later $c_j$ in the same class.  The
+term $x$, however, remains a singleton class.  Thus this one
 finite-complement quotient separates $x$ from every sufficiently late $d_k$.
 If the quotient has complement size $q$, put $M=\max\{q,1\}$.  Its kernel
 belongs to $\mathcal K_M$, so for every sufficiently late $k$ we have
@@ -173,6 +173,24 @@ Hausdorff completion is therefore outside the image of $F(D)$.
 The conclusion of \cref{thm:infinite-base-criterion} holds in particular when
 $C^D(a)=a$ for every $a\in A$.
 \end{corollary}
+
+\begin{example}[Natural numbers]\label{ex:natural-numbers}
+Let $D$ have carrier $\mathbb N$, with the usual addition and multiplication
+and with a binary division operation that is undefined whenever the denominator
+is zero; its values at nonzero denominators are immaterial here.  In $F(D)$ the
+expression $0/0$ is therefore a non-base normal term.  The one-hole context
+\[
+ C[-]=[-]+0
+\]
+is nontrivial and satisfies $C^D(n)=n$ for every $n\in\mathbb N$.  Hence
+\cref{thm:infinite-base-criterion} applies: the completion of $F(D)$ for the
+finite-complement congruence topology is strictly larger than $F(D)$.
+\end{example}
+
+The example uses partial division only to provide an undefined base
+application; no numerical value is assigned to $0/0$.  This should be
+distinguished from totalized approaches such as meadows and wheels
+\cite{BergstraHirshfeldTucker2009,Carlstrom2004}.
 
 The criterion is only sufficient.  The following example shows that this
 qualification matters: genuine partiality alone does not force a nontrivial
