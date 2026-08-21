@@ -1,25 +1,36 @@
 \section{The induced congruence topology}\label{sec:completion}
 
-For $m\ge1$, define a congruence on $F(D)$ by
+For $m\ge1$, let $\mathcal K_m$ be the set of congruences on $F(D)$ that occur
+as kernels of canonical maps
 \[
- \theta_m=
- \bigcap\{\ker(\pi_T):
- T\text{ is a finite-complement compatible extension and }
- |T\setminus A|\le m\}.
+ \pi_T:F(D)\longrightarrow T
 \]
-Equivalently, $x\equiv y\pmod{\theta_m}$ when every such extension identifies
-$x$ and $y$.  Each $\theta_m$ is a congruence and
+where $T$ is a finite-complement compatible extension with
+$|T\setminus A|\le m$, and put
 \[
- \theta_{m+1}\subseteq\theta_m.
+ \theta_m=\bigcap\mathcal K_m.
 \]
-By \cref{cor:finite-complement-separation},
+This is a set-indexed intersection: $\mathcal K_m$ is a subset of the set of
+all congruences on $F(D)$.  Each $\theta_m$ is a congruence and
+$\theta_{m+1}\subseteq\theta_m$.  By
+\cref{cor:finite-complement-separation},
 \[
  \bigcap_{m\ge1}\theta_m=\Delta_{F(D)}.
 \]
 Hence the cosets of the $\theta_m$ form a countable Hausdorff congruence
-topology on $F(D)$; this is a standard construction for universal algebras
+uniformity on $F(D)$, a standard construction for universal algebras
 \cite{BulmanFleming1971}.  We denote its Hausdorff completion by
 $\widehat{F(D)}_{\mathrm{fc}}$.
+
+Because the congruence basis is countable and nested, this uniformity is
+metrizable.  Explicitly, put $\theta_0=F(D)^2$ and, for $x\ne y$, let
+\[
+ r(x,y)=\max\{m\ge0:(x,y)\in\theta_m\},
+ \qquad d(x,y)=2^{-r(x,y)},
+\]
+with $d(x,x)=0$.  Then $d$ is an ultrametric inducing the same uniformity.
+Consequently it is enough to work with Cauchy sequences rather than general
+Cauchy filters.
 
 \subsection{Finite bases}
 
@@ -37,30 +48,27 @@ points outside the fixed finite set $A$, there are only finitely many total
 $\Sigma$-algebra structures on carriers of size at most $|A|+m$.  Thus only
 finitely many kernels occur in the defining intersection for $\theta_m$, and
 an intersection of finitely many finite-index congruences again has finite
-index.  Hence every $\theta_m$ is an entourage for the profinite topology.
+index.
 
 Conversely, let $\alpha$ be any finite-index congruence on $F(D)$.  Apply
 \cref{lem:finite-complement-rees} to the finite set $X=A$.  This gives a
 finite-index congruence $\beta$ whose restriction to $A$ is equality.  Put
-\[
- \gamma=\alpha\cap\beta.
-\]
-Then $\gamma$ has finite index, $\gamma\subseteq\alpha$, and $A$ remains
-pointwise distinct in $F(D)/\gamma$.  After identifying the image of $A$ with
-$A$ itself, the quotient $F(D)/\gamma$ is a finite-complement compatible
-extension.  If its complement has size $m$, then
+$\gamma=\alpha\cap\beta$.  Then $\gamma$ has finite index,
+$\gamma\subseteq\alpha$, and $A$ remains pointwise distinct in
+$F(D)/\gamma$.  Identifying the image of $A$ with $A$ itself, the quotient is a
+finite-complement compatible extension.  If its complement has size $m$, then
 \[
  \theta_m\subseteq\gamma\subseteq\alpha.
 \]
-Thus the family $(\theta_m)$ is cofinal among the finite-index congruences, so
-it induces exactly the profinite topology.
+Thus $(\theta_m)$ is cofinal among the finite-index congruences and induces the
+ordinary profinite topology.
 \end{proof}
 
-The remainder of the section concerns the situation in which $A$ may be
-infinite.  Then an allowed target $T$ can be infinite, and the congruences
-$\theta_m$ need not have finite index.
+For infinite $A$, an allowed target may itself be infinite and the congruences
+$\theta_m$ need not have finite index.  The rest of the section concerns this
+case.
 
-\subsection{A criterion over an arbitrary base}
+\subsection{Uniformly finite base orbits}
 
 We use one elementary observation about finite deterministic orbits.
 
@@ -72,23 +80,40 @@ large $k$.  The threshold can be chosen using only $N$.
 
 \begin{proof}
 Among the first $N+1$ positions two coincide.  The orbit is therefore eventually
-periodic, with preperiod and period bounded by $N$; every sufficiently large
+periodic, with preperiod and period bounded by $N$.  Every sufficiently large
 factorial lies beyond the preperiod and is divisible by the period.
 \end{proof}
 
 A \emph{one-hole unary context} $C[-]$ is a term with one distinguished
-occurrence of a variable.  We say that it \emph{fixes the base} if substitution
-of any $a\in A$ is defined in $D$ and evaluates to $a$:
+occurrence of a variable.  Suppose that $C[a]$ is defined in $D$ for every
+$a\in A$; then it induces a map $C^D:A\to A$.
+
+\begin{lemma}[Compatibility through contexts]\label{lem:context-compatibility}
+Let $T$ be compatible with $D$.  If $C[a]$ is defined in $D$, then evaluating
+$C[a]$ in $T$ gives the same base value as evaluating it in $D$.
+\end{lemma}
+
+\begin{proof}
+Induct on the construction of the context.  At each operation node,
+compatibility of $T$ with $D$ preserves the value of the corresponding defined
+base application.
+\end{proof}
+
+We say that $C[-]$ has \emph{uniformly finite base orbits} if $C^D$ is defined
+on all of $A$ and there is an integer $B\ge1$ such that
 \[
- C^D(a)=a\qquad(a\in A).
+ \bigl|\{(C^D)^n(a):n\ge0\}\bigr|\le B
+ \qquad\text{for every }a\in A.
 \]
-We call the context nontrivial when it contains at least one operation symbol.
+The identity case has $B=1$; maps of uniformly bounded finite order,
+idempotent maps, and constant maps are further elementary examples.
 
 \begin{theorem}[Infinite-base completion criterion]
 \label{thm:infinite-base-criterion}
-Suppose that some basic application in $D$ is undefined, and let $c_0\in
-F(D)\setminus A$ be the corresponding normal term.  If there is a nontrivial
-one-hole unary context $C[-]$ that fixes the base, then the canonical map
+Suppose that some basic application in $D$ is undefined, and let
+$c_0\in F(D)\setminus A$ be the corresponding normal term.  If there is a
+nontrivial one-hole unary context $C[-]$ with uniformly finite base orbits,
+then the canonical map
 \[
  F(D)\longrightarrow\widehat{F(D)}_{\mathrm{fc}}
 \]
@@ -96,49 +121,73 @@ is not surjective.
 \end{theorem}
 
 \begin{proof}
-Define
-\[
- c_{n+1}=C[c_n]\qquad(n\ge0).
-\]
-Because $C[-]$ is nontrivial and $c_0$ is non-base, no normalization step can
-remove the occurrence of $c_n$ inside $C[c_n]$; hence the construction depth
-strictly increases and the terms $c_n$ are pairwise distinct.
+Define $c_{n+1}=C[c_n]$.  Since $C[-]$ is nontrivial and $c_0$ is non-base,
+the occurrence of $c_n$ cannot be removed by the normalization rule: every
+operation node on the path from the hole has a non-base argument.  Thus the
+construction depth strictly increases and the $c_n$ are pairwise distinct.
 
-Consider the subsequence $d_k=c_{k!}$.  Fix $m$ and a finite-complement
-compatible extension $T$ with $|T\setminus A|\le m$.  The images of the $c_n$
-form an orbit under the unary operation induced by $C[-]$ on $T$.  If this
-orbit enters $A$, it is constant from then on because $C$ fixes every element
-of $A$.  Otherwise it remains in the at most $m$ elements of $T\setminus A$.
-Thus in either case the orbit has at most $m+1$ values before becoming
-periodic.  By \cref{lem:finite-orbit-factorials}, for all sufficiently large
-$k,l$, with a threshold depending only on $m$,
+Let $B$ bound the base orbits of $C^D$, and put $d_k=c_{k!}$.  Fix $m$ and a
+finite-complement compatible extension $T$ with $|T\setminus A|\le m$.  The
+images of the $c_n$ form an orbit under the unary operation induced by $C[-]$
+on $T$.  If this orbit never enters $A$, it takes at most $m$ values.  If it
+enters $A$, the part before first entry has at most $m$ distinct values outside
+$A$; after entry, \cref{lem:context-compatibility} identifies the remainder
+with an orbit of $C^D$, which has at most $B$ values.  Hence in every case the
+whole orbit has at most $m+B$ distinct values.
+
+By \cref{lem:finite-orbit-factorials}, for all sufficiently large $k,l$, with
+a threshold depending only on $m+B$ and not on $T$,
 \[
  \pi_T(d_k)=\pi_T(d_l).
 \]
-Since the threshold is uniform over all such $T$, we have
-$d_k\equiv d_l\pmod{\theta_m}$ for all sufficiently large $k,l$.  As $m$ was
-arbitrary, $(d_k)$ is Cauchy.
+Therefore $d_k\equiv d_l\pmod{\theta_m}$ for all sufficiently large $k,l$.
+Since $m$ was arbitrary, $(d_k)$ is Cauchy.
 
 It remains to show that this Cauchy sequence has no limit in $F(D)$.  Fix
 $x\in F(D)$.  Choose $N$ so large that the construction depth of $c_N$ exceeds
 that of $x$, and apply \cref{lem:finite-complement-rees} to
-$X=\{x,c_N\}$.  In the resulting quotient, $x$ and every selected subterm are
-singleton classes.  The next term $c_{N+1}=C[c_N]$ is not among those selected
-subterms: it has greater depth than both selected roots.  Hence it belongs to
-the collapsed ideal class.  Since that class is absorbing under every basic
-operation, all later $c_j$ also belong to it.  Therefore this one
+$X=\{x,c_N\}$.  The term $c_{N+1}=C[c_N]$ has greater depth than both selected
+roots and hence is not among their selected subterms, so it lies in the
+collapsed ideal class.  Because that class is absorbing under every basic
+operation, substitution into the context keeps all later $c_j$ in the same
+class.  The term $x$, however, remains a singleton class.  Thus this one
 finite-complement quotient separates $x$ from every sufficiently late $d_k$.
-So $(d_k)$ cannot converge to $x$.
 
-Since $x$ was arbitrary, the Cauchy sequence $(d_k)$ has no limit in $F(D)$.
-Its limit in the Hausdorff completion is therefore a point outside the image of
-$F(D)$.
+Since $x$ was arbitrary, $(d_k)$ has no limit in $F(D)$.  Its limit in the
+Hausdorff completion is therefore outside the image of $F(D)$.
 \end{proof}
 
-\begin{remark}
-The theorem is only a sufficient criterion.  It does not characterize when the
-finite-complement congruence topology over an infinite base is incomplete.
-The point of the hypothesis $C^D|_A=\mathrm{id}_A$ is that, although the target
-algebra may be infinite, the particular orbit used in the proof cannot employ
-the retained base as unbounded memory.
-\end{remark}
+\begin{corollary}[Pointwise-fixed base]\label{cor:base-fixing}
+The conclusion of \cref{thm:infinite-base-criterion} holds in particular when
+$C^D(a)=a$ for every $a\in A$.
+\end{corollary}
+
+The criterion is only sufficient.  The following example shows that this
+qualification matters: genuine partiality alone does not force a nontrivial
+completion when the retained base is infinite.
+
+\begin{proposition}[A discrete infinite-base example]
+\label{prop:discrete-example}
+Let $A$ be infinite, let the signature consist of one binary symbol $f$, and
+let $f$ be nowhere defined on $A$.  Then $D$ is genuinely partial but
+$\theta_1=\Delta_{F(D)}$.  Hence the finite-complement congruence topology on
+$F(D)$ is discrete and its Hausdorff completion adds no new points.
+\end{proposition}
+
+\begin{proof}
+Fix distinct $x,y\in F(D)$ and let $S$ be the finite subterm closure of
+$\{x,y\}$.  Since $A$ is infinite, choose an injective map
+$\lambda:S\to A$ that fixes every element of $S\cap A$.  Define a total binary
+operation on $A$ by
+\[
+ f_A(\lambda(s),\lambda(t))=\lambda(f(s,t))
+\]
+whenever $f(s,t)\in S$, and define it arbitrarily on all remaining pairs.
+These prescriptions are consistent because $\lambda$ is injective.  As the
+partial operation of $D$ is nowhere defined, there are no compatibility
+constraints to violate.  Induction on subterms gives that the canonical map
+$F(D)\to A$ agrees with $\lambda$ on $S$, and hence separates $x$ and $y$.
+Thus every distinct pair is separated by an extension with zero-point
+complement.  It follows that $\theta_1$ is equality, so the induced uniformity
+is discrete and already complete.
+\end{proof}
