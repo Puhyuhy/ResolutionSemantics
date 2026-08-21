@@ -1,0 +1,35 @@
+\section{Universal equations}\label{sec:equations}
+
+The completion does not change the universal equational theory of the free
+completion in the language obtained by naming the elements of the base.
+
+\begin{theorem}[Preservation and reflection of equations]
+\label{thm:equational-conservativity}
+For every algebraic equation $s=t$ in variables, the basic operation symbols,
+and constants naming elements of $A$,
+\[
+ \Free D\models s=t
+ \quad\Longleftrightarrow\quad
+ \FCcomp{\Free D}\models s=t.
+\]
+\end{theorem}
+
+\begin{proof}
+The reverse implication follows by restricting an equation valid in the
+completion to the embedded copy of $\Free D$.
+
+For the forward implication, suppose $\Free D\models s=t$.  Each basic
+operation preserves every congruence $\fceq{m}$ and therefore extends
+continuously to the Cauchy completion; the same is true of every term
+operation.  Given an assignment of the variables in the completion and a fixed
+$m$, choose representatives from $\Free D$ sufficiently close to the assigned
+values at level $m$.  Evaluating $s$ and $t$ on these representatives gives the
+same element because the equation holds in $\Free D$.  Continuity of term
+evaluation then shows that the two values of the completed terms are
+$\fceq{m}$-equivalent.  Since this holds for every $m$ and the uniformity is
+separated, the two completed values are equal.
+\end{proof}
+
+No corresponding claim is made here for arbitrary conditional equations; the
+argument above uses only universal equational validity and continuity of term
+operations.
