@@ -20,7 +20,12 @@ $\theta_{m+1}\subseteq\theta_m$.  By
 Hence the cosets of the $\theta_m$ form a countable Hausdorff congruence
 uniformity on $F(D)$, a standard construction for universal algebras
 \cite{BulmanFleming1971}.  We denote its Hausdorff completion by
-$\widehat{F(D)}_{\mathrm{fc}}$.
+$\widehat{F(D)}_{\mathrm{fc}}$.  Since the uniformity is separated, the
+canonical map
+\[
+ F(D)\longrightarrow\widehat{F(D)}_{\mathrm{fc}}
+\]
+is injective; the question below is whether it is surjective.
 
 Because the congruence basis is countable and nested, this uniformity is
 metrizable.  Explicitly, put $\theta_0=F(D)^2$ and, for $x\ne y$, let
@@ -73,7 +78,7 @@ case.
 
 We use one elementary observation about finite deterministic orbits.
 
-\begin{lemma}\label{lem:finite-orbit-factorials}
+\begin{lemma}[Factorial synchronization]\label{lem:finite-orbit-factorials}
 Let $s_0,s_1,\ldots$ be an orbit of a self-map.  If the orbit takes at most
 $N$ distinct values, then $s_{k!}$ is independent of $k$ for all sufficiently
 large $k$.  The threshold can be chosen using only $N$.
@@ -167,7 +172,9 @@ $C^D(a)=a$ for every $a\in A$.
 
 The criterion is only sufficient.  The following example shows that this
 qualification matters: genuine partiality alone does not force a nontrivial
-completion when the retained base is infinite.
+completion when the retained base is infinite.  In this example no nontrivial
+context is defined on the whole base, so the hypothesis of
+\cref{thm:infinite-base-criterion} fails in the strongest possible way.
 
 \begin{proposition}[A discrete infinite-base example]
 \label{prop:discrete-example}
