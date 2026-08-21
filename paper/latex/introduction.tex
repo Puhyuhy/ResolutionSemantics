@@ -8,7 +8,10 @@ classical and will be used only as background
 \cite{ClimentVidalCosmeLlopez2023,Diaconescu2009}.
 
 We study compatible total extensions $T$ that retain the whole base $A$
-pointwise and add only finitely many elements.  Thus
+pointwise and add only finitely many elements.  The restriction measures how
+much genuinely new structure a total extension must introduce: the base is
+kept intact, so the finite complement counts only elements added beyond it.
+Thus
 \[
  A\subseteq T,
  \qquad |T\setminus A|<\infty,
@@ -29,7 +32,7 @@ resulting quotient is a finite-complement compatible extension and the quotient
 map is injective on $X$.  This is the algebraic version of the standard
 finite-subterm plus sink construction used in finite tree automata
 \cite{ComonEtAl2008}.  We record it because it supplies the separating
-congruences used below, not because the construction itself is new.
+congruences used below.
 
 For $m\ge1$, let $\theta_m$ be the intersection of the kernels arising from
 finite-complement compatible extensions with at most $m$ new elements.  The
@@ -84,13 +87,11 @@ also give an infinite partial algebra for which $\theta_1$ is equality, so the
 induced topology is discrete and already complete.  Thus genuine partiality
 alone does not force new completion points over an infinite retained base.
 
-The finite-complement condition is related in spirit to finite-index and
-separability conditions studied elsewhere, for example in semigroup theory
-\cite{RuskucThomas1998,CainMaltcev2013,MillerOReillyQuickRuskuc2022}.  The
-present setting is different in that the retained carrier is only a partial
-base and need not be a subalgebra of $F(D)$.  No claim is made that
-finite-complement finiteness, congruence topologies, or factorial finite-state
-synchronization are themselves new.
+The finite-complement condition is formally analogous to finite Rees index for
+subsemigroups \cite{RuskucThomas1998,CainMaltcev2013} and to separability
+conditions studied in \cite{MillerOReillyQuickRuskuc2022}.  The present setting
+is different in that the retained carrier is only a partial base and need not
+be a subalgebra of $F(D)$.
 
 The paper is organized accordingly.  \Cref{sec:free-completion} recalls the free
 compatible extension.  \Cref{sec:finite-separation} gives the Rees-congruence
@@ -99,5 +100,4 @@ identifies the finite-base case with the profinite topology, proves the
 infinite-base criterion, and gives the discrete counterexample.
 \Cref{sec:examples} gives one arithmetic instance of the criterion.
 
-A machine-checked development of the underlying results is available separately
-from the paper; none of the arguments below depends on it.
+A machine-checked version of the results is available separately.
