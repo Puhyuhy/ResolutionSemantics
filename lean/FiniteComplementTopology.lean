@@ -16,8 +16,7 @@ parts of the development that directly support the paper:
 
 * the universal property of the free compatible total extension;
 * qualitative separation by compatible extensions with finite complement;
-* the criterion saying that the embedded base is closed exactly in the total
-  case;
+* closure of the embedded base exactly in the total case;
 * the pointwise-fixed-context special case of the paper's incompleteness
   criterion, including the natural-number example;
 * the explicit distinction between prefix-depth Cauchy behaviour and the
@@ -29,8 +28,8 @@ presented here as separately formalized theorems.
 
 Some imported modules retain historical identifiers such as `old`, `finiteTag`,
 and `ResolutionSemantics`.  They are implementation names from earlier stages
-of the project.  This facade uses the current paper's terminology wherever a
-new public name is introduced.
+of the project.  This facade gives current, descriptive names to the concepts
+that it re-exports.
 -/
 
 universe u v w
@@ -53,6 +52,28 @@ abbrev CompatibleTotalAlgebra
     (D : Resolution.PartialAlg.{u,v} Sigma) :=
   Resolution.Free.CompatibleAlg D
 
+/-- Qualitative separability by compatible extensions with finite complement
+over the embedded base. -/
+abbrev FiniteComplementSeparating
+    (D : Resolution.PartialAlg.{u,v} Sigma) :=
+  Resolution.External.IntrinsicFiniteComplementSeparating D
+
+/-- Closure of the embedded base under all generated total operations. -/
+abbrev BaseClosed
+    (D : Resolution.PartialAlg.{u,v} Sigma) :=
+  ResolutionSemantics.ResidualComparison.GeneratedOldClosed D
+
+/-- Totality of the original partial evaluator. -/
+abbrev IsTotal
+    (D : Resolution.PartialAlg.{u,v} Sigma) :=
+  Resolution.FiniteBaseProperness.IsTotal D
+
+/-- A witness consisting of an undefined base application and a unary context
+that fixes every base element pointwise. -/
+abbrev PointwiseFixedContextWitness
+    (D : Resolution.PartialAlg.{u,v} Sigma) :=
+  ResolutionSemantics.OldFixingContextCompletion.Witness D
+
 /-- The free compatible total extension has the expected universal property. -/
 theorem freeCompatibleExtensionUniversal
     (D : Resolution.PartialAlg.{u,v} Sigma)
@@ -65,25 +86,24 @@ theorem freeCompatibleExtensionUniversal
 extension whose complement over the embedded base is finite. -/
 theorem finiteComplementSeparation
     (D : Resolution.PartialAlg.{u,v} Sigma) :
-    Resolution.External.IntrinsicFiniteComplementSeparating D :=
+    FiniteComplementSeparating D :=
   ResolutionSemantics.qualitativeFiniteComplementSeparating_theorem D
 
 /-- The embedded base is closed under every generated total operation exactly
 when the original partial algebra was already total. -/
 theorem baseClosedIffTotal
     (D : Resolution.PartialAlg.{u,v} Sigma) :
-    ResolutionSemantics.ResidualComparison.GeneratedOldClosed D ↔
-      Resolution.FiniteBaseProperness.IsTotal D :=
+    BaseClosed D ↔ IsTotal D :=
   ResolutionSemantics.ResidualComparison.generatedOldClosedIffEvaluatorTotal D
 
-/-- A context that fixes every base element pointwise and starts from an
-undefined base application yields a non-surjective completion embedding.
+/-- A pointwise-fixed context starting from an undefined base application yields
+a non-surjective completion embedding.
 
 This is the pointwise-fixed special case of the more general
 uniformly-finite-base-orbit criterion proved in the manuscript. -/
 theorem pointwiseFixedContextGivesProperCompletion
     (D : Resolution.PartialAlg.{u,v} Sigma)
-    (W : ResolutionSemantics.OldFixingContextCompletion.Witness D) :
+    (W : PointwiseFixedContextWitness D) :
     ¬ Function.Surjective
       (Resolution.Filtered.embed
         (Resolution.External.generatedFilteredSpace D)) :=
