@@ -1,167 +1,111 @@
 \section{Introduction}\label{sec:introduction}
 
-\subsection{A first example}
+A partial algebra is an algebra in which some applications of the basic
+operations are left undefined.  There are several classical ways of replacing
+a partial algebra by a total one.  In this paper we use the free compatible
+completion only as a convenient ambient algebra: undefined applications are
+retained as formal terms, while applications already defined in the original
+algebra are reduced to their prescribed values.  This construction is standard
+and is not part of the novelty claim; see, for example, the literature on
+Schmidt-type completions and partial-to-total encodings
+\cite{ClimentVidalCosmeLlopez2023,Diaconescu2009}.
 
-Take the natural numbers with $+$, $\cdot$ and $/$, where division is undefined
-exactly when the denominator is zero.  We want to total\-ize this partial
-algebra without deciding what $0/0$ is.
+Our question is more specific.  Let $D$ be a one-sorted binary partial algebra
+with carrier $A$.  We ask how well elements of its free compatible completion
+can be distinguished by total extensions that preserve the whole base $A$ but
+add only finitely many new elements.
 
-The standard move is to keep the failed application as syntax.  Applications
-that the base algebra can evaluate reduce to base values; the others remain
-suspended terms.  So $6/2$ becomes the embedded natural $3$, while
+More precisely, a \emph{finite-complement extension} of $D$ will mean a
+compatible total algebra $T$ equipped with an injective map $i:A\to T$ such
+that $T\setminus i(A)$ is finite.  We identify $A$ with its image and therefore
+speak of extensions that preserve the base pointwise.  Notice that $T$ need
+not be finite: when $A$ is infinite, the restriction is only on the number of
+new elements.
+
+The main theorem is the following finite-family separation statement.
+
+\begin{theorem}[Finite-family separation; informal form]
+\label{thm:intro-finite-family}
+For every finite set $F$ of elements of the free compatible completion of $D$,
+there exists a finite-complement extension $T$ of $D$ such that the canonical
+homomorphism into $T$ is injective on $F$.
+\end{theorem}
+
+The proof is direct.  One takes the finite set of subterms occurring in the
+chosen elements, assigns distinct new states to the unresolved subterms that
+must be remembered, and sends all remaining unresolved behaviour to one
+additional sink state.  The normalization of the free completion ensures that
+this finite table is compatible with every operation already defined in the
+base algebra.
+
+For a finite base, a result of this form is close to ordinary finite
+separation.  The point here is that the base may be infinite and is never
+quotiented or collapsed.  Only the complement is finite.  This distinction is
+not cosmetic.  The class of such extensions is not closed under ordinary
+binary products when the base is infinite: even the diagonal copy of
+$\mathbb N$ in
 \[
-  0/0 \;=\; \susp(\mathsf{div},\old(0),\old(0))
+ (\mathbb N\sqcup\{\star\})^2
 \]
-stays a term.  Nothing here is new: this is the free compatible completion, and
-we use it only as a substrate.
+has infinitely many points outside it.  Thus the standard argument that
+combines pairwise separators by taking a finite product does not remain inside
+the same class.  The finite-family theorem is therefore obtained by a direct
+construction.
 
-Now ask a different question.  How much new structure must an observer add in
-order to \emph{tell such terms apart}?
+The finite-complement extensions induce a descending family of equivalence
+relations on the free completion: two elements are equivalent at budget $n$ if
+no compatible extension using at most $n+1$ new states distinguishes them.  The
+finite-family theorem implies that the intersection of these relations is
+equality.  We then consider the Cauchy completion of this separated filtered
+space.
 
-Fix a total algebra $T$ together with an injection of the base $\mathbb N$ into
-it that fixes every natural pointwise, and require that $T$ add only
-\emph{finitely many} states outside that copy of $\mathbb N$.  The base is
-infinite, so $T$ is infinite; the budget counts only genuinely new semantic
-states.  Call such a $T$ an \emph{observer}.
+A second part of the paper concerns when the resulting completion is proper,
+that is, when it contains points not represented by finite terms.  Two cases
+are treated.
 
-Two things happen, and they pull in opposite directions.
-
-\begin{itemize}
-  \item Given any finite list of terms, one observer separates all of them at
-        once.  It keeps $\mathbb N$ pointwise, gives a distinct tag to each
-        selected suspended subterm, and sends everything else to a single
-        overflow state $\overflow$.
-  \item Yet some sequences cannot be followed to a limit.  Start from $0/0$ and
-        iterate the context $x\mapsto x+0$:
-        \[
-          0/0,\qquad 0/0+0,\qquad (0/0+0)+0,\qquad\ldots
-        \]
-        Because $a+0=a$ holds for every natural, this context fixes the entire
-        base pointwise, so no observer can use base elements as memory for it.
-        The terms grow syntactically forever, while each observer has only
-        finitely many tags.  Given any candidate limit $x$, an observer can
-        retain $x$ and a long prefix of the orbit exactly --- and then the next
-        iterate must fall into $\overflow$, which is absorbing.  So $x$ is
-        separated from every sufficiently late term of the sequence.
-\end{itemize}
-
-The sequence is therefore Cauchy for the separation these observers induce, and
-it converges to nothing in the algebra.  The completion is \emph{proper}: it
-has points that are not terms.  That is the phenomenon this paper is about.
-
-\subsection{The general setting}
-
-Let $D$ be a one-sorted binary partial algebra with carrier $A$.  We consider
-compatible total extensions $T$ whose embedding of $A$ is injective, which fix
-every element of $A$, and for which $|T\setminus A|$ is finite.  We write
-$\overflow$ for the overflow state and $\stageeq{n}$ for indistinguishability
-under all observers of budget $n$.
-
-\begin{remark}[On the word \emph{observational}]
-We use \emph{observational} in the metric sense: observers induce a separated
-filtration and hence a completion.  This is not the observational
-(behavioural) satisfaction of algebraic specification, where an observational
-equivalence between algebras is induced by a distinguished set of observable
-sorts \cite{BidoitHennicker2006,SannellaTarlecki2012}.  No quotient by an
-equivalence is taken here; every base element is retained individually.
-\end{remark}
-
-The two mechanisms of the example are the two theorems of the paper.
-
-\paragraph{Finite-pattern realization (\cref{thm:finite-pattern-realization}).}
-For every finite family of generated Answers there is a single observer
-injective on the whole family.  Pairwise separation is the two-point case, not
-the primitive one.
-
-\paragraph{Compression and escape (\cref{thm:compression-escape-properness}).}
-Two independent facts combine:
+First, when the base is finitely coded, we obtain an exact criterion:
 \[
-  \boxed{
-  \text{finite trajectory compression}
-  \;+\;
-  \text{finite-pattern escape}
-  \;\Longrightarrow\;
-  \text{proper observational completion}.}
+ \text{the completion is proper}
+ \quad\Longleftrightarrow\quad
+ \text{the original evaluator is not total}.
 \]
-Compression says that if the orbit relevant to a chosen unary family has a
-uniformly finite code at each stage, then its factorial sample is Cauchy; this
-is pigeonhole periodicity and factorial divisibility.  Escape says that no
-generated Answer is a limit of a syntactically growing orbit, by the
-candidate-tailored construction of the example.  Compression makes the sample
-indistinguishable at every fixed stage; escape stops it converging.  Neither
-alone gives properness.
+Thus every genuinely partial finite-base algebra gives rise to new completion
+points.
 
-\subsection{Why the observer class is the point}
+Second, for arbitrary bases we give a sufficient criterion.  Suppose an
+undefined application produces a non-base term and there is a unary context
+that acts as the identity on every base element.  Iterating that context yields
+a sequence whose suitable factorial subsequence is Cauchy at every finite
+budget, while no finite generated term can be its limit.  This proves
+properness without any finiteness assumption on the base.  Natural and integer
+arithmetic with division undefined at zero provide simple examples, using the
+context $x\mapsto x+0$.
 
-The reader may expect the finite-family theorem to follow from the pairwise
-case by taking products of separators, as in ordinary residual arguments.  It
-does not, and the obstruction is visible already at the level of carriers.
+The proofs of the completion statements use only elementary finite-state
+periodicity, factorial divisibility, and the same finite-subterm construction
+used in the separation theorem.  We isolate these ingredients because they make
+the argument transparent, but we do not claim novelty for the finite-state
+machinery itself.
 
-Each one-point extension $\mathbb N\hookrightarrow\mathbb N\sqcup\{\overflow\}$
-has a one-element complement.  But the diagonal copy of $\mathbb N$ inside the
-product of two such extensions has infinitely many points $(a,\overflow)$
-outside it.  The class ``fixes the base pointwise, finite complement'' is thus
-\emph{not closed under binary products} over an infinite base
-(\cref{prop:relative-product-obstruction}).  The finite-family theorem is
-therefore proved by direct construction inside the class.
+The relation with earlier work is as follows.  Free completion of partial
+algebras, tree recognition, residual separation, profinite completion, and the
+many-sorted encoding of partial algebras are established theories.  The narrow
+contribution considered here is the finite-complement separation problem under
+pointwise preservation of a possibly infinite partial base, together with the
+properness consequences derived from that observer class.  The exact novelty
+and priority of this formulation remain matters for specialist evaluation.
 
-The same restriction is what makes escape non-trivial.  When the base is not
-finitely codable, the candidate-tailored observer cannot itself be encoded into
-any finite carrier, even though its external complement is finite.  It still
-separates the candidate from the whole late tail.
+The paper is organized as follows.  \Cref{sec:free-completion} records the free
+compatible completion used throughout.  \Cref{sec:finite-separation} proves the
+finite-family separation theorem and the product obstruction.
+\Cref{sec:completion} constructs the filtered completion and proves the
+finite-base and arbitrary-base properness results.  \Cref{sec:equations} treats
+universal equations, and \cref{sec:arithmetic} gives the arithmetic examples.
+The many-sorted comparison with Diaconescu's encoding is kept separate in
+\cref{sec:diaconescu-bridge}; it is included for orientation, not as a separate
+novelty claim.  The final sections compare the construction with related work
+and state its limitations.
 
-\subsection{Quantitative consequence}
-
-At stage $n$ the old-fixing orbit sees only $n+1$ external states --- the $n$
-tags plus $\overflow$ --- unless it enters the pointwise-fixed base, after
-which it stabilizes.  Hence for a distinct pair of iterates
-\[
-  c_{(n+1)!}\stageeq{n}c_{(n+2)!},
-\]
-and the least separation ranks are unbounded.  The factorial indices only
-synchronize finite periods; the content is that finite compression and
-finite-pattern escape coexist in the same observer class.
-
-\subsection{Notation}
-
-\begin{center}
-\small
-\begin{tabular}{@{}ll@{}}
-\toprule
-$D$, $A$ & partial algebra and its carrier; $A$ may be infinite\\
-$\old(a)$ & the embedded copy of a base element $a\in A$\\
-$\susp(f,s,t)$ & a suspended application: $f$ was undefined on $s,t$\\
-$\RAlg{D}$ & the generated Answer algebra (free compatible completion)\\
-observer & compatible total extension fixing $A$ pointwise, finite complement\\
-$\overflow$ & the single overflow state of an observer\\
-$\stageeq{n}$ & indistinguishable by every observer of budget $n$\\
-$\Comp{\RAlg{D}}$ & the completion of the induced filtration\\
-proper & the completion has points outside the image of $\RAlg{D}$\\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\subsection{Organization and scope}
-
-\Cref{sec:free-completion} records the substrate.
-\Cref{sec:finite-separation} develops the observer class and proves
-finite-pattern realization.
-\Cref{sec:completion} builds the filtration and proves compression, escape and
-their combination; the finite-base and old-fixing criteria follow as instances.
-\Cref{sec:equations,sec:arithmetic} give exact equational conservativity and
-the arithmetic examples.
-\Cref{sec:diaconescu-bridge} locates the construction inside the standard
-many-sorted partial-to-total encoding.
-\Cref{sec:related-work,sec:limitations} position the work and list what is
-open.
-
-\paragraph{Scope.}
-Free compatible completion, finite-state periodicity, factorial
-synchronization, generic Cauchy completion, and abstract finite-set
-discrimination are background.  What is offered here is the relative observer
-class over a pointwise-fixed and possibly infinite base, the finite-pattern
-realization theorem inside a class that is not product-closed, and the way
-escape interacts with trajectory compression to force properness over infinite
-bases.  Proofs are given in full in ordinary mathematical language; the
-accompanying machine-checked development is described in
-\cref{app:formalization} and is not relied on anywhere in the argument.
+All mathematical arguments are presented independently of the accompanying
+formalization.  The Lean sources are supplementary verification and are
+summarized only in the appendix.
